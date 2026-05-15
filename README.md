@@ -55,12 +55,14 @@ SMART-DEMO-2026-LOCAL
 - Hauptantwort, alternative Antwort, kürzere Version und diplomatische Version
 - Tabbare Antwortkarten mit Kopieren je Abschnitt und Gesamtantwort
 - Qualitätsbadges für Konflikt, Höflichkeit, Klarheit und Verbindlichkeit
-- Vorlagen speichern, Kategorien und Favoriten
+- Robuste JSON-Antwortstruktur für Analyse, Antwortvarianten und Qualitätswerte
+- Vorlagen speichern, bearbeiten, löschen, kategorisieren und favorisieren
 - Bibliothek
-- Verlauf mit Suche und Antworttyp-Filter
+- Verlauf mit Suche, Antworttyp-Filter, erneut verwenden, kopieren und löschen
 - Unternehmensstil
 - Einstellungen für Standardsprache und Standardton
-- Lokale Datenexport-Funktion
+- Lokale Datenexport- und Import-Funktion
+- Diagnosebereich für lokale Daten, API-Key, Lizenz und Speicherstatus
 - Lizenz- und API-Key-Verwaltung im übernommenen Premium-Stil
 
 Weitere technische Vorbereitungen liegen unter `desktop-blueprint/` und `docs/`.

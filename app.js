@@ -68,8 +68,10 @@ const licenseState = {
 
 const dataState = loadData();
 let currentResponseText = "Noch keine Antwort erstellt.";
+let currentResponseData = null;
 let currentMode = "reply";
 let currentSections = [];
+let editingTemplateId = null;
 
 const elements = {
   navItems: document.querySelectorAll(".nav-item"),
@@ -116,7 +118,10 @@ const elements = {
   defaultLanguage: document.querySelector("#defaultLanguage"),
   defaultTone: document.querySelector("#defaultTone"),
   exportDataBtn: document.querySelector("#exportDataBtn"),
+  importDataBtn: document.querySelector("#importDataBtn"),
+  importDataInput: document.querySelector("#importDataInput"),
   clearDataBtn: document.querySelector("#clearDataBtn"),
+  diagnosticsOutput: document.querySelector("#diagnosticsOutput"),
   apiKey: document.querySelector("#apiKey"),
   rememberKey: document.querySelector("#rememberKey"),
   toggleKey: document.querySelector("#toggleKey"),
@@ -208,6 +213,8 @@ function bindEvents() {
   elements.defaultLanguage.addEventListener("change", saveSettings);
   elements.defaultTone.addEventListener("change", saveSettings);
   elements.exportDataBtn.addEventListener("click", exportData);
+  elements.importDataBtn.addEventListener("click", () => elements.importDataInput.click());
+  elements.importDataInput.addEventListener("change", importData);
   elements.clearDataBtn.addEventListener("click", clearWorkingData);
   elements.saveKeyBtn.addEventListener("click", handleSaveKey);
   elements.connectBtn.addEventListener("click", handleConnect);
@@ -307,12 +314,156 @@ async function handleGenerate() {
 }
 
 function setResponseOutput(text, isPlaceholder = false) {
-  currentResponseText = text;
+  currentResponseData = isPlaceholder ? null : normalizeResponsePayload(text);
+  currentResponseText = isPlaceholder ? text : responseDataToText(currentResponseData);
   elements.responseOutput.classList.toggle("is-placeholder", isPlaceholder);
-  elements.responseOutput.innerHTML = isPlaceholder ? renderEmptyOutput(text) : renderStructuredOutput(text);
+  elements.responseOutput.innerHTML = isPlaceholder ? renderEmptyOutput(text) : renderResponseData(currentResponseData);
   elements.resultTabs.hidden = isPlaceholder || currentSections.length === 0;
   elements.qualityStrip.hidden = isPlaceholder || currentSections.length === 0;
-  if (!isPlaceholder) renderQualityStrip(text);
+  if (!isPlaceholder) renderQualityStrip(currentResponseData);
+}
+
+function normalizeResponsePayload(value) {
+  if (typeof value === "object" && value !== null) return value;
+  const raw = String(value || "").trim();
+  const jsonCandidate = raw
+    .replace(/^```json\s*/i, "")
+    .replace(/^```\s*/i, "")
+    .replace(/```$/i, "")
+    .trim();
+
+  try {
+    const parsed = JSON.parse(jsonCandidate);
+    return {
+      analysis: {
+        topic: parsed.analysis?.topic || "",
+        senderExpectation: parsed.analysis?.senderExpectation || "",
+        risks: toArray(parsed.analysis?.risks),
+        strategy: parsed.analysis?.strategy || "",
+        openPoints: toArray(parsed.analysis?.openPoints)
+      },
+      responses: {
+        main: parsed.responses?.main || "",
+        alternative: parsed.responses?.alternative || "",
+        short: parsed.responses?.short || "",
+        diplomatic: parsed.responses?.diplomatic || ""
+      },
+      quality: {
+        conflict: parsed.quality?.conflict || "offen",
+        politeness: parsed.quality?.politeness || "offen",
+        clarity: parsed.quality?.clarity || "offen",
+        commitment: parsed.quality?.commitment || "offen",
+        notes: toArray(parsed.quality?.notes)
+      }
+    };
+  } catch {
+    return markdownToResponseData(raw);
+  }
+}
+
+function markdownToResponseData(markdownText) {
+  const sections = splitSections(markdownText);
+  const getSection = (title) => sections.find((section) => section.title.toLowerCase().includes(title))?.body.trim() || "";
+  return {
+    analysis: {
+      topic: getSection("analyse") || "Analyse nicht strukturiert erkannt.",
+      senderExpectation: "",
+      risks: [],
+      strategy: "",
+      openPoints: []
+    },
+    responses: {
+      main: getSection("hauptantwort") || markdownText,
+      alternative: getSection("alternative"),
+      short: getSection("kürzere") || getSection("kurz"),
+      diplomatic: getSection("diplomatische") || getSection("diplomatisch")
+    },
+    quality: {
+      conflict: "offen",
+      politeness: "offen",
+      clarity: "offen",
+      commitment: "offen",
+      notes: [getSection("qualität")].filter(Boolean)
+    }
+  };
+}
+
+function toArray(value) {
+  if (Array.isArray(value)) return value.filter(Boolean).map(String);
+  if (!value) return [];
+  return [String(value)];
+}
+
+function responseDataToText(data) {
+  return [
+    "## KI-Analyse",
+    `Worum geht es? ${data.analysis.topic || "-"}`,
+    `Erwartung des Absenders: ${data.analysis.senderExpectation || "-"}`,
+    `Risiken/Konflikte: ${formatPlainList(data.analysis.risks)}`,
+    `Empfohlene Strategie: ${data.analysis.strategy || "-"}`,
+    `Offene Punkte: ${formatPlainList(data.analysis.openPoints)}`,
+    "",
+    "## Hauptantwort",
+    data.responses.main || "-",
+    "",
+    "## Alternative Antwort",
+    data.responses.alternative || "-",
+    "",
+    "## Kürzere Version",
+    data.responses.short || "-",
+    "",
+    "## Diplomatische Version",
+    data.responses.diplomatic || "-",
+    "",
+    "## Qualitätsbewertung",
+    `Konflikt: ${data.quality.conflict || "offen"}`,
+    `Höflichkeit: ${data.quality.politeness || "offen"}`,
+    `Klarheit: ${data.quality.clarity || "offen"}`,
+    `Verbindlichkeit: ${data.quality.commitment || "offen"}`,
+    `Hinweise: ${formatPlainList(data.quality.notes)}`
+  ].join("\n");
+}
+
+function formatPlainList(items) {
+  return items?.length ? items.join("; ") : "-";
+}
+
+function renderResponseData(data) {
+  currentSections = [
+    {
+      title: "KI-Analyse",
+      body: [
+        `**Worum geht es?** ${data.analysis.topic || "-"}`,
+        `**Erwartung des Absenders:** ${data.analysis.senderExpectation || "-"}`,
+        `**Risiken/Konflikte:** ${formatPlainList(data.analysis.risks)}`,
+        `**Empfohlene Strategie:** ${data.analysis.strategy || "-"}`,
+        `**Offene Punkte:** ${formatPlainList(data.analysis.openPoints)}`
+      ].join("\n\n")
+    },
+    { title: "Hauptantwort", body: data.responses.main || "-" },
+    { title: "Alternative Antwort", body: data.responses.alternative || "-" },
+    { title: "Kürzere Version", body: data.responses.short || "-" },
+    { title: "Diplomatische Version", body: data.responses.diplomatic || "-" },
+    {
+      title: "Qualitätsbewertung",
+      body: [
+        `Konflikt: ${data.quality.conflict || "offen"}`,
+        `Höflichkeit: ${data.quality.politeness || "offen"}`,
+        `Klarheit: ${data.quality.clarity || "offen"}`,
+        `Verbindlichkeit: ${data.quality.commitment || "offen"}`,
+        `Hinweise: ${formatPlainList(data.quality.notes)}`
+      ].join("\n")
+    }
+  ];
+
+  renderResultTabs(currentSections);
+  return currentSections.map((section, index) => `
+    <article class="response-section${index === 0 ? " is-active" : ""}" data-result-section="${escapeHtml(section.title)}">
+      <h3>${escapeHtml(section.title)}</h3>
+      <button type="button" class="copy-section" data-copy-section="${escapeHtml(section.title)}">Kopieren</button>
+      ${renderMarkdown(section.body)}
+    </article>
+  `).join("");
 }
 
 function renderStructuredOutput(markdownText) {
@@ -368,13 +519,12 @@ function shortSectionTitle(title) {
     .replace("Qualitätsbewertung", "Qualität");
 }
 
-function renderQualityStrip(text) {
-  const lower = text.toLowerCase();
+function renderQualityStrip(data) {
   const scores = {
-    conflict: lower.includes("eskalation") || lower.includes("konflikt") ? "prüfen" : "niedrig",
-    politeness: lower.includes("höflichkeit") || lower.includes("wertschätz") ? "gut" : "offen",
-    clarity: lower.includes("klarheit") || lower.includes("klar") ? "gut" : "offen",
-    commitment: lower.includes("verbindlichkeit") || lower.includes("verbindlich") ? "gut" : "offen"
+    conflict: data.quality?.conflict || "offen",
+    politeness: data.quality?.politeness || "offen",
+    clarity: data.quality?.clarity || "offen",
+    commitment: data.quality?.commitment || "offen"
   };
 
   updateScoreBadge("conflict", "Konflikt", scores.conflict);
@@ -387,7 +537,11 @@ function updateScoreBadge(key, label, value) {
   const badge = elements.qualityStrip.querySelector(`[data-score="${key}"]`);
   if (!badge) return;
   badge.textContent = `${label}: ${value}`;
-  badge.className = `score-badge ${value === "prüfen" ? "warn" : value === "gut" || value === "niedrig" ? "success" : ""}`;
+  const normalized = String(value).toLowerCase();
+  const state = normalized === "hoch" || normalized === "prüfen"
+    ? "warn"
+    : ["gut", "sehr gut", "niedrig"].includes(normalized) ? "success" : "";
+  badge.className = `score-badge ${state}`;
 }
 
 function splitSections(markdownText) {
@@ -420,7 +574,7 @@ function renderMarkdown(markdownText) {
     if (/^[-*]\s+/.test(line)) {
       const items = [];
       while (index < lines.length && /^[-*]\s+/.test(lines[index].trim())) {
-        items.push(`<li>${escapeHtml(lines[index].trim().replace(/^[-*]\s+/, ""))}</li>`);
+        items.push(`<li>${formatInline(lines[index].trim().replace(/^[-*]\s+/, ""))}</li>`);
         index += 1;
       }
       index -= 1;
@@ -431,7 +585,7 @@ function renderMarkdown(markdownText) {
     if (/^\d+\.\s+/.test(line)) {
       const items = [];
       while (index < lines.length && /^\d+\.\s+/.test(lines[index].trim())) {
-        items.push(`<li>${escapeHtml(lines[index].trim().replace(/^\d+\.\s+/, ""))}</li>`);
+        items.push(`<li>${formatInline(lines[index].trim().replace(/^\d+\.\s+/, ""))}</li>`);
         index += 1;
       }
       index -= 1;
@@ -450,10 +604,14 @@ function renderMarkdown(markdownText) {
       paragraphLines.push(lines[index + 1].trim());
       index += 1;
     }
-    blocks.push(`<p>${escapeHtml(paragraphLines.join(" "))}</p>`);
+    blocks.push(`<p>${formatInline(paragraphLines.join(" "))}</p>`);
   }
 
   return blocks.join("");
+}
+
+function formatInline(value) {
+  return escapeHtml(value).replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
 }
 
 document.addEventListener("click", async (event) => {
@@ -507,14 +665,28 @@ function addTemplate() {
     return;
   }
 
-  dataState.templates.unshift({
+  if (editingTemplateId) {
+    const item = dataState.templates.find((template) => template.id === editingTemplateId);
+    if (item) {
+      item.title = title;
+      item.category = elements.templateCategory.value.trim() || "Allgemein";
+      item.body = body;
+      item.favorite = elements.templateFavorite.checked;
+      item.updatedAt = new Date().toISOString();
+    }
+    editingTemplateId = null;
+    elements.addTemplateBtn.textContent = "Vorlage speichern";
+  } else {
+    dataState.templates.unshift({
     id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
     title,
     category: elements.templateCategory.value.trim() || "Allgemein",
     body,
     favorite: elements.templateFavorite.checked,
-    createdAt: new Date().toISOString()
-  });
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    });
+  }
 
   elements.templateTitle.value = "";
   elements.templateCategory.value = "";
@@ -552,8 +724,10 @@ function saveCurrentHistory(options = {}) {
     tone: elements.tone.value,
     focus: elements.focus.value,
     createdAt: new Date().toISOString(),
+    inboundMessage: elements.inboundMessage.value.trim(),
     inputPreview: elements.inboundMessage.value.trim().slice(0, 420),
-    output: currentResponseText
+    output: currentResponseText,
+    outputData: currentResponseData
   });
   dataState.history = dataState.history.slice(0, 50);
   saveData();
@@ -608,7 +782,9 @@ function renderHistory() {
       <small>${formatDate(item.createdAt)} · ${escapeHtml(item.responseType)} · ${escapeHtml(item.focus)}</small>
       <p>${escapeHtml(item.inputPreview || "")}</p>
       <div class="card-actions">
+        <button type="button" data-reuse-history="${item.id}">Erneut verwenden</button>
         <button type="button" data-copy-history="${item.id}">Antwort kopieren</button>
+        <button type="button" data-delete-history="${item.id}" class="danger-action">Löschen</button>
       </div>
     </article>
   `).join("");
@@ -644,7 +820,9 @@ function dataCard(item, type) {
       <div class="card-actions">
         <button type="button" data-use-template="${item.id}">In Antwort übernehmen</button>
         <button type="button" data-copy-template="${item.id}">Kopieren</button>
+        ${type === "template" ? `<button type="button" data-edit-template="${item.id}">Bearbeiten</button>` : ""}
         ${type === "template" ? `<button type="button" data-toggle-favorite="${item.id}">${item.favorite ? "Favorit entfernen" : "Favorit"}</button>` : ""}
+        ${type === "template" ? `<button type="button" data-delete-template="${item.id}" class="danger-action">Löschen</button>` : ""}
       </div>
     </article>
   `;
@@ -680,8 +858,12 @@ function showContextPanel(name) {
 document.addEventListener("click", async (event) => {
   const templateId = event.target.dataset.copyTemplate;
   const useTemplateId = event.target.dataset.useTemplate;
+  const editTemplateId = event.target.dataset.editTemplate;
   const favoriteId = event.target.dataset.toggleFavorite;
+  const deleteTemplateId = event.target.dataset.deleteTemplate;
   const historyId = event.target.dataset.copyHistory;
+  const reuseHistoryId = event.target.dataset.reuseHistory;
+  const deleteHistoryId = event.target.dataset.deleteHistory;
 
   if (templateId) {
     const item = dataState.templates.find((template) => template.id === templateId);
@@ -698,6 +880,20 @@ document.addEventListener("click", async (event) => {
     }
   }
 
+  if (editTemplateId) {
+    const item = dataState.templates.find((template) => template.id === editTemplateId);
+    if (item) {
+      editingTemplateId = item.id;
+      elements.templateTitle.value = item.title;
+      elements.templateCategory.value = item.category;
+      elements.templateBody.value = item.body;
+      elements.templateFavorite.checked = Boolean(item.favorite);
+      elements.addTemplateBtn.textContent = "Vorlage aktualisieren";
+      showView("templates");
+      setStatus("Vorlage im Bearbeitungsmodus", "ready");
+    }
+  }
+
   if (favoriteId) {
     const item = dataState.templates.find((template) => template.id === favoriteId);
     if (item) item.favorite = !item.favorite;
@@ -705,10 +901,45 @@ document.addEventListener("click", async (event) => {
     renderLists();
   }
 
+  if (deleteTemplateId) {
+    const index = dataState.templates.findIndex((template) => template.id === deleteTemplateId);
+    if (index >= 0) dataState.templates.splice(index, 1);
+    if (editingTemplateId === deleteTemplateId) editingTemplateId = null;
+    saveData();
+    renderLists();
+    updateDashboard();
+    setStatus("Vorlage gelöscht", "ready");
+  }
+
   if (historyId) {
     const item = dataState.history.find((history) => history.id === historyId);
     if (item) await navigator.clipboard.writeText(item.output);
     setStatus("Antwort kopiert", "ready");
+  }
+
+  if (reuseHistoryId) {
+    const item = dataState.history.find((history) => history.id === reuseHistoryId);
+    if (item) {
+      elements.subject.value = item.subject || "";
+      elements.inboundMessage.value = item.inboundMessage || item.inputPreview || "";
+      elements.responseType.value = item.responseType || elements.responseType.value;
+      elements.tone.value = item.tone || elements.tone.value;
+      elements.focus.value = item.focus || elements.focus.value;
+      if (item.outputData) setResponseOutput(item.outputData);
+      else if (item.output) setResponseOutput(item.output);
+      updateCharacterCount();
+      showView("composer");
+      setStatus("Verlauf übernommen", "ready");
+    }
+  }
+
+  if (deleteHistoryId) {
+    const index = dataState.history.findIndex((history) => history.id === deleteHistoryId);
+    if (index >= 0) dataState.history.splice(index, 1);
+    saveData();
+    renderLists();
+    updateDashboard();
+    setStatus("Verlaufseintrag gelöscht", "ready");
   }
 });
 
@@ -757,12 +988,37 @@ function exportData() {
   URL.revokeObjectURL(link.href);
 }
 
+async function importData(event) {
+  const file = event.target.files?.[0];
+  if (!file) return;
+
+  try {
+    const imported = JSON.parse(await file.text());
+    dataState.templates = Array.isArray(imported.templates) ? imported.templates : dataState.templates;
+    dataState.history = Array.isArray(imported.history) ? imported.history : dataState.history;
+    dataState.companyStyle = imported.companyStyle || dataState.companyStyle;
+    dataState.companyStyleNotes = imported.companyStyleNotes || dataState.companyStyleNotes;
+    dataState.settings = { ...dataState.settings, ...(imported.settings || {}) };
+    saveData();
+    renderLists();
+    updateDashboard();
+    renderDiagnostics();
+    setStatus("Daten importiert", "ready");
+  } catch (error) {
+    setStatus("Import fehlgeschlagen", "danger");
+    elements.diagnosticsOutput.innerHTML = `<div class="diagnostic-row danger"><strong>Import</strong><span>${escapeHtml(error.message)}</span></div>`;
+  } finally {
+    elements.importDataInput.value = "";
+  }
+}
+
 function clearWorkingData() {
   dataState.templates = [];
   dataState.history = [];
   saveData();
   renderLists();
   updateDashboard();
+  renderDiagnostics();
   setStatus("Arbeitsdaten geleert", "ready");
 }
 
@@ -1000,6 +1256,25 @@ function updateDashboard() {
   elements.metricFocus.textContent = dataState.history[0]?.focus || elements.focus.value || "-";
   elements.metricApi.textContent = apiKeyState.isConnected ? "Verbunden" : apiKeyState.value ? "Bereit" : "Fehlt";
   updateSystemHealth();
+  renderDiagnostics();
+}
+
+function renderDiagnostics() {
+  if (!elements.diagnosticsOutput) return;
+  const rows = [
+    ["Vorlagen", `${dataState.templates.length} gespeichert`, "success"],
+    ["Verlauf", `${dataState.history.length} lokale Vorgänge`, dataState.history.length ? "success" : ""],
+    ["API-Key", apiKeyState.value ? "vorhanden" : "fehlt", apiKeyState.value ? "success" : "warn"],
+    ["Lizenz", licenseState.active ? "aktiv" : "nicht aktiviert", licenseState.active ? "success" : "warn"],
+    ["Speicher", "Browser-Prototyp, Desktop-Blueprint vorhanden", ""]
+  ];
+
+  elements.diagnosticsOutput.innerHTML = rows.map(([label, value, state]) => `
+    <div class="diagnostic-row ${state}">
+      <strong>${escapeHtml(label)}</strong>
+      <span>${escapeHtml(value)}</span>
+    </div>
+  `).join("");
 }
 
 function updateSystemHealth() {

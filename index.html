@@ -223,7 +223,13 @@
             <div class="field"><label>Standardsprache</label><select id="defaultLanguage"><option>Deutsch</option><option>Englisch</option><option>Französisch</option><option>Spanisch</option><option>Italienisch</option></select></div>
             <div class="field"><label>Antwortstil</label><select id="defaultTone"><option>geschäftlich-formell</option><option>freundlich</option><option>souverän</option><option>diplomatisch</option></select></div>
             <button type="button" id="exportDataBtn">Lokale Daten exportieren</button>
+            <button type="button" id="importDataBtn">Lokale Daten importieren</button>
+            <input id="importDataInput" type="file" accept="application/json,.json" hidden>
             <button type="button" id="clearDataBtn">Lokale Arbeitsdaten leeren</button>
+          </div>
+          <div class="diagnostics-panel">
+            <h3>Diagnose</h3>
+            <div id="diagnosticsOutput"></div>
           </div>
         </section>
       </section>

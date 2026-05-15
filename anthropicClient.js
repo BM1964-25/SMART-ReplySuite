@@ -56,13 +56,30 @@ export function buildMailResponsePrompts({
     `Antwortlänge: ${lengthMap[length] || lengthMap.standard}`,
     `Fokus: ${focus}. ${focusRules[focus] || ""}`,
     `Unternehmensstil: ${companyStyleMap[companyStyle] || companyStyle}.`,
-    "Gib exakt die folgenden Markdown-Abschnitte aus:",
-    "## KI-Analyse",
-    "## Hauptantwort",
-    "## Alternative Antwort",
-    "## Kürzere Version",
-    "## Diplomatische Version",
-    "## Qualitätsbewertung"
+    "Gib ausschließlich valides JSON aus. Keine Markdown-Codeblöcke, keine Einleitung, keine Kommentare.",
+    "Das JSON muss exakt diese Struktur haben:",
+    "{",
+    '  "analysis": {',
+    '    "topic": "string",',
+    '    "senderExpectation": "string",',
+    '    "risks": ["string"],',
+    '    "strategy": "string",',
+    '    "openPoints": ["string"]',
+    "  },",
+    '  "responses": {',
+    '    "main": "string",',
+    '    "alternative": "string",',
+    '    "short": "string",',
+    '    "diplomatic": "string"',
+    "  },",
+    '  "quality": {',
+    '    "conflict": "niedrig|mittel|hoch",',
+    '    "politeness": "niedrig|mittel|hoch|gut|sehr gut",',
+    '    "clarity": "niedrig|mittel|hoch|gut|sehr gut",',
+    '    "commitment": "niedrig|mittel|hoch|gut|sehr gut",',
+    '    "notes": ["string"]',
+    "  }",
+    "}"
   ].join("\n");
 
   const userPrompt = [
@@ -105,8 +122,9 @@ export function buildMailResponsePrompts({
     "- Alternative Antwort mit anderer Akzentsetzung formulieren.",
     "- Kürzere Version kompakt und geschäftlich formulieren.",
     "- Diplomatische Version besonders deeskalierend formulieren.",
-    "- Qualitätsbewertung mit Konfliktwarnung, Höflichkeit, Klarheit und Verbindlichkeit ausgeben. Verwende klare Werte wie niedrig, mittel, hoch oder gut.",
-    "- Keine Fakten ergänzen, die nicht aus Nachricht, Notizen oder Ziel ableitbar sind."
+    "- Qualitätsbewertung mit Konfliktwarnung, Höflichkeit, Klarheit und Verbindlichkeit ausgeben. Verwende klare Werte wie niedrig, mittel, hoch, gut oder sehr gut.",
+    "- Keine Fakten ergänzen, die nicht aus Nachricht, Notizen oder Ziel ableitbar sind.",
+    "- Antworte ausschließlich als JSON mit der vorgegebenen Struktur."
   ].join("\n");
 
   return { systemPrompt, userPrompt };

@@ -12,6 +12,11 @@ Implemented in the current local prototype:
 - Improved empty state for the response area
 - Existing draft optimization mode
 - History search and response-type filter
+- Robust JSON response contract for AI output
+- Template editing and deletion
+- History reuse and deletion
+- Local data import
+- Diagnostics panel
 - SQLite schema blueprint
 - Electron main-process blueprint
 - Secure settings blueprint for OS-keychain storage
