@@ -781,7 +781,7 @@ textarea:focus, input:focus, select:focus {
 }
 .help-toggle:checked ~ .modal-backdrop { display: grid; }
 .help-modal {
-  width: min(960px, 100%);
+  width: min(1040px, 100%);
   max-height: min(760px, calc(100vh - 56px));
   overflow: auto;
   padding: 20px;
@@ -791,10 +791,95 @@ textarea:focus, input:focus, select:focus {
 }
 .help-header { display: flex; justify-content: space-between; gap: 16px; margin-bottom: 16px; }
 .help-header .eyebrow { color: var(--accent-strong); }
+.help-header h2 { margin-bottom: 6px; }
+.help-intro {
+  max-width: 700px;
+  margin-bottom: 0;
+  color: var(--muted);
+  line-height: 1.45;
+}
+.help-quickstart {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0,1fr));
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.help-quickstart article {
+  display: grid;
+  grid-template-columns: 32px minmax(0,1fr);
+  gap: 10px;
+  padding: 13px;
+  border: 1px solid rgba(22,104,184,0.18);
+  border-radius: var(--radius);
+  background: linear-gradient(180deg, #f8fbff, #eef6ff);
+}
+.help-quickstart span {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: #0f5aa7;
+  color: #fff;
+  font-weight: 900;
+  font-size: 0.82rem;
+}
+.help-quickstart strong { display: block; margin-bottom: 4px; font-size: 0.92rem; }
+.help-quickstart p { margin-bottom: 0; color: var(--muted); font-size: 0.82rem; line-height: 1.38; }
+.help-section {
+  padding: 16px;
+  margin-bottom: 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+}
+.help-section h3,
+.help-reference h3 {
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+.help-steps {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding-left: 20px;
+  color: var(--soft);
+  line-height: 1.48;
+}
+.help-steps li::marker { color: var(--accent-strong); font-weight: 900; }
 .help-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; }
 .help-grid article { padding: 14px; border: 1px solid var(--line); border-radius: var(--radius); background: #f8fbff; }
 .help-grid h3 { margin-bottom: 6px; font-size: 1rem; }
 .help-grid p { margin-bottom: 0; color: var(--muted); line-height: 1.45; }
+.help-reference {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+.help-reference article {
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+}
+.help-reference ul {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+.help-reference li { margin-bottom: 7px; }
+.help-reference li:last-child { margin-bottom: 0; }
+.help-reference code {
+  padding: 2px 5px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: #f4f8fd;
+  color: var(--accent-strong);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.86em;
+}
 
 @media (max-width: 1180px) {
   .app-shell { grid-template-columns: 1fr; }
@@ -807,12 +892,13 @@ textarea:focus, input:focus, select:focus {
   .workflow-arrow { display: none; }
   .composer-tools { grid-template-columns: 1fr; }
   .quality-strip, .result-tabs { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .help-quickstart { grid-template-columns: repeat(2, minmax(0,1fr)); }
 }
 
 @media (max-width: 760px) {
   .app-shell { width: min(100% - 20px, 1580px); padding: 16px 0; }
   .app-header { align-items: stretch; flex-direction: column; }
   .header-actions { justify-content: space-between; }
-  .nav-list, .dashboard-grid, .two-column, .mail-grid, .template-form, .settings-grid, .license-grid, .api-action-row, .api-actions, .license-actions, .result-actions, .style-grid, .help-grid, .quick-actions, .signal-grid, .quality-strip, .result-tabs, .history-tools, .setup-alert { grid-template-columns: 1fr; }
+  .nav-list, .dashboard-grid, .two-column, .mail-grid, .template-form, .settings-grid, .license-grid, .api-action-row, .api-actions, .license-actions, .result-actions, .style-grid, .help-grid, .quick-actions, .signal-grid, .quality-strip, .result-tabs, .history-tools, .setup-alert, .help-quickstart, .help-reference { grid-template-columns: 1fr; }
   h1 { font-size: 2.1rem; }
 }

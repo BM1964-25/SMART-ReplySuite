@@ -279,12 +279,110 @@
 
   <div class="modal-backdrop" id="helpModal">
     <section class="help-modal" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
-      <div class="help-header"><div><p class="eyebrow">Hilfe</p><h2 id="helpTitle">Wichtige Hinweise</h2></div><label class="modal-close" for="helpToggle" aria-label="Hilfe schließen">×</label></div>
+      <div class="help-header">
+        <div>
+          <p class="eyebrow">Hilfe</p>
+          <h2 id="helpTitle">Anleitung für SMART MailResponse</h2>
+          <p class="help-intro">Diese Anleitung führt dich durch Einrichtung, Antworterstellung, Vorlagen, Verlauf und Datenschutz.</p>
+        </div>
+        <label class="modal-close" for="helpToggle" aria-label="Hilfe schließen">×</label>
+      </div>
+
+      <div class="help-quickstart">
+        <article>
+          <span>1</span>
+          <div><strong>API-Key einrichten</strong><p>Unter Lizenz & API den Anthropic-Key einfügen, speichern und optional die Verbindung testen.</p></div>
+        </article>
+        <article>
+          <span>2</span>
+          <div><strong>E-Mail einfügen</strong><p>Betreff, eingegangene Nachricht, Ziel und interne Notizen in Neue Antwort erfassen.</p></div>
+        </article>
+        <article>
+          <span>3</span>
+          <div><strong>Antwort steuern</strong><p>Antworttyp, Tonalität, Länge, Fokus, Sprache und Unternehmensstil wählen.</p></div>
+        </article>
+        <article>
+          <span>4</span>
+          <div><strong>Ergebnis nutzen</strong><p>Analyse prüfen, passende Antwortvariante kopieren, speichern oder als Vorlage übernehmen.</p></div>
+        </article>
+      </div>
+
+      <div class="help-section">
+        <h3>Antwort erstellen</h3>
+        <ol class="help-steps">
+          <li><strong>Neue Antwort öffnen:</strong> In der Sidebar „Neue Antwort“ wählen.</li>
+          <li><strong>Betreff eintragen:</strong> Der Betreff hilft der KI, Kontext und Dringlichkeit besser zu erkennen.</li>
+          <li><strong>E-Mail einfügen:</strong> Den Inhalt aus Outlook, Gmail oder einem anderen E-Mail-Programm direkt in „Eingegangene Nachricht“ kopieren.</li>
+          <li><strong>Ziel formulieren:</strong> Kurz beschreiben, was die Antwort erreichen soll, z. B. „Termin abstimmen“, „Rückfrage stellen“ oder „Eskalation entschärfen“.</li>
+          <li><strong>Notizen ergänzen:</strong> Interne Fakten, Grenzen, Fristen oder gewünschte Aussagen unter „Eigene Notizen“ hinterlegen.</li>
+          <li><strong>Antwortvorschläge erstellen:</strong> Die App erzeugt KI-Analyse, Hauptantwort, Alternative, Kurzversion, diplomatische Version und Qualitätsbewertung.</li>
+        </ol>
+      </div>
+
       <div class="help-grid">
-        <article><h3>Copy-and-Paste</h3><p>E-Mails aus Outlook, Gmail oder anderen Programmen können direkt eingefügt werden. Anhänge werden im MVP nicht automatisch gelesen.</p></article>
-        <article><h3>Datenschutz</h3><p>Arbeitsdaten bleiben lokal im Browser-Prototyp. Die Zielversion nutzt SQLite und verschlüsselte Einstellungen.</p></article>
-        <article><h3>API-Key</h3><p>Der API-Key wird verborgen angezeigt und nur lokal gespeichert, wenn die Speicherung aktiviert ist.</p></article>
-        <article><h3>Lizenz</h3><p>Für Tests funktioniert SMART-DEMO-2026-LOCAL. Produktiv wird Stripe mit einer Lizenz-API verbunden.</p></article>
+        <article>
+          <h3>Entwurf optimieren</h3>
+          <p>Wähle im Composer „Entwurf optimieren“, wenn du bereits einen Antwortentwurf hast. Füge Eingangsmail und Entwurf gemeinsam in das Nachrichtenfeld ein und nutze Notizen für gewünschte Änderungen.</p>
+        </article>
+        <article>
+          <h3>Vorlagen anwenden</h3>
+          <p>Gespeicherte Vorlagen können direkt im Composer über „Vorlage anwenden“ in die zusätzlichen Hinweise übernommen werden. So bleiben Standardformulierungen schnell verfügbar.</p>
+        </article>
+        <article>
+          <h3>Antwortvarianten</h3>
+          <p>Die Ergebnis-Tabs trennen Analyse, Hauptantwort, Alternative, Kurzfassung, diplomatische Version und Qualitätsbewertung. Jede Karte kann einzeln kopiert werden.</p>
+        </article>
+        <article>
+          <h3>Qualitätsbadges</h3>
+          <p>Konflikt, Höflichkeit, Klarheit und Verbindlichkeit geben eine schnelle Einschätzung. Bei sensiblen Vorgängen sollte die Antwort fachlich geprüft werden.</p>
+        </article>
+        <article>
+          <h3>Vorlagen & Bibliothek</h3>
+          <p>Unter Vorlagen können Standardantworten gespeichert, kategorisiert und als Favorit markiert werden. Die Bibliothek sortiert Favoriten nach oben.</p>
+        </article>
+        <article>
+          <h3>Verlauf</h3>
+          <p>Erstellte Vorgänge werden lokal im Verlauf gespeichert. Suche und Antworttyp-Filter helfen, ältere Antworten wiederzufinden und zu kopieren.</p>
+        </article>
+      </div>
+
+      <div class="help-reference">
+        <article>
+          <h3>API-Key & Lizenz</h3>
+          <ul>
+            <li>API-Key unter „Lizenz & API“ einfügen.</li>
+            <li>„Speichern“ übernimmt den Key für die Sitzung oder lokal, wenn die Checkbox aktiv ist.</li>
+            <li>„Verbindung überprüfen“ sendet eine kurze Testanfrage an Anthropic.</li>
+            <li>Für Tests kann die Lizenz <code>SMART-DEMO-2026-LOCAL</code> verwendet werden.</li>
+          </ul>
+        </article>
+        <article>
+          <h3>Datenschutz</h3>
+          <ul>
+            <li>Vorlagen, Verlauf, Lizenzdaten und Einstellungen bleiben im lokalen App-Speicher.</li>
+            <li>E-Mail-Inhalte werden nur bei KI-Anfragen über den lokalen Proxy an Anthropic übertragen.</li>
+            <li>Keine zentrale Projektdatenbank wird im Prototyp verwendet.</li>
+            <li>Vertrauliche Inhalte sollten nur verarbeitet werden, wenn dies fachlich und rechtlich zulässig ist.</li>
+          </ul>
+        </article>
+        <article>
+          <h3>Typische Probleme</h3>
+          <ul>
+            <li><strong>API-Key fehlt:</strong> Lizenz & API öffnen, Key speichern, Verbindung prüfen.</li>
+            <li><strong>Antwort wird nicht erzeugt:</strong> Eingegangene Nachricht prüfen und lokalen Server laufen lassen.</li>
+            <li><strong>Lizenz nicht aktiv:</strong> Lizenzschlüssel und Kauf-E-Mail kontrollieren.</li>
+            <li><strong>Antwort zu allgemein:</strong> Ziel, Notizen und zusätzliche Hinweise konkreter formulieren.</li>
+          </ul>
+        </article>
+        <article>
+          <h3>Gute Eingaben</h3>
+          <ul>
+            <li>Absendererwartung und gewünschtes Ziel klar benennen.</li>
+            <li>Fristen, Termine und Zusagen nur eintragen, wenn sie belastbar sind.</li>
+            <li>Bei Konflikten eine gewünschte Eskalationsgrenze angeben.</li>
+            <li>Interne Informationen markieren, die nicht wörtlich in die Antwort sollen.</li>
+          </ul>
+        </article>
       </div>
     </section>
   </div>
