@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SMART MailResponse</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <input type="checkbox" class="help-toggle" id="helpToggle" aria-hidden="true">
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Hauptnavigation">
+      <div class="brand-block">
+        <span class="brand-mark">SM</span>
+        <div>
+          <strong>SMART MailResponse</strong>
+          <span>Professional Reply Studio</span>
+        </div>
+      </div>
+      <nav class="nav-list">
+        <button type="button" class="nav-item is-active" data-view="dashboard">Dashboard</button>
+        <button type="button" class="nav-item" data-view="composer">Neue Antwort</button>
+        <button type="button" class="nav-item" data-view="templates">Vorlagen</button>
+        <button type="button" class="nav-item" data-view="library">Bibliothek</button>
+        <button type="button" class="nav-item" data-view="history">Verlauf</button>
+        <button type="button" class="nav-item" data-view="style">Unternehmensstil</button>
+        <button type="button" class="nav-item" data-view="settings">Einstellungen</button>
+        <button type="button" class="nav-item" data-view="license">Lizenz & API</button>
+      </nav>
+      <div class="sidebar-health" aria-label="Systemstatus">
+        <div><span>Lizenz</span><strong id="sidebarLicenseStatus">Nicht aktiviert</strong></div>
+        <div><span>Claude</span><strong id="sidebarApiStatus">Nicht verbunden</strong></div>
+        <div><span>Speicher</span><strong id="sidebarStorageStatus">Lokal</strong></div>
+      </div>
+      <div class="sidebar-status">
+        <span class="status-dot" id="statusDot"></span>
+        <div>
+          <strong id="statusText">System bereit</strong>
+          <span>Lokale Verarbeitung, eigener API-Key</span>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-shell">
+      <header class="app-header">
+        <div>
+          <p class="eyebrow">Lokale KI-Arbeitsoberfläche</p>
+          <h1>SMART MailResponse</h1>
+          <p class="lead">Professionelle Antwortvorschläge für geschäftliche E-Mails: klar, souverän, datenschutzbewusst und direkt kopierbar.</p>
+        </div>
+        <div class="header-actions">
+          <label class="help-button" for="helpToggle" aria-label="Hilfe öffnen">?</label>
+          <button type="button" class="primary-action header-action" data-view-target="composer">Neue Antwort</button>
+        </div>
+      </header>
+
+      <section class="workflow-panel" aria-label="Arbeitsablauf">
+        <div class="workflow-step"><span class="step-number">1</span><div><strong>E-Mail einfügen</strong><span>Betreff, Nachricht und Kontext erfassen</span></div></div>
+        <span class="workflow-arrow" aria-hidden="true">→</span>
+        <div class="workflow-step"><span class="step-number">2</span><div><strong>Kommunikation steuern</strong><span>Antworttyp, Tonalität und Fokus wählen</span></div></div>
+        <span class="workflow-arrow" aria-hidden="true">→</span>
+        <div class="workflow-step"><span class="step-number">3</span><div><strong>Risiken erkennen</strong><span>KI-Analyse vor der Antwort prüfen</span></div></div>
+        <span class="workflow-arrow" aria-hidden="true">→</span>
+        <div class="workflow-step"><span class="step-number">4</span><div><strong>Antwort nutzen</strong><span>Variante kopieren oder als Vorlage speichern</span></div></div>
+      </section>
+
+      <section class="view is-visible" data-view-panel="dashboard">
+        <div class="dashboard-grid">
+          <article class="metric-card"><span>Heute erstellt</span><strong id="metricToday">0</strong><small>lokale Vorgänge</small></article>
+          <article class="metric-card"><span>Vorlagen</span><strong id="metricTemplates">0</strong><small>eigene Standardantworten</small></article>
+          <article class="metric-card"><span>Letzter Fokus</span><strong id="metricFocus">-</strong><small>Antwortstrategie</small></article>
+          <article class="metric-card"><span>API-Status</span><strong id="metricApi">Fehlt</strong><small>Anthropic Claude</small></article>
+        </div>
+        <div class="two-column">
+          <section class="panel">
+            <div class="panel-heading"><div><h2>Arbeitsbereich</h2><p>Schnellstart für neue Antwortvorschläge.</p></div></div>
+            <div class="quick-actions">
+              <button type="button" class="primary-action" data-view-target="composer">Antwort erstellen</button>
+              <button type="button" data-view-target="templates">Vorlagen öffnen</button>
+              <button type="button" data-view-target="license">API-Key prüfen</button>
+            </div>
+          </section>
+          <section class="panel">
+            <div class="panel-heading"><div><h2>Qualitätsprofil</h2><p>Premium-Funktionen für sichere Kommunikation.</p></div></div>
+            <div class="signal-grid">
+              <span>Konflikterkennung</span><span>Eskalationswarnung</span><span>Höflichkeitsanalyse</span><span>Klarheitsprüfung</span><span>Antwortqualität</span><span>KI-Optimierung</span>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="view composer-view" data-view-panel="composer">
+        <section class="panel input-panel">
+          <div class="panel-heading">
+            <div><h2>Neue Antwort</h2><p>Füge die eingegangene E-Mail und deinen Kontext ein.</p></div>
+            <div class="source-metrics"><span class="counter" id="charCount">0 Zeichen</span><span class="quality-badge" id="mailQuality">Noch keine Nachricht</span></div>
+          </div>
+          <div class="setup-alert" id="setupAlert">
+            <div>
+              <strong>API-Key einrichten</strong>
+              <p>Für KI-Antworten wird ein eigener Anthropic API-Key benötigt. Inhalte bleiben lokal gespeichert; nur die Anfrage wird an den gewählten KI-Anbieter gesendet.</p>
+            </div>
+            <button type="button" data-view-target="license">Lizenz & API öffnen</button>
+          </div>
+          <div class="composer-tools">
+            <div class="segmented-control" aria-label="Arbeitsmodus">
+              <button type="button" class="is-active" data-mode="reply">Antwort erstellen</button>
+              <button type="button" data-mode="optimize">Entwurf optimieren</button>
+            </div>
+            <div class="field template-picker">
+              <label for="templatePicker">Vorlage anwenden</label>
+              <select id="templatePicker">
+                <option value="">Keine Vorlage ausgewählt</option>
+              </select>
+            </div>
+          </div>
+          <div class="mail-grid">
+            <div class="field"><label for="subject">Betreff</label><input id="subject" type="text" placeholder="z. B. Rückfrage zum Nachtrag"></div>
+            <div class="field"><label for="responseGoal">Ziel der Antwort</label><input id="responseGoal" type="text" placeholder="z. B. verbindlich nachfassen, Termin vorschlagen"></div>
+            <div class="field full"><label for="inboundMessage">Eingegangene Nachricht</label><textarea id="inboundMessage" placeholder="E-Mail aus Outlook, Gmail oder einem anderen Mailprogramm hier einfügen..." spellcheck="true"></textarea></div>
+            <div class="context-tabs full">
+              <div class="tab-buttons" aria-label="Kontextfelder">
+                <button type="button" class="is-active" data-context-tab="notes">Eigene Notizen</button>
+                <button type="button" data-context-tab="hints">Zusätzliche Hinweise</button>
+              </div>
+              <div class="context-panel is-active" data-context-panel="notes">
+                <label for="notes">Eigene Notizen</label>
+                <textarea id="notes" class="small-textarea" placeholder="Interne Hinweise, Fakten, Grenzen, gewünschte Aussage..."></textarea>
+              </div>
+              <div class="context-panel" data-context-panel="hints">
+                <label for="extraHints">Zusätzliche Hinweise</label>
+                <textarea id="extraHints" class="small-textarea" placeholder="Fristen, Ansprechpartner, sensibler Kontext, gewünschte Formulierungen..."></textarea>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <aside class="panel settings-panel">
+          <div class="panel-heading compact"><div><h2>Steuerung</h2><p>Antworttyp, Tonalität, Länge und Fokus.</p></div></div>
+          <div class="control-grid">
+            <div class="field"><label for="responseType">Antworttyp</label><select id="responseType"></select></div>
+            <div class="field"><label for="tone">Tonalität</label><select id="tone"></select></div>
+            <div class="field"><label for="length">Antwortlänge</label><select id="length"><option value="kurz">Kurz</option><option value="standard" selected>Standard</option><option value="ausfuehrlich">Ausführlich</option></select></div>
+            <div class="field"><label for="focus">Fokus</label><select id="focus"></select></div>
+            <div class="field"><label for="language">Sprache</label><select id="language"><option>Deutsch</option><option>Englisch</option><option>Französisch</option><option>Spanisch</option><option>Italienisch</option></select></div>
+            <div class="field"><label for="companyStyle">Unternehmensstil</label><select id="companyStyle"><option>modern</option><option>konservativ</option><option>technisch</option><option>juristisch vorsichtig</option><option>managementorientiert</option></select></div>
+          </div>
+          <button type="button" class="primary-action" id="generateBtn">Antwortvorschläge erstellen</button>
+        </aside>
+
+        <section class="panel output-panel">
+          <div class="panel-heading"><div><h2>KI-Analyse & Antwortvorschläge</h2><p>Jede Antwortvariante ist einzeln kopierbar.</p></div></div>
+          <div class="quality-strip" id="qualityStrip" hidden>
+            <span class="score-badge" data-score="conflict">Konflikt: offen</span>
+            <span class="score-badge" data-score="politeness">Höflichkeit: offen</span>
+            <span class="score-badge" data-score="clarity">Klarheit: offen</span>
+            <span class="score-badge" data-score="commitment">Verbindlichkeit: offen</span>
+          </div>
+          <div class="result-tabs" id="resultTabs" hidden aria-label="Antwortbereiche"></div>
+          <div id="responseOutput" class="response-output is-placeholder">Noch keine Antwort erstellt.</div>
+          <div class="toolbar result-actions">
+            <button type="button" id="copyAllBtn">Alles kopieren</button>
+            <button type="button" id="saveTemplateFromOutputBtn">Als Vorlage speichern</button>
+            <button type="button" id="saveHistoryBtn">Im Verlauf speichern</button>
+            <button type="button" id="resetBtn">Leeren</button>
+          </div>
+        </section>
+      </section>
+
+      <section class="view" data-view-panel="templates">
+        <section class="panel">
+          <div class="panel-heading"><div><h2>Vorlagen</h2><p>Eigene Standardantworten speichern, kategorisieren und favorisieren.</p></div></div>
+          <div class="template-form">
+            <input id="templateTitle" type="text" placeholder="Vorlagentitel">
+            <input id="templateCategory" type="text" placeholder="Kategorie">
+            <textarea id="templateBody" placeholder="Antwortvorlage oder Textbaustein..."></textarea>
+            <label class="check-row"><input id="templateFavorite" type="checkbox"><span>Als Favorit markieren</span></label>
+            <button type="button" class="primary-action" id="addTemplateBtn">Vorlage speichern</button>
+          </div>
+          <div class="card-list" id="templateList"></div>
+        </section>
+      </section>
+
+      <section class="view" data-view-panel="library">
+        <section class="panel">
+          <div class="panel-heading"><div><h2>Bibliothek</h2><p>Kategorien, Favoriten und wiederverwendbare Kommunikationsmuster.</p></div></div>
+          <div class="card-list" id="libraryList"></div>
+        </section>
+      </section>
+
+      <section class="view" data-view-panel="history">
+        <section class="panel">
+          <div class="panel-heading"><div><h2>Verlauf</h2><p>Bisherige Vorgänge werden lokal gespeichert.</p></div></div>
+          <div class="history-tools">
+            <input id="historySearch" type="search" placeholder="Verlauf durchsuchen">
+            <select id="historyTypeFilter">
+              <option value="">Alle Antworttypen</option>
+            </select>
+          </div>
+          <div class="card-list" id="historyList"></div>
+        </section>
+      </section>
+
+      <section class="view" data-view-panel="style">
+        <section class="panel">
+          <div class="panel-heading"><div><h2>Unternehmensstil</h2><p>Definiere den Standard-Kommunikationsstil für künftige Antworten.</p></div></div>
+          <div class="style-grid">
+            <label><input type="radio" name="stylePreset" value="konservativ"> konservativ</label>
+            <label><input type="radio" name="stylePreset" value="modern" checked> modern</label>
+            <label><input type="radio" name="stylePreset" value="technisch"> technisch</label>
+            <label><input type="radio" name="stylePreset" value="juristisch vorsichtig"> juristisch vorsichtig</label>
+            <label><input type="radio" name="stylePreset" value="managementorientiert"> managementorientiert</label>
+          </div>
+          <textarea id="styleNotes" class="style-notes" placeholder="Eigene Stilregeln, verbotene Formulierungen, bevorzugte Grußformel, Corporate Wording..."></textarea>
+          <button type="button" class="primary-action narrow" id="saveStyleBtn">Stil speichern</button>
+        </section>
+      </section>
+
+      <section class="view" data-view-panel="settings">
+        <section class="panel">
+          <div class="panel-heading"><div><h2>Einstellungen</h2><p>Sprache, Standardantwortstil, Export/Import und lokale Datensicherung.</p></div></div>
+          <div class="settings-grid">
+            <div class="field"><label>Standardsprache</label><select id="defaultLanguage"><option>Deutsch</option><option>Englisch</option><option>Französisch</option><option>Spanisch</option><option>Italienisch</option></select></div>
+            <div class="field"><label>Antwortstil</label><select id="defaultTone"><option>geschäftlich-formell</option><option>freundlich</option><option>souverän</option><option>diplomatisch</option></select></div>
+            <button type="button" id="exportDataBtn">Lokale Daten exportieren</button>
+            <button type="button" id="clearDataBtn">Lokale Arbeitsdaten leeren</button>
+          </div>
+        </section>
+      </section>
+
+      <section class="view" data-view-panel="license">
+        <section class="panel api-panel">
+          <div class="panel-heading compact"><div><h2>Lizenz & API</h2><p>Lizenz aktivieren, API-Key verwalten und Datenschutz prüfen.</p></div></div>
+          <details class="api-key-card license-card" open>
+            <summary class="api-key-toggle">
+              <div><h3>Lizenz verwalten</h3><p>Lizenzschlüssel und Kauf-E-Mail lokal speichern und prüfen.</p></div>
+              <span class="api-key-summary"><span class="connection-badge" id="licenseBadge">Nicht aktiviert</span><span class="chevron">▾</span></span>
+            </summary>
+            <div class="api-key-details">
+              <div class="license-grid">
+                <div class="field api-field"><label for="licenseKey">Lizenzschlüssel</label><input id="licenseKey" type="text" autocomplete="off" placeholder="SMART-XXXX-XXXX-XXXX"></div>
+                <div class="field api-field"><label for="licenseEmail">E-Mail-Adresse</label><input id="licenseEmail" type="email" autocomplete="off" placeholder="name@unternehmen.de"></div>
+              </div>
+              <div class="api-action-row license-action-row">
+                <div class="api-actions license-actions"><button type="button" id="saveLicenseBtn">Lizenz speichern</button><button type="button" id="verifyLicenseBtn">Lizenz prüfen</button></div>
+                <div class="key-feedback" id="licenseFeedback">Noch keine Lizenz gespeichert.</div>
+              </div>
+            </div>
+          </details>
+
+          <details class="api-key-card" id="apiKeyCard" open>
+            <summary class="api-key-toggle">
+              <div><h3>API-Key verwalten</h3><p>Anthropic Claude lokal verwalten und Verbindung testen.</p></div>
+              <span class="api-key-summary"><span class="connection-badge" id="connectionBadge">Nicht verbunden</span><span class="chevron">▾</span></span>
+            </summary>
+            <div class="api-key-details">
+              <div class="field api-field">
+                <label for="apiKey">API-Schlüssel</label>
+                <div class="secret-row">
+                  <input id="apiKey" type="password" autocomplete="off" placeholder="sk-ant-...">
+                  <button type="button" class="icon-button eye-button" id="toggleKey" aria-label="API-Key anzeigen" aria-pressed="false">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.2 12s3.6-6.5 9.8-6.5S21.8 12 21.8 12 18.2 18.5 12 18.5 2.2 12 2.2 12Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                  </button>
+                </div>
+                <p class="field-help" id="keyHint">Gib deinen Anthropic API-Key ein. Ohne Key wird keine KI-Anfrage gesendet.</p>
+              </div>
+              <label class="check-row"><input id="rememberKey" type="checkbox"><span>API-Key lokal im Browser speichern</span></label>
+              <div class="api-action-row">
+                <div class="api-actions"><button type="button" id="saveKeyBtn">Speichern</button><button type="button" id="connectBtn">Verbindung</button><button type="button" id="testConnectionBtn">Verbindung überprüfen</button><button type="button" id="disconnectBtn">Verbindung trennen</button></div>
+                <div class="key-feedback" id="keyFeedback">Noch kein API-Key gespeichert.</div>
+              </div>
+              <div class="privacy-note"><strong>Datenschutz-Hinweis</strong><p>Inhalte werden nur für die KI-Anfrage über den lokalen Proxy an Anthropic übertragen. API-Key, Lizenz, Verlauf und Vorlagen bleiben lokal. Für die Electron-Version ist verschlüsselte Speicherung im OS-Keychain plus SQLite vorgesehen.</p></div>
+            </div>
+          </details>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="helpModal">
+    <section class="help-modal" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+      <div class="help-header"><div><p class="eyebrow">Hilfe</p><h2 id="helpTitle">Wichtige Hinweise</h2></div><label class="modal-close" for="helpToggle" aria-label="Hilfe schließen">×</label></div>
+      <div class="help-grid">
+        <article><h3>Copy-and-Paste</h3><p>E-Mails aus Outlook, Gmail oder anderen Programmen können direkt eingefügt werden. Anhänge werden im MVP nicht automatisch gelesen.</p></article>
+        <article><h3>Datenschutz</h3><p>Arbeitsdaten bleiben lokal im Browser-Prototyp. Die Zielversion nutzt SQLite und verschlüsselte Einstellungen.</p></article>
+        <article><h3>API-Key</h3><p>Der API-Key wird verborgen angezeigt und nur lokal gespeichert, wenn die Speicherung aktiviert ist.</p></article>
+        <article><h3>Lizenz</h3><p>Für Tests funktioniert SMART-DEMO-2026-LOCAL. Produktiv wird Stripe mit einer Lizenz-API verbunden.</p></article>
+      </div>
+    </section>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
