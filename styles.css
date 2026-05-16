@@ -970,6 +970,41 @@ textarea:focus, input:focus, select:focus {
   align-self: center;
   justify-content: flex-end;
   flex-wrap: nowrap;
+  gap: 6px;
+}
+
+.style-profile-card .card-actions button {
+  min-height: 30px;
+  padding: 5px 10px;
+  border-color: rgba(22, 43, 71, 0.1);
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.78), rgba(246,249,253,0.58));
+  color: #33445f;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.82), 0 8px 18px rgba(20,32,51,0.04);
+  transition: transform 0.16s ease, border-color 0.16s ease, background 0.16s ease, box-shadow 0.16s ease, color 0.16s ease;
+}
+
+.style-profile-card .card-actions button:hover {
+  transform: translateY(-1px);
+  border-color: rgba(22,104,184,0.24);
+  background: linear-gradient(180deg, #ffffff, #eef6ff);
+  color: var(--accent-strong);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.95), 0 10px 22px rgba(20,32,51,0.08);
+}
+
+.style-profile-card .card-actions .danger-action {
+  border-color: rgba(201,54,68,0.14);
+  background: linear-gradient(180deg, rgba(255,255,255,0.74), rgba(255,246,247,0.62));
+  color: #8d3440;
+}
+
+.style-profile-card .card-actions .danger-action:hover {
+  border-color: rgba(201,54,68,0.26);
+  background: linear-gradient(180deg, #ffffff, #fff0f2);
+  color: #a72c3a;
 }
 
 .api-key-card {
