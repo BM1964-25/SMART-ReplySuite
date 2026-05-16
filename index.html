@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SMART MailResponse</title>
-  <link rel="stylesheet" href="styles.css?v=style-assist-33-66">
+  <link rel="stylesheet" href="styles.css?v=style-pills-expanded">
   <script>
     (function () {
       const collapsedKey = "smart-mailresponse-sidebar-collapsed";
@@ -578,26 +578,38 @@
               <h3>Zusätzliche Stilakzente</h3>
               <p>Mehrfachauswahl möglich. Der Hauptstil bleibt führend, die Akzente verfeinern die Antwort.</p>
               <div class="chip-grid" id="styleAccentChips">
-                <button type="button" data-style-accent="diplomatisch" onclick="window.SMART_STYLE?.toggleStyleChip(this)">diplomatisch</button>
-                <button type="button" data-style-accent="wertschätzend" onclick="window.SMART_STYLE?.toggleStyleChip(this)">wertschätzend</button>
                 <button type="button" data-style-accent="deeskalierend" onclick="window.SMART_STYLE?.toggleStyleChip(this)">deeskalierend</button>
-                <button type="button" data-style-accent="kurz und präzise" onclick="window.SMART_STYLE?.toggleStyleChip(this)">kurz und präzise</button>
                 <button type="button" data-style-accent="direkt" onclick="window.SMART_STYLE?.toggleStyleChip(this)">direkt</button>
+                <button type="button" data-style-accent="diplomatisch" onclick="window.SMART_STYLE?.toggleStyleChip(this)">diplomatisch</button>
                 <button type="button" data-style-accent="entscheidungsorientiert" onclick="window.SMART_STYLE?.toggleStyleChip(this)">entscheidungsorientiert</button>
+                <button type="button" data-style-accent="kooperativ" onclick="window.SMART_STYLE?.toggleStyleChip(this)">kooperativ</button>
+                <button type="button" data-style-accent="kundenorientiert" onclick="window.SMART_STYLE?.toggleStyleChip(this)">kundenorientiert</button>
+                <button type="button" data-style-accent="kurz und präzise" onclick="window.SMART_STYLE?.toggleStyleChip(this)">kurz und präzise</button>
+                <button type="button" data-style-accent="lösungsorientiert" onclick="window.SMART_STYLE?.toggleStyleChip(this)">lösungsorientiert</button>
+                <button type="button" data-style-accent="präzise" onclick="window.SMART_STYLE?.toggleStyleChip(this)">präzise</button>
+                <button type="button" data-style-accent="sachlich-klar" onclick="window.SMART_STYLE?.toggleStyleChip(this)">sachlich-klar</button>
+                <button type="button" data-style-accent="vertragsneutral" onclick="window.SMART_STYLE?.toggleStyleChip(this)">vertragsneutral</button>
+                <button type="button" data-style-accent="wertschätzend" onclick="window.SMART_STYLE?.toggleStyleChip(this)">wertschätzend</button>
               </div>
             </article>
             <article>
               <h3>No-Gos berücksichtigen</h3>
               <p>Die ausgewählten Punkte werden als klare Grenzen an die KI übergeben.</p>
               <div class="chip-grid" id="styleNoGoChips">
-                <button type="button" data-style-nogo="keine Schuldzuweisungen" onclick="window.SMART_STYLE?.toggleStyleChip(this)">keine Schuldzuweisungen</button>
-                <button type="button" data-style-nogo="keine rechtlich verbindlichen Zusagen" onclick="window.SMART_STYLE?.toggleStyleChip(this)">keine verbindlichen Zusagen</button>
-                <button type="button" data-style-nogo="keine Preis-, Termin- oder Leistungszusagen ohne Prüfung" onclick="window.SMART_STYLE?.toggleStyleChip(this)">keine Zusagen ohne Prüfung</button>
-                <button type="button" data-style-nogo="keine Umgangssprache" onclick="window.SMART_STYLE?.toggleStyleChip(this)">keine Umgangssprache</button>
-                <button type="button" data-style-nogo="keine internen Informationen preisgeben" onclick="window.SMART_STYLE?.toggleStyleChip(this)">keine Interna preisgeben</button>
-                <button type="button" data-style-nogo="keine Spekulationen oder Vermutungen" onclick="window.SMART_STYLE?.toggleStyleChip(this)">keine Spekulationen</button>
+                <button type="button" data-style-nogo="keine Anerkennung von Ansprüchen" onclick="window.SMART_STYLE?.toggleStyleChip(this)">keine Anerkennung von Ansprüchen</button>
+                <button type="button" data-style-nogo="keine emotionalen Formulierungen" onclick="window.SMART_STYLE?.toggleStyleChip(this)">keine emotionalen Formulierungen</button>
                 <button type="button" data-style-nogo="keine Eskalation ohne Freigabe" onclick="window.SMART_STYLE?.toggleStyleChip(this)">keine Eskalation ohne Freigabe</button>
+                <button type="button" data-style-nogo="keine Fristzusagen ohne Prüfung" onclick="window.SMART_STYLE?.toggleStyleChip(this)">keine Fristzusagen ohne Prüfung</button>
+                <button type="button" data-style-nogo="keine internen Informationen preisgeben" onclick="window.SMART_STYLE?.toggleStyleChip(this)">keine Interna preisgeben</button>
+                <button type="button" data-style-nogo="keine Zusage zu Kostenübernahmen" onclick="window.SMART_STYLE?.toggleStyleChip(this)">keine Kostenübernahmen zusagen</button>
+                <button type="button" data-style-nogo="keine Schuldzuweisungen" onclick="window.SMART_STYLE?.toggleStyleChip(this)">keine Schuldzuweisungen</button>
+                <button type="button" data-style-nogo="keine Schuldeingeständnisse" onclick="window.SMART_STYLE?.toggleStyleChip(this)">keine Schuldeingeständnisse</button>
+                <button type="button" data-style-nogo="keine Spekulationen oder Vermutungen" onclick="window.SMART_STYLE?.toggleStyleChip(this)">keine Spekulationen</button>
+                <button type="button" data-style-nogo="keine Umgangssprache" onclick="window.SMART_STYLE?.toggleStyleChip(this)">keine Umgangssprache</button>
                 <button type="button" data-style-nogo="keine Entschuldigungen, wenn Verantwortung unklar ist" onclick="window.SMART_STYLE?.toggleStyleChip(this)">keine unklaren Entschuldigungen</button>
+                <button type="button" data-style-nogo="keine rechtlich verbindlichen Zusagen" onclick="window.SMART_STYLE?.toggleStyleChip(this)">keine verbindlichen Zusagen</button>
+                <button type="button" data-style-nogo="keine vertraulichen Details" onclick="window.SMART_STYLE?.toggleStyleChip(this)">keine vertraulichen Details</button>
+                <button type="button" data-style-nogo="keine Preis-, Termin- oder Leistungszusagen ohne Prüfung" onclick="window.SMART_STYLE?.toggleStyleChip(this)">keine Zusagen ohne Prüfung</button>
               </div>
             </article>
           </div>
