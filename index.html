@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SMART MailResponse</title>
-  <link rel="stylesheet" href="styles.css?v=sidebar-workflow-order">
+  <link rel="stylesheet" href="styles.css?v=settings-priority-help">
   <script>
     (function () {
       const collapsedKey = "smart-mailresponse-sidebar-collapsed";
@@ -423,7 +423,7 @@
       <section class="view composer-view" data-view-panel="composer">
         <section class="panel input-panel">
           <div class="panel-heading">
-            <div><h2>Neue Antwort</h2><p>Füge die eingegangene E-Mail und deinen Kontext ein.</p></div>
+            <div><h2>Neue Antwort</h2><p>Füge die eingegangene E-Mail und deinen Kontext ein. Angaben hier gelten für diesen Vorgang und überschreiben die Grundeinstellungen.</p></div>
             <div class="source-metrics"><span class="counter" id="charCount">0 Zeichen</span><span class="quality-badge" id="mailQuality">Noch keine Nachricht</span></div>
           </div>
           <div class="setup-alert" id="setupAlert">
@@ -473,7 +473,7 @@
         </section>
 
         <aside class="panel settings-panel">
-          <div class="panel-heading compact"><div><h2>Steuerung</h2><p>Antworttyp, Tonalität, Länge und Fokus.</p></div></div>
+          <div class="panel-heading compact"><div><h2>Steuerung</h2><p>Antworttyp, Tonalität, Länge, Fokus und Sprache für diese Antwort.</p></div></div>
           <div class="control-grid">
             <div class="field"><label for="responseType">Antworttyp</label><select id="responseType"></select></div>
             <div class="field"><label for="tone">Tonalität</label><select id="tone"></select></div>
@@ -561,10 +561,10 @@
 
       <section class="view" data-view-panel="style">
         <section class="panel">
-          <div class="panel-heading"><div><h2>Unternehmensstil</h2><p>Erstelle wiederverwendbare Stilprofile für unterschiedliche Kommunikationssituationen.</p></div></div>
+          <div class="panel-heading"><div><h2>Unternehmensstil</h2><p>Erstelle wiederverwendbare Stilprofile für Corporate Voice, Akzente und No-Gos.</p></div></div>
           <div class="info-note">
             <strong>Was macht der Unternehmensstil?</strong>
-            <p>Hier erstellst und verwaltest du Stilprofile aus Hauptstil, Stilakzenten, No-Gos und eigenen Regeln. Gespeicherte Profile erscheinen automatisch in „Neue Antwort“ im Feld „Stilprofil zugrunde legen“.</p>
+            <p>Hier erstellst und verwaltest du Stilprofile aus Hauptstil, Stilakzenten, No-Gos und eigenen Regeln. Gespeicherte Profile erscheinen automatisch in „Neue Antwort“ und ergänzen die konkrete Vorgangsauswahl.</p>
           </div>
           <div class="style-grid">
             <label><input type="radio" name="stylePreset" value="konservativ"> konservativ</label>
@@ -624,14 +624,18 @@
 
       <section class="view" data-view-panel="settings">
         <section class="panel">
-          <div class="panel-heading"><div><h2>Einstellungen</h2><p>Ausgabesprache, Standardantwortstil, Export/Import und lokale Datensicherung.</p></div></div>
+          <div class="panel-heading"><div><h2>Einstellungen</h2><p>Grundeinstellungen für neue Antworten, Export/Import und lokale Datensicherung.</p></div></div>
+          <div class="info-note">
+            <strong>Grundeinstellungen & Vorrang</strong>
+            <p>Standard-Ausgabesprache und Standard-Antwortstil dienen als Voreinstellung. Für den einzelnen Vorgang haben Angaben in „Neue Antwort“, ein gewähltes Stilprofil sowie eigene Notizen und Hinweise Vorrang.</p>
+          </div>
           <div class="info-note">
             <strong>Export & Import als .json</strong>
             <p>Der Export erstellt eine lokale Sicherungsdatei im JSON-Format. Die Datei wird vom Browser im Standard-Download-Ordner gespeichert, normalerweise unter <code>Downloads</code>, sofern kein anderer Speicherort abgefragt oder eingestellt wurde.</p>
           </div>
           <div class="settings-grid">
             <div class="field"><label>Standard-Ausgabesprache</label><select id="defaultLanguage"><option>Deutsch</option><option>Englisch</option><option>Französisch</option><option>Spanisch</option><option>Italienisch</option></select></div>
-            <div class="field"><label>Antwortstil</label><select id="defaultTone"><option>geschäftlich-formell</option><option>freundlich</option><option>souverän</option><option>diplomatisch</option></select></div>
+            <div class="field"><label>Standard-Antwortstil</label><select id="defaultTone"><option>geschäftlich-formell</option><option>freundlich</option><option>souverän</option><option>diplomatisch</option></select></div>
           </div>
           <div class="settings-actions">
             <button type="button" id="exportDataBtn" onclick="window.SMART_BACKUP?.exportJson()">Lokale Daten als .json exportieren</button>
@@ -764,11 +768,11 @@
         </article>
         <article>
           <h3>Unternehmensstil</h3>
-          <p>Der Unternehmensstil verwaltet wiederverwendbare Stilprofile. Gespeicherte Profile werden in „Neue Antwort“ ausgewählt und hier bearbeitet, dupliziert oder gelöscht.</p>
+          <p>Der Unternehmensstil verwaltet wiederverwendbare Stilprofile. Sie ergänzen die konkrete Antwortsteuerung mit Corporate Voice, Akzenten, No-Gos und eigenen Regeln.</p>
         </article>
         <article>
           <h3>Einstellungen</h3>
-          <p>In den Einstellungen verwaltest du Standard-Ausgabesprache, Antwortstil, lokale JSON-Sicherungen und Diagnoseinformationen.</p>
+          <p>In den Einstellungen verwaltest du Grundeinstellungen wie Standard-Ausgabesprache, Standard-Antwortstil, lokale JSON-Sicherungen und Diagnoseinformationen.</p>
         </article>
       </div>
 
@@ -816,6 +820,16 @@
             <li><strong>Profil löschen:</strong> Nicht mehr benötigte Stilprofile werden direkt aus der Liste entfernt.</li>
             <li><strong>Corporate Voice abbilden:</strong> Wiederkehrende Sprachregeln, Begriffe, Grußformeln und Grenzen werden konsistent an die KI übergeben.</li>
             <li><strong>Merksatz:</strong> Unternehmensstil = Corporate Voice für KI-Antworten.</li>
+          </ul>
+        </article>
+        <article>
+          <h3>Welche Einstellungen haben Vorrang?</h3>
+          <ul>
+            <li><strong>Einstellungen:</strong> Standard-Ausgabesprache und Standard-Antwortstil sind Grundeinstellungen für neue Vorgänge.</li>
+            <li><strong>Neue Antwort:</strong> Sprache, Tonalität, Länge, Fokus und Antworttyp überschreiben die Grundeinstellungen für diesen Vorgang.</li>
+            <li><strong>Stilprofil:</strong> Ergänzt die Antwort um Corporate Voice, Akzente, No-Gos und eigene Regeln.</li>
+            <li><strong>Eigene Notizen und Hinweise:</strong> Haben den stärksten Bezug zum aktuellen Fall und sollen bei Widersprüchen zuerst berücksichtigt werden.</li>
+            <li><strong>Priorität:</strong> Aktuelle Hinweise > Auswahl in Neue Antwort > gewähltes Stilprofil > Einstellungen.</li>
           </ul>
         </article>
         <article>
