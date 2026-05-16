@@ -82,6 +82,7 @@ let currentResponseData = null;
 let currentMode = "reply";
 let currentSections = [];
 let editingTemplateId = null;
+let editingStyleProfileId = null;
 let selectedStyleAccents = Array.isArray(dataState.companyStyleAccents) ? [...dataState.companyStyleAccents] : [];
 let selectedStyleNoGos = Array.isArray(dataState.companyStyleNoGos) ? [...dataState.companyStyleNoGos] : [];
 
@@ -891,7 +892,7 @@ function renderStyleProfilePicker() {
   const currentValue = elements.styleProfilePicker.value;
   const profiles = dataState.styleProfiles || [];
   elements.styleProfilePicker.innerHTML = [
-    `<option value="">Kein Stilprofil ausgewählt</option>`,
+    `<option value="">Kein Stilprofil zugrunde gelegt</option>`,
     ...profiles.map((profile) => `<option value="${escapeHtml(profile.id)}">${escapeHtml(profile.name)}</option>`)
   ].join("");
   if (profiles.some((profile) => profile.id === currentValue)) {
@@ -1142,7 +1143,9 @@ function applyStyleProfile(id) {
   selectedStyleNoGos = [...(profile.companyStyleNoGos || [])];
   renderStyleChips();
   elements.styleProfilePicker.value = id;
-  setStatus("Stilprofil angewendet", "ready");
+  editingStyleProfileId = null;
+  elements.saveStyleProfileBtn.textContent = "Als Stilprofil speichern";
+  setStatus("Stilprofil zugrunde gelegt", "ready");
 }
 
 function editStyleProfile(id) {
@@ -1150,6 +1153,8 @@ function editStyleProfile(id) {
   if (!profile) return;
   applyStyleProfile(id);
   elements.styleProfileName.value = profile.name;
+  editingStyleProfileId = id;
+  elements.saveStyleProfileBtn.textContent = "Stilprofil aktualisieren";
   showView("style");
   setStatus("Stilprofil im Bearbeitungsmodus", "ready");
 }
@@ -1178,6 +1183,8 @@ function duplicateStyleProfile(id) {
   renderStyleProfileList();
   applyStyleProfile(copy.id);
   elements.styleProfileName.value = copy.name;
+  editingStyleProfileId = copy.id;
+  elements.saveStyleProfileBtn.textContent = "Stilprofil aktualisieren";
   showView("style");
   setStatus("Stilprofil dupliziert", "ready");
 }
@@ -1186,6 +1193,10 @@ function deleteStyleProfile(id) {
   const index = dataState.styleProfiles.findIndex((item) => item.id === id);
   if (index < 0) return;
   dataState.styleProfiles.splice(index, 1);
+  if (editingStyleProfileId === id) {
+    editingStyleProfileId = null;
+    elements.saveStyleProfileBtn.textContent = "Als Stilprofil speichern";
+  }
   saveData();
   renderStyleProfilePicker();
   renderStyleProfileList();
