@@ -607,38 +607,42 @@ textarea:focus, input:focus, select:focus {
 
 .optional-context {
   display: grid;
-  grid-template-columns: minmax(190px, 0.72fr) minmax(0, 1fr);
+  grid-template-columns: minmax(190px, 0.58fr) minmax(0, 1fr);
   gap: 12px;
-  align-items: end;
+  align-items: center;
   padding: 10px 12px;
   border: 1px solid rgba(22,104,184,0.14);
   border-radius: var(--radius);
   background: rgba(248,251,255,0.72);
 }
 
-.optional-context strong,
-.optional-context span {
+.optional-context-labels {
+  display: grid;
+  gap: 4px;
+}
+
+.optional-context-labels strong,
+.optional-context-labels span {
   display: block;
 }
 
-.optional-context strong {
+.optional-context-labels strong {
   color: var(--text);
   font-size: 0.86rem;
   font-weight: 900;
 }
 
-.optional-context span {
-  margin-top: 3px;
+.optional-context-labels span {
   color: var(--soft);
-  font-size: 0.74rem;
-  font-weight: 680;
+  font-size: 0.78rem;
+  font-weight: 760;
   line-height: 1.25;
 }
 
 .optional-context-fields {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
+  grid-template-columns: 1fr;
+  gap: 8px;
   align-items: end;
 }
 
