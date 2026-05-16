@@ -12,6 +12,9 @@ function buildMailResponsePrompts({
   focus,
   language,
   companyStyle,
+  companyStyleNotes = "",
+  companyStyleAccents = [],
+  companyStyleNoGos = [],
   mode = "reply"
 }) {
   const lengthMap = {
@@ -56,6 +59,9 @@ function buildMailResponsePrompts({
     `Antwortlänge: ${lengthMap[length] || lengthMap.standard}`,
     `Fokus: ${focus}. ${focusRules[focus] || ""}`,
     `Unternehmensstil: ${companyStyleMap[companyStyle] || companyStyle}.`,
+    companyStyleAccents.length ? `Zusätzliche Stilakzente: ${companyStyleAccents.join(", ")}.` : "",
+    companyStyleNoGos.length ? `Verbindliche No-Gos: ${companyStyleNoGos.join("; ")}.` : "",
+    companyStyleNotes ? `Eigene Unternehmensstil-Regeln: ${companyStyleNotes}.` : "",
     "Gib ausschließlich valides JSON aus. Keine Markdown-Codeblöcke, keine Einleitung, keine Kommentare.",
     "Das JSON muss exakt diese Struktur haben:",
     "{",
@@ -94,6 +100,9 @@ function buildMailResponsePrompts({
     `Länge: ${length}`,
     `Fokus: ${focus}`,
     `Unternehmensstil: ${companyStyle}`,
+    `Zusätzliche Stilakzente: ${companyStyleAccents.length ? companyStyleAccents.join(", ") : "keine"}`,
+    `No-Gos: ${companyStyleNoGos.length ? companyStyleNoGos.join("; ") : "keine"}`,
+    `Eigene Stilregeln: ${companyStyleNotes || "keine"}`,
     `Zielsprache: ${language}`,
     "",
     "Eingegangene Nachricht:",

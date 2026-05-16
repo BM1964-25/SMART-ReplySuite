@@ -82,6 +82,8 @@ let currentResponseData = null;
 let currentMode = "reply";
 let currentSections = [];
 let editingTemplateId = null;
+let selectedStyleAccents = Array.isArray(dataState.companyStyleAccents) ? [...dataState.companyStyleAccents] : [];
+let selectedStyleNoGos = Array.isArray(dataState.companyStyleNoGos) ? [...dataState.companyStyleNoGos] : [];
 
 const elements = {
   appShell: document.querySelector("#appShell"),
@@ -131,6 +133,8 @@ const elements = {
   historySearch: document.querySelector("#historySearch"),
   historyTypeFilter: document.querySelector("#historyTypeFilter"),
   styleNotes: document.querySelector("#styleNotes"),
+  styleAccentButtons: document.querySelectorAll("[data-style-accent]"),
+  styleNoGoButtons: document.querySelectorAll("[data-style-nogo]"),
   saveStyleBtn: document.querySelector("#saveStyleBtn"),
   defaultLanguage: document.querySelector("#defaultLanguage"),
   defaultTone: document.querySelector("#defaultTone"),
@@ -202,6 +206,7 @@ function init() {
   elements.tone.value = dataState.settings.defaultTone || "geschäftlich-formell";
   elements.companyStyle.value = dataState.companyStyle || "modern";
   document.querySelector(`input[name="stylePreset"][value="${dataState.companyStyle || "modern"}"]`)?.click();
+  renderStyleChips();
 
   bindEvents();
   updateCharacterCount();
@@ -239,6 +244,11 @@ function bindEvents() {
   elements.librarySearch.addEventListener("input", renderLibrary);
   elements.libraryTagFilter.addEventListener("change", renderLibrary);
   elements.saveStyleBtn.addEventListener("click", saveStyle);
+  document.querySelectorAll('input[name="stylePreset"]').forEach((input) => {
+    input.addEventListener("change", () => {
+      if (input.checked) elements.companyStyle.value = input.value;
+    });
+  });
   elements.defaultLanguage.addEventListener("change", saveSettings);
   elements.defaultTone.addEventListener("change", saveSettings);
   elements.clearDataBtn.addEventListener("click", clearWorkingData);
@@ -331,6 +341,9 @@ async function handleGenerate() {
       focus: elements.focus.value,
       language: elements.language.value,
       companyStyle: elements.companyStyle.value,
+      companyStyleNotes: elements.styleNotes.value.trim(),
+      companyStyleAccents: getSelectedStyleChips("accent"),
+      companyStyleNoGos: getSelectedStyleChips("nogo"),
       mode: currentMode
     });
 
@@ -1044,12 +1057,31 @@ function resetComposer() {
 
 function saveStyle() {
   const selected = document.querySelector('input[name="stylePreset"]:checked')?.value || "modern";
+  selectedStyleAccents = getSelectedStyleChips("accent");
+  selectedStyleNoGos = getSelectedStyleChips("nogo");
   dataState.companyStyle = selected;
   dataState.companyStyleNotes = elements.styleNotes.value.trim();
+  dataState.companyStyleAccents = [...selectedStyleAccents];
+  dataState.companyStyleNoGos = [...selectedStyleNoGos];
   elements.companyStyle.value = selected;
   saveData();
   updateDashboard();
   setStatus("Stil gespeichert", "ready");
+}
+
+function renderStyleChips() {
+  elements.styleAccentButtons.forEach((button) => {
+    button.classList.toggle("is-active", selectedStyleAccents.includes(button.dataset.styleAccent));
+  });
+  elements.styleNoGoButtons.forEach((button) => {
+    button.classList.toggle("is-active", selectedStyleNoGos.includes(button.dataset.styleNogo));
+  });
+}
+
+function getSelectedStyleChips(type) {
+  const selector = type === "accent" ? "[data-style-accent].is-active" : "[data-style-nogo].is-active";
+  const key = type === "accent" ? "styleAccent" : "styleNogo";
+  return [...document.querySelectorAll(selector)].map((button) => button.dataset[key]);
 }
 
 function saveSettings() {
@@ -1093,9 +1125,14 @@ async function importData(event) {
     dataState.history = Array.isArray(imported.history) ? imported.history : dataState.history;
     dataState.companyStyle = imported.companyStyle || dataState.companyStyle;
     dataState.companyStyleNotes = imported.companyStyleNotes || dataState.companyStyleNotes;
+    dataState.companyStyleAccents = Array.isArray(imported.companyStyleAccents) ? imported.companyStyleAccents : dataState.companyStyleAccents;
+    dataState.companyStyleNoGos = Array.isArray(imported.companyStyleNoGos) ? imported.companyStyleNoGos : dataState.companyStyleNoGos;
+    selectedStyleAccents = [...dataState.companyStyleAccents];
+    selectedStyleNoGos = [...dataState.companyStyleNoGos];
     dataState.settings = { ...dataState.settings, ...(imported.settings || {}) };
     saveData();
     renderLists();
+    renderStyleChips();
     updateDashboard();
     renderDiagnostics();
     setStatus(".json-Datei importiert", "ready");
@@ -1390,6 +1427,8 @@ function loadData() {
     history: [],
     companyStyle: "modern",
     companyStyleNotes: "",
+    companyStyleAccents: [],
+    companyStyleNoGos: [],
     settings: {
       defaultLanguage: "Deutsch",
       defaultTone: "geschäftlich-formell"

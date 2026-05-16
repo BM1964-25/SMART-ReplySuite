@@ -14,6 +14,8 @@
         history: [],
         companyStyle: "modern",
         companyStyleNotes: "",
+        companyStyleAccents: [],
+        companyStyleNoGos: [],
         settings: {
           defaultLanguage: "Deutsch",
           defaultTone: "geschäftlich-formell"
@@ -51,6 +53,48 @@
         }
       }
 
+      function saveLocalData(nextData) {
+        try {
+          localStorage.setItem(dataKey, JSON.stringify(nextData));
+        } catch (error) {
+          // Lokale Datei-Ansicht kann Storage je nach Browser-Einstellung blockieren.
+        }
+      }
+
+      function getActiveValues(selector, attribute) {
+        return [...document.querySelectorAll(`${selector}.is-active`)].map((button) => button.dataset[attribute]);
+      }
+
+      function renderStyleSelection(data = loadLocalData()) {
+        document.querySelectorAll("[data-style-accent]").forEach((button) => {
+          button.classList.toggle("is-active", (data.companyStyleAccents || []).includes(button.dataset.styleAccent));
+        });
+        document.querySelectorAll("[data-style-nogo]").forEach((button) => {
+          button.classList.toggle("is-active", (data.companyStyleNoGos || []).includes(button.dataset.styleNogo));
+        });
+      }
+
+      function toggleStyleChip(button) {
+        button.classList.toggle("is-active");
+      }
+
+      function saveStyleSelection() {
+        const current = loadLocalData();
+        const selectedStyle = document.querySelector('input[name="stylePreset"]:checked')?.value || current.companyStyle || "modern";
+        const nextData = {
+          ...current,
+          companyStyle: selectedStyle,
+          companyStyleNotes: document.querySelector("#styleNotes")?.value.trim() || "",
+          companyStyleAccents: getActiveValues("[data-style-accent]", "styleAccent"),
+          companyStyleNoGos: getActiveValues("[data-style-nogo]", "styleNogo")
+        };
+        const companyStyleSelect = document.querySelector("#companyStyle");
+        if (companyStyleSelect) companyStyleSelect.value = selectedStyle;
+        saveLocalData(nextData);
+        setFallbackStatus("Stil gespeichert");
+        prependDiagnostic("Unternehmensstil", `${selectedStyle}, ${nextData.companyStyleAccents.length} Akzente, ${nextData.companyStyleNoGos.length} No-Gos`);
+      }
+
       function exportJson() {
         const fileName = `smart-mailresponse-backup-${new Date().toISOString().slice(0, 10)}.json`;
         const blob = new Blob([JSON.stringify(loadLocalData(), null, 2)], { type: "application/json;charset=utf-8" });
@@ -84,6 +128,8 @@
             history: Array.isArray(imported.history) ? imported.history : current.history,
             companyStyle: imported.companyStyle || current.companyStyle,
             companyStyleNotes: imported.companyStyleNotes || current.companyStyleNotes,
+            companyStyleAccents: Array.isArray(imported.companyStyleAccents) ? imported.companyStyleAccents : current.companyStyleAccents,
+            companyStyleNoGos: Array.isArray(imported.companyStyleNoGos) ? imported.companyStyleNoGos : current.companyStyleNoGos,
             settings: { ...current.settings, ...(imported.settings || {}) }
           };
           localStorage.setItem(dataKey, JSON.stringify(nextData));
@@ -126,6 +172,7 @@
 
       window.SMART_APP = { showView, toggleSidebar, applySidebarState };
       window.SMART_BACKUP = { exportJson, openJsonImport, importJsonFile };
+      window.SMART_STYLE = { toggleStyleChip, saveStyleSelection, renderStyleSelection };
 
       document.addEventListener("DOMContentLoaded", () => {
         let storedCollapsed = false;
@@ -135,6 +182,7 @@
           storedCollapsed = false;
         }
         applySidebarState(storedCollapsed);
+        renderStyleSelection();
       });
     })();
   </script>
@@ -364,7 +412,7 @@
           <div class="panel-heading"><div><h2>Unternehmensstil</h2><p>Definiere den Standard-Kommunikationsstil für künftige Antworten.</p></div></div>
           <div class="info-note">
             <strong>Was macht der Unternehmensstil?</strong>
-            <p>Der Unternehmensstil steuert die grundsätzliche Sprache deiner Antworten. Er wirkt wie ein Kommunikationsprofil für die KI, zum Beispiel konservativ, modern, technisch, juristisch vorsichtig oder managementorientiert.</p>
+            <p>Der Unternehmensstil steuert die grundsätzliche Sprache deiner Antworten. Ein Hauptstil bleibt führend; zusätzliche Stilakzente und No-Gos können per Klick ergänzt werden.</p>
           </div>
           <div class="style-grid">
             <label><input type="radio" name="stylePreset" value="konservativ"> konservativ</label>
@@ -373,8 +421,36 @@
             <label><input type="radio" name="stylePreset" value="juristisch vorsichtig"> juristisch vorsichtig</label>
             <label><input type="radio" name="stylePreset" value="managementorientiert"> managementorientiert</label>
           </div>
+          <div class="style-assist">
+            <article>
+              <h3>Zusätzliche Stilakzente</h3>
+              <p>Mehrfachauswahl möglich. Der Hauptstil bleibt führend, die Akzente verfeinern die Antwort.</p>
+              <div class="chip-grid" id="styleAccentChips">
+                <button type="button" data-style-accent="diplomatisch" onclick="window.SMART_STYLE?.toggleStyleChip(this)">diplomatisch</button>
+                <button type="button" data-style-accent="direkt" onclick="window.SMART_STYLE?.toggleStyleChip(this)">direkt</button>
+                <button type="button" data-style-accent="wertschätzend" onclick="window.SMART_STYLE?.toggleStyleChip(this)">wertschätzend</button>
+                <button type="button" data-style-accent="deeskalierend" onclick="window.SMART_STYLE?.toggleStyleChip(this)">deeskalierend</button>
+                <button type="button" data-style-accent="kurz und präzise" onclick="window.SMART_STYLE?.toggleStyleChip(this)">kurz und präzise</button>
+                <button type="button" data-style-accent="entscheidungsorientiert" onclick="window.SMART_STYLE?.toggleStyleChip(this)">entscheidungsorientiert</button>
+              </div>
+            </article>
+            <article>
+              <h3>No-Gos berücksichtigen</h3>
+              <p>Die ausgewählten Punkte werden als klare Grenzen an die KI übergeben.</p>
+              <div class="chip-grid" id="styleNoGoChips">
+                <button type="button" data-style-nogo="keine Schuldzuweisungen" onclick="window.SMART_STYLE?.toggleStyleChip(this)">keine Schuldzuweisungen</button>
+                <button type="button" data-style-nogo="keine rechtlich verbindlichen Zusagen" onclick="window.SMART_STYLE?.toggleStyleChip(this)">keine rechtlich verbindlichen Zusagen</button>
+                <button type="button" data-style-nogo="keine Preis-, Termin- oder Leistungszusagen ohne Prüfung" onclick="window.SMART_STYLE?.toggleStyleChip(this)">keine Preis-, Termin- oder Leistungszusagen ohne Prüfung</button>
+                <button type="button" data-style-nogo="keine Umgangssprache" onclick="window.SMART_STYLE?.toggleStyleChip(this)">keine Umgangssprache</button>
+                <button type="button" data-style-nogo="keine internen Informationen preisgeben" onclick="window.SMART_STYLE?.toggleStyleChip(this)">keine internen Informationen preisgeben</button>
+                <button type="button" data-style-nogo="keine Spekulationen oder Vermutungen" onclick="window.SMART_STYLE?.toggleStyleChip(this)">keine Spekulationen oder Vermutungen</button>
+                <button type="button" data-style-nogo="keine Eskalation ohne Freigabe" onclick="window.SMART_STYLE?.toggleStyleChip(this)">keine Eskalation ohne Freigabe</button>
+                <button type="button" data-style-nogo="keine Entschuldigungen, wenn Verantwortung unklar ist" onclick="window.SMART_STYLE?.toggleStyleChip(this)">keine Entschuldigungen bei unklarer Verantwortung</button>
+              </div>
+            </article>
+          </div>
           <textarea id="styleNotes" class="style-notes" placeholder="Eigene Stilregeln, verbotene Formulierungen, bevorzugte Grußformel, Corporate Wording..."></textarea>
-          <button type="button" class="primary-action narrow" id="saveStyleBtn">Stil speichern</button>
+          <button type="button" class="primary-action narrow" id="saveStyleBtn" onclick="window.SMART_STYLE?.saveStyleSelection()">Stil speichern</button>
         </section>
       </section>
 
@@ -567,6 +643,8 @@
           <ul>
             <li><strong>Grundton setzen:</strong> Der Stil bestimmt, wie die KI grundsätzlich formuliert.</li>
             <li><strong>Profile wählen:</strong> Möglich sind konservativ, modern, technisch, juristisch vorsichtig und managementorientiert.</li>
+            <li><strong>Akzente ergänzen:</strong> Mehrere Zusatzakzente wie diplomatisch, wertschätzend oder deeskalierend können kombiniert werden.</li>
+            <li><strong>No-Gos anklicken:</strong> Grenzen wie keine Schuldzuweisungen, keine verbindlichen Zusagen oder keine internen Informationen werden per Chip ausgewählt.</li>
             <li><strong>Eigene Regeln:</strong> Im Textfeld können bevorzugte Formulierungen, Grußformeln oder No-Gos hinterlegt werden.</li>
             <li><strong>Corporate Voice abbilden:</strong> Wiederkehrende Sprachregeln, Begriffe und Tonalität können als Standard hinterlegt werden.</li>
             <li><strong>Antworten steuern:</strong> Der Stil beeinflusst Wortwahl, Direktheit, Vorsicht, Management-Fokus und Verbindlichkeit.</li>
