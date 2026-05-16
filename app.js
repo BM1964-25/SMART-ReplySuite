@@ -1,3 +1,4 @@
+(() => {
 const {
   requestClaudeMailResponse = async () => {
     throw new Error("Der KI-Client konnte nicht geladen werden. Bitte Seite neu laden oder den lokalen Server prüfen.");
@@ -25,6 +26,27 @@ const DATA_KEY = "smart-mailresponse-data";
 const SIDEBAR_COLLAPSED_KEY = "smart-mailresponse-sidebar-collapsed";
 const DEFAULT_PROXY_URL = "/api/anthropic/messages";
 const DEFAULT_CLAUDE_MODEL = "claude-sonnet-4-20250514";
+const sampleTemplate = {
+  id: "sample-template-bauprojekt-rueckfrage",
+  title: "Mustervorlage: Rückfrage Bauprojekt",
+  category: "Projektkommunikation",
+  tags: ["Bauprojekt", "Rückfrage", "Frist", "sachlich-klar", "vertragsneutral"],
+  body: `Vielen Dank für Ihre Nachricht.
+
+Wir haben Ihre Rückmeldung aufgenommen und prüfen die genannten Punkte intern.
+
+Damit wir die Anfrage verbindlich und vollständig bewerten können, bitten wir um folgende Ergänzungen:
+- kurze Konkretisierung des betroffenen Leistungsbereichs
+- relevante Fristen oder Terminabhängigkeiten
+- vorhandene Unterlagen, Fotos oder Bezugsdokumente
+
+Nach Eingang der Informationen stimmen wir die weitere Vorgehensweise ab und melden uns mit einer fachlich belastbaren Rückmeldung.
+
+Mit freundlichen Grüßen`,
+  favorite: true,
+  createdAt: "2026-05-16T00:00:00.000Z",
+  updatedAt: "2026-05-16T00:00:00.000Z"
+};
 
 const responseTypes = [
   "Zustimmung",
@@ -85,6 +107,7 @@ let editingTemplateId = null;
 let editingStyleProfileId = null;
 let selectedStyleAccents = Array.isArray(dataState.companyStyleAccents) ? [...dataState.companyStyleAccents] : [];
 let selectedStyleNoGos = Array.isArray(dataState.companyStyleNoGos) ? [...dataState.companyStyleNoGos] : [];
+seedSampleTemplate();
 
 const elements = {
   appShell: document.querySelector("#appShell"),
@@ -1527,7 +1550,7 @@ function updateSystemHealth() {
 
 function loadData() {
   const fallback = {
-    templates: [],
+    templates: [sampleTemplate],
     history: [],
     companyStyle: "modern",
     companyStyleNotes: "",
@@ -1536,7 +1559,8 @@ function loadData() {
     styleProfiles: [],
     settings: {
       defaultLanguage: "Deutsch",
-      defaultTone: "geschäftlich-formell"
+      defaultTone: "geschäftlich-formell",
+      sampleTemplateSeeded: false
     }
   };
 
@@ -1548,7 +1572,27 @@ function loadData() {
 }
 
 function saveData() {
-  localStorage.setItem(DATA_KEY, JSON.stringify(dataState));
+  try {
+    localStorage.setItem(DATA_KEY, JSON.stringify(dataState));
+  } catch (error) {
+    // Lokaler Speicher kann in Datei-/Sandbox-Ansichten blockiert sein.
+  }
+}
+
+function seedSampleTemplate() {
+  dataState.settings = {
+    defaultLanguage: "Deutsch",
+    defaultTone: "geschäftlich-formell",
+    ...(dataState.settings || {})
+  };
+  const hasSample = dataState.templates.some((template) => template.id === sampleTemplate.id);
+  if (!hasSample && !dataState.settings.sampleTemplateSeeded) {
+    dataState.templates.unshift({ ...sampleTemplate });
+  }
+  if (!dataState.settings.sampleTemplateSeeded) {
+    dataState.settings.sampleTemplateSeeded = true;
+    saveData();
+  }
 }
 
 function fillSelect(select, values, selected = values[0]) {
@@ -1586,3 +1630,4 @@ function escapeHtml(value) {
 function shortPause() {
   return new Promise((resolve) => window.setTimeout(resolve, 250));
 }
+})();

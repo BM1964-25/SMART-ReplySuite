@@ -4,14 +4,41 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SMART MailResponse</title>
-  <link rel="stylesheet" href="styles.css?v=composer-guidance">
+  <link rel="stylesheet" href="styles.css?v=sample-template">
   <script>
+    window.addEventListener("error", (event) => {
+      document.documentElement.dataset.appError = event.message || "Unbekannter Skriptfehler";
+    });
+    window.addEventListener("unhandledrejection", (event) => {
+      document.documentElement.dataset.appError = event.reason?.message || String(event.reason || "Unbekannter Promise-Fehler");
+    });
     (function () {
       const collapsedKey = "smart-mailresponse-sidebar-collapsed";
       const dataKey = "smart-mailresponse-data";
       let editingStyleProfileId = null;
+      const sampleTemplate = {
+        id: "sample-template-bauprojekt-rueckfrage",
+        title: "Mustervorlage: Rückfrage Bauprojekt",
+        category: "Projektkommunikation",
+        tags: ["Bauprojekt", "Rückfrage", "Frist", "sachlich-klar", "vertragsneutral"],
+        body: `Vielen Dank für Ihre Nachricht.
+
+Wir haben Ihre Rückmeldung aufgenommen und prüfen die genannten Punkte intern.
+
+Damit wir die Anfrage verbindlich und vollständig bewerten können, bitten wir um folgende Ergänzungen:
+- kurze Konkretisierung des betroffenen Leistungsbereichs
+- relevante Fristen oder Terminabhängigkeiten
+- vorhandene Unterlagen, Fotos oder Bezugsdokumente
+
+Nach Eingang der Informationen stimmen wir die weitere Vorgehensweise ab und melden uns mit einer fachlich belastbaren Rückmeldung.
+
+Mit freundlichen Grüßen`,
+        favorite: true,
+        createdAt: "2026-05-16T00:00:00.000Z",
+        updatedAt: "2026-05-16T00:00:00.000Z"
+      };
       const fallbackData = {
-        templates: [],
+        templates: [sampleTemplate],
         history: [],
         companyStyle: "modern",
         companyStyleNotes: "",
@@ -20,7 +47,8 @@
         styleProfiles: [],
         settings: {
           defaultLanguage: "Deutsch",
-          defaultTone: "geschäftlich-formell"
+          defaultTone: "geschäftlich-formell",
+          sampleTemplateSeeded: false
         }
       };
 
@@ -894,9 +922,9 @@
     </section>
   </div>
 
-  <script src="licenseClient.js?v=style-profile-multiple"></script>
-  <script src="anthropicClient.js?v=style-profile-multiple"></script>
-  <script src="app.js?v=style-profile-multiple"></script>
+  <script src="licenseClient.js?v=sample-template-iife"></script>
+  <script src="anthropicClient.js?v=sample-template-iife"></script>
+  <script src="app.js?v=sample-template-iife"></script>
   <script>
     (function () {
       const collapsedKey = "smart-mailresponse-sidebar-collapsed";
