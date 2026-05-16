@@ -144,6 +144,9 @@ h1, h2, h3, p { margin-top: 0; }
 }
 
 .sidebar-toggle-item {
+  width: 44px;
+  justify-content: center;
+  padding: 10px;
   color: rgba(255,255,255,0.72);
 }
 
