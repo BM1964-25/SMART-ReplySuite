@@ -510,6 +510,54 @@ textarea:focus, input:focus, select:focus {
   font-weight: 850;
 }
 
+.composer-guidance {
+  display: grid;
+  gap: 10px;
+  padding: 12px 13px;
+  margin-bottom: 14px;
+  border: 1px solid rgba(22,104,184,0.14);
+  border-radius: var(--radius);
+  background: rgba(248,251,255,0.72);
+}
+
+.composer-guidance strong {
+  color: var(--text);
+  font-size: 0.9rem;
+}
+
+.composer-guidance ol {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 8px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.composer-guidance li {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--soft);
+  font-size: 0.78rem;
+  font-weight: 760;
+  line-height: 1.25;
+}
+
+.composer-guidance span {
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: #e9f3ff;
+  color: var(--accent-strong);
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+
 .composer-tools {
   display: grid;
   grid-template-columns: minmax(260px, auto) repeat(2, minmax(220px, 1fr));
@@ -1254,7 +1302,7 @@ textarea:focus, input:focus, select:focus {
   .dashboard-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
   .workflow-panel { grid-template-columns: 1fr; }
   .workflow-arrow { display: none; }
-  .composer-tools, .style-profile-actions, .style-profile-card { grid-template-columns: 1fr; }
+  .composer-tools, .composer-guidance ol, .style-profile-actions, .style-profile-card { grid-template-columns: 1fr; }
   .quality-strip, .result-tabs { grid-template-columns: repeat(2, minmax(0,1fr)); }
   .help-quickstart { grid-template-columns: repeat(2, minmax(0,1fr)); }
 }
@@ -1265,7 +1313,7 @@ textarea:focus, input:focus, select:focus {
   .header-brand { align-items: flex-start; flex-direction: column; gap: 12px; }
   .header-icon { width: 82px; height: 82px; border-radius: 18px; }
   .header-actions { justify-content: space-between; }
-  .nav-list, .dashboard-grid, .two-column, .mail-grid, .template-form, .settings-grid, .settings-actions, .style-profile-actions, .style-profile-card, .license-grid, .api-action-row, .api-actions, .license-actions, .result-actions, .style-grid, .style-assist, .help-grid, .quick-actions, .signal-grid, .quality-strip, .result-tabs, .history-tools, .template-tools, .setup-alert, .help-quickstart, .help-reference { grid-template-columns: 1fr; }
+  .nav-list, .dashboard-grid, .two-column, .mail-grid, .template-form, .settings-grid, .settings-actions, .style-profile-actions, .style-profile-card, .license-grid, .api-action-row, .api-actions, .license-actions, .result-actions, .style-grid, .style-assist, .help-grid, .quick-actions, .signal-grid, .quality-strip, .result-tabs, .history-tools, .template-tools, .setup-alert, .composer-guidance ol, .help-quickstart, .help-reference { grid-template-columns: 1fr; }
   .style-profile-card .card-actions { justify-content: flex-start; flex-wrap: wrap; }
   h1 { font-size: 2.1rem; }
 }
