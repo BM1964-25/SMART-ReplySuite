@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SMART MailResponse</title>
-  <link rel="stylesheet" href="styles.css?v=sample-template">
+  <link rel="stylesheet" href="styles.css?v=answer-parameter-labels">
   <script>
     window.addEventListener("error", (event) => {
       document.documentElement.dataset.appError = event.message || "Unbekannter Skriptfehler";
@@ -467,8 +467,8 @@ Mit freundlichen Grüßen`,
               <li><span>1</span>E-Mail einfügen</li>
               <li><span>2</span>Ziel und Kontext ergänzen</li>
               <li><span>3</span>Vorlage oder Stilprofil optional wählen</li>
-              <li><span>4</span>Antwort steuern</li>
-              <li><span>5</span>Antwortvorschläge erstellen</li>
+              <li><span>4</span>Antwortparameter festlegen</li>
+              <li><span>5</span>Analyse & Antwortvorschläge erstellen</li>
               <li><span>6</span>Ergebnis nutzen</li>
             </ol>
           </div>
@@ -512,16 +512,16 @@ Mit freundlichen Grüßen`,
         </section>
 
         <aside class="panel settings-panel">
-          <div class="panel-heading compact"><div><h2>Steuerung</h2><p>Antworttyp, Tonalität, Länge, Fokus und Sprache für diese Antwort.</p></div></div>
+          <div class="panel-heading compact"><div><h2>Antwortparameter</h2><p>Antworttyp, Tonalität, Länge, Fokus und Sprache für diese Antwort.</p></div></div>
           <div class="control-grid">
             <div class="field"><label for="responseType">Antworttyp</label><select id="responseType"></select></div>
             <div class="field"><label for="tone">Tonalität</label><select id="tone"></select></div>
             <div class="field"><label for="length">Antwortlänge</label><select id="length"><option value="kurz">Kurz</option><option value="standard" selected>Standard</option><option value="ausfuehrlich">Ausführlich</option></select></div>
             <div class="field"><label for="focus">Fokus</label><select id="focus"></select></div>
             <div class="field"><label for="language">Antwortsprache</label><select id="language"><option>Deutsch</option><option>Englisch</option><option>Französisch</option><option>Spanisch</option><option>Italienisch</option></select></div>
-            <div class="field"><label for="companyStyle">Unternehmensstil</label><select id="companyStyle"><option>modern</option><option>konservativ</option><option>technisch</option><option>juristisch vorsichtig</option><option>managementorientiert</option></select></div>
+            <div class="field"><label for="companyStyle">Basisstil</label><select id="companyStyle"><option>modern</option><option>konservativ</option><option>technisch</option><option>juristisch vorsichtig</option><option>managementorientiert</option></select></div>
           </div>
-          <button type="button" class="primary-action" id="generateBtn">Antwortvorschläge erstellen</button>
+          <button type="button" class="primary-action" id="generateBtn">Analyse & Antwortvorschläge erstellen</button>
         </aside>
 
         <section class="panel output-panel">
@@ -760,7 +760,7 @@ Mit freundlichen Grüßen`,
         </article>
         <article>
           <span>3</span>
-          <div><strong>Antwort steuern</strong><p>Antworttyp, Tonalität, Länge, Fokus, Antwortsprache und Unternehmensstil wählen.</p></div>
+          <div><strong>Antwortparameter festlegen</strong><p>Antworttyp, Tonalität, Länge, Fokus, Antwortsprache und Basisstil wählen.</p></div>
         </article>
         <article>
           <span>4</span>
@@ -776,7 +776,7 @@ Mit freundlichen Grüßen`,
           <li><strong>E-Mail einfügen:</strong> Den Inhalt aus Outlook, Gmail oder einem anderen E-Mail-Programm direkt in „Eingegangene Nachricht“ kopieren.</li>
           <li><strong>Ziel formulieren:</strong> Kurz beschreiben, was die Antwort erreichen soll, z. B. „Termin abstimmen“, „Rückfrage stellen“ oder „Eskalation entschärfen“.</li>
           <li><strong>Notizen ergänzen:</strong> Interne Fakten, Grenzen, Fristen oder gewünschte Aussagen unter „Eigene Notizen“ hinterlegen.</li>
-          <li><strong>Antwortvorschläge erstellen:</strong> Die App erzeugt KI-Analyse, Hauptantwort, Alternative, Kurzversion, diplomatische Version und Qualitätsbewertung.</li>
+          <li><strong>Analyse & Antwortvorschläge erstellen:</strong> Die App erzeugt KI-Analyse, Hauptantwort, Alternative, Kurzversion, diplomatische Version und Qualitätsbewertung.</li>
         </ol>
       </div>
 

@@ -1000,7 +1000,7 @@ function applyTemplateToComposer(item) {
 function setComposerMode(mode) {
   currentMode = mode === "optimize" ? "optimize" : "reply";
   elements.modeButtons.forEach((button) => button.classList.toggle("is-active", button.dataset.mode === currentMode));
-  elements.generateBtn.textContent = currentMode === "optimize" ? "Entwurf optimieren" : "Antwortvorschläge erstellen";
+  elements.generateBtn.textContent = currentMode === "optimize" ? "Entwurf optimieren" : "Analyse & Antwortvorschläge erstellen";
   elements.inboundMessage.placeholder = currentMode === "optimize"
     ? "Eingegangene E-Mail und vorhandenen Antwortentwurf hier einfügen..."
     : "E-Mail aus Outlook, Gmail oder einem anderen Mailprogramm hier einfügen...";
