@@ -689,6 +689,7 @@ textarea:focus, input:focus, select:focus {
 .context-panel { display: none; }
 .context-panel.is-active { display: grid; gap: 7px; }
 .context-panel label { color: var(--soft); font-size: 0.88rem; font-weight: 750; }
+.field-hint { margin: -2px 0 2px; color: var(--muted); font-size: 0.78rem; line-height: 1.35; }
 
 .primary-action {
   width: 100%;
