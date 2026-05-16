@@ -431,34 +431,28 @@ h1 {
 
 .metric-card {
   display: grid;
-  grid-template-columns: minmax(0, auto) max-content;
-  align-items: center;
-  column-gap: 12px;
-  row-gap: 3px;
+  place-items: center;
+  row-gap: 6px;
   min-width: 0;
   padding: 8px 18px;
   border-right: 1px solid var(--line);
+  text-align: center;
 }
 .metric-card:first-child { padding-left: 4px; }
 .metric-card:last-child { padding-right: 4px; border-right: 0; }
 .metric-card span, .metric-card small { display: block; color: var(--muted); }
 .metric-card span {
-  grid-column: 1;
   font-size: 0.82rem;
   font-weight: 850;
   text-transform: uppercase;
   letter-spacing: 0;
 }
 .metric-card small {
-  grid-column: 1;
   font-size: 0.82rem;
   line-height: 1.25;
 }
 .metric-card strong {
-  grid-column: 2;
-  grid-row: 1 / span 2;
   display: block;
-  justify-self: end;
   color: var(--text);
   font-size: 1.45rem;
   line-height: 1;
