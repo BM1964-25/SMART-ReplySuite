@@ -214,7 +214,9 @@ function init() {
 }
 
 function bindEvents() {
-  elements.navItems.forEach((item) => item.addEventListener("click", () => showView(item.dataset.view)));
+  elements.navItems.forEach((item) => {
+    if (item.dataset.view) item.addEventListener("click", () => showView(item.dataset.view));
+  });
   elements.viewTargets.forEach((item) => item.addEventListener("click", () => showView(item.dataset.viewTarget)));
   elements.modeButtons.forEach((button) => button.addEventListener("click", () => setComposerMode(button.dataset.mode)));
   elements.contextTabButtons.forEach((button) => button.addEventListener("click", () => showContextPanel(button.dataset.contextTab)));
