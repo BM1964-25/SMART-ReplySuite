@@ -527,7 +527,9 @@ textarea:focus, input:focus, select:focus {
 
 .composer-guidance ol {
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-rows: repeat(2, auto);
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
   gap: 8px;
   padding: 0;
   margin: 0;
@@ -1314,6 +1316,7 @@ textarea:focus, input:focus, select:focus {
   .header-icon { width: 82px; height: 82px; border-radius: 18px; }
   .header-actions { justify-content: space-between; }
   .nav-list, .dashboard-grid, .two-column, .mail-grid, .template-form, .settings-grid, .settings-actions, .style-profile-actions, .style-profile-card, .license-grid, .api-action-row, .api-actions, .license-actions, .result-actions, .style-grid, .style-assist, .help-grid, .quick-actions, .signal-grid, .quality-strip, .result-tabs, .history-tools, .template-tools, .setup-alert, .composer-guidance ol, .help-quickstart, .help-reference { grid-template-columns: 1fr; }
+  .composer-guidance ol { grid-template-rows: none; grid-auto-flow: row; grid-auto-columns: auto; }
   .style-profile-card .card-actions { justify-content: flex-start; flex-wrap: wrap; }
   h1 { font-size: 2.1rem; }
 }
