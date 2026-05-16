@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SMART MailResponse</title>
-  <link rel="stylesheet" href="styles.css?v=sidebar-controls">
+  <link rel="stylesheet" href="styles.css?v=sidebar-bottom-help-icon">
 </head>
 <body>
   <input type="checkbox" class="help-toggle" id="helpToggle" aria-hidden="true">
@@ -16,6 +16,8 @@
           <strong>SMART MailResponse</strong>
           <span>Professional Reply Studio</span>
         </div>
+      </div>
+      <div class="sidebar-control-row">
         <button type="button" class="sidebar-toggle" id="sidebarToggle" aria-label="Sidebar einklappen" aria-pressed="false" onclick="window.SMART_APP?.toggleSidebar()">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"></path></svg>
         </button>
@@ -52,7 +54,9 @@
           <p class="lead">Professionelle Antwortvorschläge für geschäftliche E-Mails: klar, souverän, datenschutzbewusst und direkt kopierbar.</p>
         </div>
         <div class="header-actions">
-          <label class="help-button" for="helpToggle" aria-label="Hilfe öffnen">?</label>
+          <label class="help-button" for="helpToggle" aria-label="Hilfe öffnen" title="Hilfe öffnen">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M9.7 9a2.4 2.4 0 0 1 4.6 1.1c0 1.8-2.3 2.1-2.3 3.8"></path><path d="M12 17h.01"></path></svg>
+          </label>
           <button type="button" class="primary-action header-action" data-view-target="composer">Neue Antwort</button>
         </div>
       </header>
