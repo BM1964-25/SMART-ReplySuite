@@ -639,6 +639,16 @@ function showResultSection(title) {
   });
 }
 
+function getActiveResultSection() {
+  const activeTitle = elements.resultTabs.querySelector("[data-result-tab].is-active")?.dataset.resultTab;
+  return currentSections.find((section) => section.title === activeTitle) || currentSections[0] || null;
+}
+
+function isTemplateEligibleSection(section) {
+  if (!section) return false;
+  return !["KI-Analyse", "Qualitätsbewertung"].includes(section.title);
+}
+
 function shortSectionTitle(title) {
   return title
     .replace("KI-Analyse", "Analyse")
@@ -835,12 +845,17 @@ function saveCurrentAsTemplate() {
     setStatus("Noch keine KI-Ausgabe vorhanden", "warn");
     return;
   }
+  const section = getActiveResultSection();
+  if (!isTemplateEligibleSection(section)) {
+    setStatus("Bitte zuerst eine Antwortvariante wählen", "warn");
+    return;
+  }
   dataState.templates.unshift({
     id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
-    title: elements.subject.value.trim() || "Antwortvorschlag",
+    title: [elements.subject.value.trim() || "Antwortvorschlag", section.title].join(" · "),
     category: elements.responseType.value,
     tags: parseTags([elements.responseType.value, elements.tone.value, elements.focus.value].join(",")),
-    body: currentResponseText,
+    body: section.body,
     favorite: false,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
@@ -848,7 +863,7 @@ function saveCurrentAsTemplate() {
   saveData();
   renderLists();
   updateDashboard();
-  setStatus("Als Vorlage gespeichert", "ready");
+  setStatus(`${section.title} als Vorlage gespeichert`, "ready");
 }
 
 function saveCurrentHistory(options = {}) {
