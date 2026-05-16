@@ -485,6 +485,24 @@ textarea:focus, input:focus, select:focus {
 
 .control-grid { display: grid; grid-template-columns: 1fr; gap: 0; }
 
+.parameter-note {
+  display: grid;
+  gap: 3px;
+  padding: 10px 11px;
+  margin: 4px 0 12px;
+  border: 1px solid rgba(22,104,184,0.14);
+  border-radius: var(--radius);
+  background: rgba(248,251,255,0.74);
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+
+.parameter-note strong {
+  color: var(--text);
+  font-size: 0.82rem;
+}
+
 .setup-alert {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
