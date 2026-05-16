@@ -469,7 +469,14 @@ textarea {
   line-height: 1.56;
 }
 .small-textarea { min-height: 128px; }
-.style-notes { min-height: 180px; margin: 14px 0; }
+.style-notes {
+  min-height: calc(2lh + 20px);
+  height: calc(2lh + 20px);
+  max-height: 220px;
+  margin: 14px 0;
+  padding: 10px 12px;
+  resize: vertical;
+}
 
 textarea:focus, input:focus, select:focus {
   border-color: rgba(79,180,255,0.72);
