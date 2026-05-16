@@ -607,8 +607,8 @@ textarea:focus, input:focus, select:focus {
 
 .optional-context {
   display: grid;
-  grid-template-columns: minmax(190px, 0.58fr) minmax(0, 1fr);
-  gap: 12px;
+  grid-template-columns: minmax(150px, 0.38fr) minmax(0, 1fr);
+  gap: 8px 12px;
   align-items: center;
   padding: 10px 12px;
   border: 1px solid rgba(22,104,184,0.14);
@@ -616,34 +616,26 @@ textarea:focus, input:focus, select:focus {
   background: rgba(248,251,255,0.72);
 }
 
-.optional-context-labels {
-  display: grid;
-  gap: 4px;
-}
-
-.optional-context-labels strong,
-.optional-context-labels span {
-  display: block;
-}
-
-.optional-context-labels strong {
+.optional-context > strong {
+  grid-column: 1 / -1;
   color: var(--text);
   font-size: 0.86rem;
   font-weight: 900;
 }
 
-.optional-context-labels span {
+.optional-context-row {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: minmax(150px, 0.38fr) minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+}
+
+.optional-context-row > label {
   color: var(--soft);
   font-size: 0.78rem;
   font-weight: 760;
   line-height: 1.25;
-}
-
-.optional-context-fields {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 8px;
-  align-items: end;
 }
 
 .segmented-control,
@@ -1386,7 +1378,7 @@ textarea:focus, input:focus, select:focus {
   .composer-view.is-visible { grid-template-columns: 1fr; }
   .settings-panel { position: static; }
   .dashboard-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
-  .composer-tools, .composer-guidance ol, .optional-context, .optional-context-fields, .style-profile-actions, .style-profile-card { grid-template-columns: 1fr; }
+  .composer-tools, .composer-guidance ol, .optional-context, .optional-context-row, .style-profile-actions, .style-profile-card { grid-template-columns: 1fr; }
   .quality-strip, .result-tabs { grid-template-columns: repeat(2, minmax(0,1fr)); }
   .help-quickstart { grid-template-columns: repeat(2, minmax(0,1fr)); }
 }
@@ -1397,7 +1389,7 @@ textarea:focus, input:focus, select:focus {
   .header-brand { align-items: flex-start; flex-direction: column; gap: 12px; }
   .header-icon { width: 82px; height: 82px; border-radius: 18px; }
   .header-actions { justify-content: space-between; }
-  .nav-list, .dashboard-grid, .two-column, .mail-grid, .template-form, .settings-grid, .settings-actions, .optional-context, .optional-context-fields, .style-profile-actions, .style-profile-card, .license-grid, .api-action-row, .api-actions, .license-actions, .result-actions, .style-grid, .style-assist, .help-grid, .quick-actions, .signal-grid, .quality-strip, .result-tabs, .history-tools, .template-tools, .composer-guidance ol, .help-quickstart, .help-reference { grid-template-columns: 1fr; }
+  .nav-list, .dashboard-grid, .two-column, .mail-grid, .template-form, .settings-grid, .settings-actions, .optional-context, .optional-context-row, .style-profile-actions, .style-profile-card, .license-grid, .api-action-row, .api-actions, .license-actions, .result-actions, .style-grid, .style-assist, .help-grid, .quick-actions, .signal-grid, .quality-strip, .result-tabs, .history-tools, .template-tools, .composer-guidance ol, .help-quickstart, .help-reference { grid-template-columns: 1fr; }
   .style-profile-card .card-actions { justify-content: flex-start; flex-wrap: wrap; }
   h1 { font-size: 2.1rem; }
 }

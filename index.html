@@ -464,20 +464,18 @@ Mit freundlichen Grüßen`,
               <button type="button" data-mode="optimize">Entwurf optimieren</button>
             </div>
             <div class="optional-context">
-              <div class="optional-context-labels">
-                <strong>Optionaler Kontext</strong>
-                <span>Vorlage anwenden</span>
-                <span>Stilprofil zugrunde legen</span>
-              </div>
-              <div class="optional-context-fields">
+              <strong>Optionaler Kontext</strong>
+              <div class="optional-context-row">
+                <label for="templatePicker">Auswahl Vorlage</label>
                 <div class="field template-picker">
-                  <label for="templatePicker">Auswahl Vorlage</label>
                   <select id="templatePicker">
                     <option value="">Keine Vorlage ausgewählt</option>
                   </select>
                 </div>
+              </div>
+              <div class="optional-context-row">
+                <label for="styleProfilePicker">Auswahl Stilprofil</label>
                 <div class="field template-picker">
-                  <label for="styleProfilePicker">Auswahl Stilprofil</label>
                   <select id="styleProfilePicker" onchange="window.SMART_STYLE?.applySelectedStyleProfile()">
                     <option value="">Kein Stilprofil zugrunde gelegt</option>
                   </select>
