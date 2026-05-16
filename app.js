@@ -912,7 +912,6 @@ function renderStyleProfileList() {
         <small>${escapeHtml(profile.companyStyle)} · ${(profile.companyStyleAccents || []).length} Akzente · ${(profile.companyStyleNoGos || []).length} No-Gos</small>
       </div>
       <div class="card-actions">
-        <button type="button" data-apply-style-profile="${escapeHtml(profile.id)}">Anwenden</button>
         <button type="button" data-edit-style-profile="${escapeHtml(profile.id)}">Bearbeiten</button>
         <button type="button" data-duplicate-style-profile="${escapeHtml(profile.id)}">Duplizieren</button>
         <button type="button" data-delete-style-profile="${escapeHtml(profile.id)}" class="danger-action">Löschen</button>
@@ -998,7 +997,6 @@ document.addEventListener("click", async (event) => {
   const historyId = event.target.dataset.copyHistory;
   const reuseHistoryId = event.target.dataset.reuseHistory;
   const deleteHistoryId = event.target.dataset.deleteHistory;
-  const applyStyleProfileId = event.target.dataset.applyStyleProfile;
   const editStyleProfileId = event.target.dataset.editStyleProfile;
   const duplicateStyleProfileId = event.target.dataset.duplicateStyleProfile;
   const deleteStyleProfileId = event.target.dataset.deleteStyleProfile;
@@ -1081,7 +1079,6 @@ document.addEventListener("click", async (event) => {
     setStatus("Verlaufseintrag gelöscht", "ready");
   }
 
-  if (applyStyleProfileId) applyStyleProfile(applyStyleProfileId);
   if (editStyleProfileId) editStyleProfile(editStyleProfileId);
   if (duplicateStyleProfileId) duplicateStyleProfile(duplicateStyleProfileId);
   if (deleteStyleProfileId) deleteStyleProfile(deleteStyleProfileId);
