@@ -1,6 +1,6 @@
 # SMART MailResponse
 
-SMART MailResponse ist eine lokale KI-Arbeitsoberfläche für professionelle E-Mail-Antwortvorschläge. Die App übernimmt bewusst Design, Farbwelt, Statuslogik und API-Key-Darstellung aus dem SMART Summary Assistant, baut die Produktlogik aber neu auf.
+SMART MailResponse ist eine lokale KI-Arbeitsoberfläche für professionelle Antwortvorschläge zu E-Mails, Briefen und allgemeiner Geschäftskorrespondenz. Die App übernimmt bewusst Design, Farbwelt, Statuslogik und API-Key-Darstellung aus dem SMART Summary Assistant, baut die Produktlogik aber neu auf.
 
 ## Einschätzung zur Wiederverwendung
 
@@ -14,9 +14,9 @@ SMART MailResponse ist eine lokale KI-Arbeitsoberfläche für professionelle E-M
 
 Neu aufbauen:
 
-- MailResponse-Domain mit Betreff, Nachricht, Notizen, Antwortziel und Hinweisen
+- Korrespondenz-Domain mit Betreff, Nachricht, Schreiben, Notizen, Antwortziel und Hinweisen
 - Sidebar-Menüstruktur
-- Antworttypen, Tonalität, Länge, Fokus, Unternehmensstil
+- Antworttypen, Tonalität, Länge, Fokus und Stilprofile
 - Prompt-Architektur für Analyse plus vier Antwortvarianten
 - Bibliothek, Vorlagen, Favoriten und Verlauf
 - Zielarchitektur für Electron, React, SQLite, verschlüsselte Einstellungen und Stripe-Lizenzierung
@@ -67,12 +67,12 @@ npm run icon:icns
 ## Funktionsumfang im aktuellen MVP
 
 - Dashboard
-- Neue Antwort mit Betreff, Nachricht, Notizen, Ziel und Hinweisen
+- Neue Antwort mit Betreff, Nachricht oder Schreiben, Notizen, Ziel und Hinweisen
 - Inline-Onboarding, wenn noch kein API-Key eingerichtet ist
 - Permanenter Systemstatus für Lizenz, Claude und lokale Speicherung
 - Kompakter Composer mit Moduswahl für neue Antworten oder Entwurfsoptimierung
 - Direkte Vorlagenauswahl im Composer
-- Auswahl von Antworttyp, Tonalität, Länge, Fokus, Sprache und Unternehmensstil
+- Auswahl von Antworttyp, Tonalität, Länge, Fokus, Sprache und Stilprofilen
 - Anthropic-Claude-Anbindung über lokalen Proxy
 - KI-Analyse vor der Antwort
 - Hauptantwort, alternative Antwort, kürzere Version und diplomatische Version
@@ -82,7 +82,7 @@ npm run icon:icns
 - Vorlagen speichern, bearbeiten, löschen, kategorisieren, taggen und favorisieren
 - Bibliothek mit Suche und Tag-Filter
 - Verlauf mit Suche, Antworttyp-Filter, erneut verwenden, kopieren und löschen
-- Unternehmensstil
+- Stilprofile
 - Einstellungen für Standardsprache und Standardton
 - Lokale Datenexport- und Import-Funktion
 - Diagnosebereich für lokale Daten, API-Key, Lizenz und Speicherstatus
@@ -243,7 +243,7 @@ Die Prompt-Architektur trennt:
 
 - Systemrolle: Senior Communication Strategist
 - Sicherheitsregeln: keine erfundenen Fakten, keine riskanten Zusagen
-- Steuerparameter: Antworttyp, Tonalität, Länge, Fokus, Sprache, Unternehmensstil
+- Steuerparameter: Antworttyp, Tonalität, Länge, Fokus, Sprache und Stilprofil
 - Analysepflicht: Erwartung, Risiken, Konflikte, Strategie, offene Punkte
 - Antwortpflicht: Hauptantwort, Alternative, Kurzversion, diplomatische Version, Qualitätsbewertung
 
@@ -273,7 +273,7 @@ Das Dashboard zeigt:
 
 MVP ist erreicht, wenn:
 
-- E-Mail per Copy-and-Paste verarbeitet wird
+- E-Mails, Briefe oder Geschäftsschreiben per Copy-and-Paste verarbeitet werden
 - Claude mit eigenem API-Key Antwortvorschläge erstellt
 - Analyse und vier Varianten ausgegeben werden
 - Antworten kopierbar sind
@@ -290,10 +290,10 @@ MVP ist erreicht, wenn:
 5. Sichere Einstellungen: OS-Keychain, Verschlüsselung, Backups.
 6. Lizenz-API und Stripe-Webhooks produktiv machen.
 7. OpenAI optional als zweiten Provider vorbereiten.
-8. QA: Offline-Verhalten, Fehlerfälle, lange E-Mails, Datenschutztexte.
+8. QA: Offline-Verhalten, Fehlerfälle, lange Nachrichten und Schreiben, Datenschutztexte.
 9. Packaging für macOS und Windows.
 10. Vertriebsreife: Website, Checkout, Onboarding, Lizenzmails.
 
 ## Erweiterungsstrategie SaaS
 
-Eine spätere SaaS-Version kann Team-Vorlagen, Rollen, zentrale Unternehmensstile, Admin-Policies, Audit-Logs und geteilte Bibliotheken anbieten. Sensible E-Mail-Inhalte sollten weiterhin nur nach expliziter Freigabe synchronisiert werden. Die lokale Desktop-App bleibt als Datenschutz- und Professional-Power-User-Variante bestehen.
+Eine spätere SaaS-Version kann Team-Vorlagen, Rollen, zentrale Stilprofile, Admin-Policies, Audit-Logs und geteilte Bibliotheken anbieten. Sensible Inhalte aus E-Mails, Briefen und Geschäftsschreiben sollten weiterhin nur nach expliziter Freigabe synchronisiert werden. Die lokale Desktop-App bleibt als Datenschutz- und Professional-Power-User-Variante bestehen.

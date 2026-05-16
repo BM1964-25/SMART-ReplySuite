@@ -414,7 +414,7 @@ Mit freundlichen Grüßen`,
       </header>
 
       <section class="workflow-panel" aria-label="Arbeitsablauf">
-        <div class="workflow-step"><span class="step-number">1</span><div><strong>E-Mail einfügen</strong><span>Betreff, Nachricht und Kontext erfassen</span></div></div>
+        <div class="workflow-step"><span class="step-number">1</span><div><strong>Nachricht einfügen</strong><span>Betreff, Schreiben und Kontext erfassen</span></div></div>
         <span class="workflow-arrow" aria-hidden="true">→</span>
         <div class="workflow-step"><span class="step-number">2</span><div><strong>Kommunikation steuern</strong><span>Antworttyp, Tonalität und Fokus wählen</span></div></div>
         <span class="workflow-arrow" aria-hidden="true">→</span>
@@ -451,7 +451,7 @@ Mit freundlichen Grüßen`,
       <section class="view composer-view" data-view-panel="composer">
         <section class="panel input-panel">
           <div class="panel-heading">
-            <div><h2>Neue Antwort</h2><p>Füge die eingegangene E-Mail und deinen Kontext ein.<br>Angaben hier gelten für diesen Vorgang und überschreiben die Grundeinstellungen.</p></div>
+            <div><h2>Neue Antwort</h2><p>Füge die eingegangene Nachricht, E-Mail oder das Schreiben und deinen Kontext ein.<br>Angaben hier gelten für diesen Vorgang und überschreiben die Grundeinstellungen.</p></div>
             <div class="source-metrics"><span class="counter" id="charCount">0 Zeichen</span><span class="quality-badge" id="mailQuality">Noch keine Nachricht</span></div>
           </div>
           <div class="setup-alert" id="setupAlert">
@@ -464,7 +464,7 @@ Mit freundlichen Grüßen`,
           <div class="composer-guidance" aria-label="Vorgehensweise Neue Antwort">
             <strong>Vorgehen</strong>
             <ol>
-              <li><span>1</span>E-Mail einfügen</li>
+              <li><span>1</span>Nachricht oder Schreiben einfügen</li>
               <li><span>2</span>Ziel und Kontext ergänzen</li>
               <li><span>3</span>Vorlage oder Stilprofil optional wählen</li>
               <li><span>4</span>Antwortparameter festlegen</li>
@@ -493,7 +493,7 @@ Mit freundlichen Grüßen`,
           <div class="mail-grid">
             <div class="field"><label for="subject">Betreff</label><input id="subject" type="text" placeholder="z. B. Rückfrage zum Nachtrag"></div>
             <div class="field"><label for="responseGoal">Ziel der Antwort</label><input id="responseGoal" type="text" placeholder="z. B. verbindlich nachfassen, Termin vorschlagen"></div>
-            <div class="field full"><label for="inboundMessage">Eingegangene Nachricht</label><textarea id="inboundMessage" placeholder="E-Mail aus Outlook, Gmail oder einem anderen Mailprogramm hier einfügen..." spellcheck="true"></textarea></div>
+            <div class="field full"><label for="inboundMessage">Eingegangene Nachricht / Schreiben</label><textarea id="inboundMessage" placeholder="E-Mail, Brief, Nachricht oder Geschäftsschreiben hier einfügen..." spellcheck="true"></textarea></div>
             <div class="context-tabs full">
               <div class="tab-buttons" aria-label="Kontextfelder">
                 <button type="button" class="is-active" data-context-tab="notes">Eigene Notizen</button>
@@ -548,7 +548,7 @@ Mit freundlichen Grüßen`,
           <div class="panel-heading"><div><h2>Vorlagen</h2><p>Antwortbausteine erstellen, bearbeiten, kategorisieren und verwalten.</p></div></div>
           <div class="info-note">
             <strong>Was macht eine Vorlage?</strong>
-            <p>Eine Vorlage ist ein wiederverwendbarer Textbaustein für typische Antworten oder Formulierungen. Tags beschreiben Einsatzsituationen wie „freundlich“, „Frist“, „Bauprojekt“ oder „Eskalation“. Die Vorlage wird nicht 1:1 eingesetzt; die KI passt den Text an die konkrete E-Mail an.</p>
+            <p>Eine Vorlage ist ein wiederverwendbarer Textbaustein für typische Antworten oder Formulierungen. Tags beschreiben Einsatzsituationen wie „freundlich“, „Frist“, „Bauprojekt“ oder „Eskalation“. Die Vorlage wird nicht 1:1 eingesetzt; die KI passt den Text an die konkrete Nachricht oder das Schreiben an.</p>
           </div>
           <div class="template-form">
             <input id="templateTitle" type="text" placeholder="Vorlagentitel">
@@ -756,7 +756,7 @@ Mit freundlichen Grüßen`,
         </article>
         <article>
           <span>2</span>
-          <div><strong>E-Mail einfügen</strong><p>Betreff, eingegangene Nachricht, Ziel und interne Notizen in Neue Antwort erfassen.</p></div>
+          <div><strong>Nachricht einfügen</strong><p>Betreff, eingegangene Nachricht oder Schreiben, Ziel und interne Notizen in Neue Antwort erfassen.</p></div>
         </article>
         <article>
           <span>3</span>
@@ -773,7 +773,7 @@ Mit freundlichen Grüßen`,
         <ol class="help-steps">
           <li><strong>Neue Antwort öffnen:</strong> In der Sidebar „Neue Antwort“ wählen.</li>
           <li><strong>Betreff eintragen:</strong> Der Betreff hilft der KI, Kontext und Dringlichkeit besser zu erkennen.</li>
-          <li><strong>E-Mail einfügen:</strong> Den Inhalt aus Outlook, Gmail oder einem anderen E-Mail-Programm direkt in „Eingegangene Nachricht“ kopieren.</li>
+          <li><strong>Nachricht einfügen:</strong> Den Inhalt aus Outlook, Gmail, einem Brief, PDF-Text oder anderem Schriftverkehr direkt in „Eingegangene Nachricht / Schreiben“ kopieren.</li>
           <li><strong>Ziel formulieren:</strong> Kurz beschreiben, was die Antwort erreichen soll, z. B. „Termin abstimmen“, „Rückfrage stellen“ oder „Eskalation entschärfen“.</li>
           <li><strong>Notizen ergänzen:</strong> Interne Fakten, Grenzen, Fristen oder gewünschte Aussagen unter „Eigene Notizen“ hinterlegen.</li>
           <li><strong>Analyse & Antwortvorschläge erstellen:</strong> Die App erzeugt KI-Analyse, Hauptantwort, Alternative, Kurzversion, diplomatische Version und Qualitätsbewertung.</li>
@@ -783,7 +783,7 @@ Mit freundlichen Grüßen`,
       <div class="help-grid">
         <article>
           <h3>Entwurf optimieren</h3>
-          <p>Wähle im Composer „Entwurf optimieren“, wenn du bereits einen Antwortentwurf hast. Füge Eingangsmail und Entwurf gemeinsam in das Nachrichtenfeld ein und nutze Notizen für gewünschte Änderungen.</p>
+          <p>Wähle im Composer „Entwurf optimieren“, wenn du bereits einen Antwortentwurf hast. Füge Ausgangsnachricht, Schreiben oder Brief und Entwurf gemeinsam in das Nachrichtenfeld ein und nutze Notizen für gewünschte Änderungen.</p>
         </article>
         <article>
           <h3>Vorlagen anwenden</h3>
@@ -895,7 +895,7 @@ Mit freundlichen Grüßen`,
           <h3>Datenschutz</h3>
           <ul>
             <li>Vorlagen, Verlauf, Lizenzdaten und Einstellungen bleiben im lokalen App-Speicher.</li>
-            <li>E-Mail-Inhalte werden nur bei KI-Anfragen über den lokalen Proxy an Anthropic übertragen.</li>
+            <li>Inhalte aus E-Mails, Briefen und anderem Schriftverkehr werden nur bei KI-Anfragen über den lokalen Proxy an Anthropic übertragen.</li>
             <li>Keine zentrale Projektdatenbank wird im Prototyp verwendet.</li>
             <li>Vertrauliche Inhalte sollten nur verarbeitet werden, wenn dies fachlich und rechtlich zulässig ist.</li>
           </ul>

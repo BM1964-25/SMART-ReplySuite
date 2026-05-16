@@ -32,6 +32,7 @@ function buildMailResponsePrompts({
   };
 
   const focusRules = {
+    Ausgewogen: "Berücksichtige Inhalt, Tonalität, nächste Schritte und Risiken ausgewogen, ohne einen einzelnen Schwerpunkt zu überbetonen.",
     Kernaussagen: "Priorisiere die Kernbotschaft, den Zweck der Antwort und die entscheidenden Fakten.",
     Handlungsempfehlungen: "Leite klare nächste Handlungen ab und formuliere sie verbindlich.",
     Konfliktvermeidung: "Reduziere Reibung, vermeide Schuldzuweisungen und deeskaliere konsequent.",
@@ -44,24 +45,24 @@ function buildMailResponsePrompts({
   const isOptimizeMode = mode === "optimize";
   const systemPrompt = [
     isOptimizeMode
-      ? "Du bist ein Senior Communication Strategist und optimierst bestehende geschäftliche E-Mail-Entwürfe."
-      : "Du bist ein Senior Communication Strategist für professionelle geschäftliche E-Mail-Kommunikation.",
+      ? "Du bist ein Senior Communication Strategist und optimierst bestehende geschäftliche Antwortentwürfe für E-Mails, Briefe und Schriftverkehr."
+      : "Du bist ein Senior Communication Strategist für professionelle schriftliche Geschäftskommunikation per E-Mail, Brief und allgemeinem Schriftverkehr.",
     "Arbeite diskret, präzise, souverän und nutzerorientiert.",
     "Erfinde keine Fakten, Termine, Zusagen, Beträge oder Rechtspositionen.",
     "Kennzeichne offene Punkte, wenn Informationen fehlen.",
     isOptimizeMode
-      ? "Verbessere den vorhandenen Entwurf so, dass er direkt in Outlook oder Gmail verwendet werden kann."
-      : "Formuliere E-Mails so, dass sie direkt in Outlook oder Gmail verwendet werden können.",
+      ? "Verbessere den vorhandenen Entwurf so, dass er direkt als E-Mail, Brief oder Geschäftsschreiben verwendet werden kann."
+      : "Formuliere Antworten so, dass sie direkt als E-Mail, Brief oder Geschäftsschreiben verwendet werden können.",
     "Keine generischen KI-Floskeln, keine Meta-Erklärungen vor oder nach der Ausgabe.",
     `Zielsprache: ${language}.`,
     `Antworttyp: ${responseType}.`,
     `Tonalität: ${tone}.`,
     `Antwortlänge: ${lengthMap[length] || lengthMap.standard}`,
     `Fokus: ${focus}. ${focusRules[focus] || ""}`,
-    `Unternehmensstil: ${companyStyleMap[companyStyle] || companyStyle}.`,
+    `Basisstil des Stilprofils: ${companyStyleMap[companyStyle] || companyStyle}.`,
     companyStyleAccents.length ? `Zusätzliche Stilakzente: ${companyStyleAccents.join(", ")}.` : "",
     companyStyleNoGos.length ? `Verbindliche No-Gos: ${companyStyleNoGos.join("; ")}.` : "",
-    companyStyleNotes ? `Eigene Unternehmensstil-Regeln: ${companyStyleNotes}.` : "",
+    companyStyleNotes ? `Eigene Stilprofil-Regeln: ${companyStyleNotes}.` : "",
     "Gib ausschließlich valides JSON aus. Keine Markdown-Codeblöcke, keine Einleitung, keine Kommentare.",
     "Das JSON muss exakt diese Struktur haben:",
     "{",
@@ -90,8 +91,8 @@ function buildMailResponsePrompts({
 
   const userPrompt = [
     isOptimizeMode
-      ? "Optimiere den vorhandenen Antwortentwurf auf Basis der eingegangenen E-Mail und des Nutzerkontexts."
-      : "Erstelle professionelle Antwortvorschläge auf Basis dieser E-Mail.",
+      ? "Optimiere den vorhandenen Antwortentwurf auf Basis der eingegangenen Nachricht, des Schreibens und des Nutzerkontexts."
+      : "Erstelle professionelle Antwortvorschläge auf Basis dieser Nachricht oder dieses Schreibens.",
     "",
     "Eingaben:",
     `Betreff: ${subject || "nicht angegeben"}`,
@@ -99,7 +100,7 @@ function buildMailResponsePrompts({
     `Tonalität: ${tone}`,
     `Länge: ${length}`,
     `Fokus: ${focus}`,
-    `Unternehmensstil: ${companyStyle}`,
+    `Basisstil: ${companyStyle}`,
     `Zusätzliche Stilakzente: ${companyStyleAccents.length ? companyStyleAccents.join(", ") : "keine"}`,
     `No-Gos: ${companyStyleNoGos.length ? companyStyleNoGos.join("; ") : "keine"}`,
     `Eigene Stilregeln: ${companyStyleNotes || "keine"}`,

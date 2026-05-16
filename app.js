@@ -58,6 +58,9 @@ const responseTypes = [
   "Eskalationsentschärfung",
   "Nachforderung",
   "Projektkommunikation",
+  "Stellungnahme",
+  "Fristantwort",
+  "Schriftliche Klärung",
   "Individuelle Antwort"
 ];
 
@@ -338,7 +341,7 @@ async function handleGenerate() {
 
   if (!inboundMessage) {
     setStatus("Nachricht fehlt", "danger");
-    setResponseOutput("Bitte füge zuerst die eingegangene E-Mail ein.", true);
+    setResponseOutput("Bitte füge zuerst die eingegangene Nachricht oder das Schreiben ein.", true);
     return;
   }
 
@@ -568,7 +571,7 @@ function renderEmptyOutput(message) {
   return `
     <div class="empty-output">
       <strong>${escapeHtml(message)}</strong>
-      <p>Füge eine E-Mail ein, wähle Antworttyp und Tonalität, und erstelle dann eine professionelle Antwort mit Analyse, Varianten und Qualitätscheck.</p>
+      <p>Füge eine Nachricht, E-Mail oder ein Schreiben ein, wähle Antworttyp und Tonalität, und erstelle dann eine professionelle Antwort mit Analyse, Varianten und Qualitätscheck.</p>
     </div>
   `;
 }
@@ -1003,8 +1006,8 @@ function setComposerMode(mode) {
   elements.modeButtons.forEach((button) => button.classList.toggle("is-active", button.dataset.mode === currentMode));
   elements.generateBtn.textContent = currentMode === "optimize" ? "Entwurf optimieren" : "Analyse & Antwortvorschläge erstellen";
   elements.inboundMessage.placeholder = currentMode === "optimize"
-    ? "Eingegangene E-Mail und vorhandenen Antwortentwurf hier einfügen..."
-    : "E-Mail aus Outlook, Gmail oder einem anderen Mailprogramm hier einfügen...";
+    ? "Eingegangene Nachricht, Schreiben und vorhandenen Antwortentwurf hier einfügen..."
+    : "E-Mail, Brief, Nachricht oder Geschäftsschreiben hier einfügen...";
 }
 
 function showContextPanel(name) {
