@@ -222,10 +222,9 @@ h1 {
 .step-number {
   width: 30px;
   height: 30px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
+  display: inline-grid;
+  place-items: center;
+  padding: 1px 0 0;
   border-radius: 999px;
   background: #e9f3ff;
   color: var(--accent-strong);
