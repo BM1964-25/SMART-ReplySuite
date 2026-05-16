@@ -56,8 +56,8 @@ SMART-DEMO-2026-LOCAL
 - Tabbare Antwortkarten mit Kopieren je Abschnitt und Gesamtantwort
 - Qualitätsbadges für Konflikt, Höflichkeit, Klarheit und Verbindlichkeit
 - Robuste JSON-Antwortstruktur für Analyse, Antwortvarianten und Qualitätswerte
-- Vorlagen speichern, bearbeiten, löschen, kategorisieren und favorisieren
-- Bibliothek
+- Vorlagen speichern, bearbeiten, löschen, kategorisieren, taggen und favorisieren
+- Bibliothek mit Suche und Tag-Filter
 - Verlauf mit Suche, Antworttyp-Filter, erneut verwenden, kopieren und löschen
 - Unternehmensstil
 - Einstellungen für Standardsprache und Standardton

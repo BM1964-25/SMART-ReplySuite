@@ -14,6 +14,7 @@ Implemented in the current local prototype:
 - History search and response-type filter
 - Robust JSON response contract for AI output
 - Template editing and deletion
+- Template tags with search/filter support
 - History reuse and deletion
 - Local data import
 - Diagnostics panel

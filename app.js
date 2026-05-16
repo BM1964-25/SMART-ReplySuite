@@ -105,11 +105,16 @@ const elements = {
   resetBtn: document.querySelector("#resetBtn"),
   templateTitle: document.querySelector("#templateTitle"),
   templateCategory: document.querySelector("#templateCategory"),
+  templateTags: document.querySelector("#templateTags"),
   templateBody: document.querySelector("#templateBody"),
   templateFavorite: document.querySelector("#templateFavorite"),
   addTemplateBtn: document.querySelector("#addTemplateBtn"),
   templateList: document.querySelector("#templateList"),
+  templateSearch: document.querySelector("#templateSearch"),
+  templateTagFilter: document.querySelector("#templateTagFilter"),
   libraryList: document.querySelector("#libraryList"),
+  librarySearch: document.querySelector("#librarySearch"),
+  libraryTagFilter: document.querySelector("#libraryTagFilter"),
   historyList: document.querySelector("#historyList"),
   historySearch: document.querySelector("#historySearch"),
   historyTypeFilter: document.querySelector("#historyTypeFilter"),
@@ -209,6 +214,10 @@ function bindEvents() {
   elements.saveHistoryBtn.addEventListener("click", saveCurrentHistory);
   elements.resetBtn.addEventListener("click", resetComposer);
   elements.addTemplateBtn.addEventListener("click", addTemplate);
+  elements.templateSearch.addEventListener("input", renderTemplates);
+  elements.templateTagFilter.addEventListener("change", renderTemplates);
+  elements.librarySearch.addEventListener("input", renderLibrary);
+  elements.libraryTagFilter.addEventListener("change", renderLibrary);
   elements.saveStyleBtn.addEventListener("click", saveStyle);
   elements.defaultLanguage.addEventListener("change", saveSettings);
   elements.defaultTone.addEventListener("change", saveSettings);
@@ -670,6 +679,7 @@ function addTemplate() {
     if (item) {
       item.title = title;
       item.category = elements.templateCategory.value.trim() || "Allgemein";
+      item.tags = parseTags(elements.templateTags.value);
       item.body = body;
       item.favorite = elements.templateFavorite.checked;
       item.updatedAt = new Date().toISOString();
@@ -681,6 +691,7 @@ function addTemplate() {
     id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
     title,
     category: elements.templateCategory.value.trim() || "Allgemein",
+    tags: parseTags(elements.templateTags.value),
     body,
     favorite: elements.templateFavorite.checked,
       createdAt: new Date().toISOString(),
@@ -690,6 +701,7 @@ function addTemplate() {
 
   elements.templateTitle.value = "";
   elements.templateCategory.value = "";
+  elements.templateTags.value = "";
   elements.templateBody.value = "";
   elements.templateFavorite.checked = false;
   saveData();
@@ -704,9 +716,11 @@ function saveCurrentAsTemplate() {
     id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
     title: elements.subject.value.trim() || "Antwortvorschlag",
     category: elements.responseType.value,
+    tags: parseTags([elements.responseType.value, elements.tone.value, elements.focus.value].join(",")),
     body: currentResponseText,
     favorite: false,
-    createdAt: new Date().toISOString()
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
   });
   saveData();
   renderLists();
@@ -741,26 +755,50 @@ function renderLists() {
   renderLibrary();
   renderHistory();
   renderTemplatePicker();
+  renderTemplateTagFilters();
   renderHistoryFilter();
 }
 
 function renderTemplates() {
-  if (!dataState.templates.length) {
+  const items = filterTemplates(dataState.templates, elements.templateSearch.value, elements.templateTagFilter.value);
+  if (!items.length) {
     elements.templateList.innerHTML = `<div class="empty-state">Noch keine Vorlagen gespeichert.</div>`;
     return;
   }
 
-  elements.templateList.innerHTML = dataState.templates.map((item) => dataCard(item, "template")).join("");
+  elements.templateList.innerHTML = items.map((item) => dataCard(item, "template")).join("");
 }
 
 function renderLibrary() {
-  const items = [...dataState.templates].sort((a, b) => Number(b.favorite) - Number(a.favorite));
+  const items = filterTemplates(dataState.templates, elements.librarySearch.value, elements.libraryTagFilter.value)
+    .sort((a, b) => Number(b.favorite) - Number(a.favorite));
   if (!items.length) {
     elements.libraryList.innerHTML = `<div class="empty-state">Die Bibliothek füllt sich mit gespeicherten Vorlagen und Favoriten.</div>`;
     return;
   }
 
   elements.libraryList.innerHTML = items.map((item) => dataCard(item, "library")).join("");
+}
+
+function filterTemplates(templates, queryValue, tagValue) {
+  const query = queryValue?.trim().toLowerCase() || "";
+  const tag = tagValue || "";
+  return templates.filter((item) => {
+    const tags = getTemplateTags(item);
+    const haystack = [item.title, item.category, item.body, tags.join(" ")].join(" ").toLowerCase();
+    return (!query || haystack.includes(query)) && (!tag || tags.includes(tag));
+  });
+}
+
+function renderTemplateTagFilters() {
+  const currentTemplateTag = elements.templateTagFilter.value;
+  const currentLibraryTag = elements.libraryTagFilter.value;
+  const tags = [...new Set(dataState.templates.flatMap(getTemplateTags))].sort((a, b) => a.localeCompare(b, "de"));
+  const options = [`<option value="">Alle Tags</option>`, ...tags.map((tag) => `<option value="${escapeHtml(tag)}">${escapeHtml(tag)}</option>`)].join("");
+  elements.templateTagFilter.innerHTML = options;
+  elements.libraryTagFilter.innerHTML = options;
+  if (tags.includes(currentTemplateTag)) elements.templateTagFilter.value = currentTemplateTag;
+  if (tags.includes(currentLibraryTag)) elements.libraryTagFilter.value = currentLibraryTag;
 }
 
 function renderHistory() {
@@ -812,10 +850,12 @@ function renderHistoryFilter() {
 }
 
 function dataCard(item, type) {
+  const tags = getTemplateTags(item);
   return `
     <article class="data-card">
       <h3>${escapeHtml(item.favorite ? `★ ${item.title}` : item.title)}</h3>
       <small>${escapeHtml(item.category)} · ${formatDate(item.createdAt)}</small>
+      ${tags.length ? `<div class="tag-list">${tags.map((tag) => `<span>${escapeHtml(tag)}</span>`).join("")}</div>` : ""}
       <p>${escapeHtml(item.body.slice(0, 360))}${item.body.length > 360 ? "..." : ""}</p>
       <div class="card-actions">
         <button type="button" data-use-template="${item.id}">In Antwort übernehmen</button>
@@ -826,6 +866,18 @@ function dataCard(item, type) {
       </div>
     </article>
   `;
+}
+
+function parseTags(value) {
+  return [...new Set(String(value || "")
+    .split(",")
+    .map((tag) => tag.trim())
+    .filter(Boolean)
+    .map((tag) => tag.length > 32 ? tag.slice(0, 32) : tag))];
+}
+
+function getTemplateTags(item) {
+  return Array.isArray(item.tags) ? item.tags : parseTags(item.tags || "");
 }
 
 function applySelectedTemplate() {
@@ -886,6 +938,7 @@ document.addEventListener("click", async (event) => {
       editingTemplateId = item.id;
       elements.templateTitle.value = item.title;
       elements.templateCategory.value = item.category;
+      elements.templateTags.value = getTemplateTags(item).join(", ");
       elements.templateBody.value = item.body;
       elements.templateFavorite.checked = Boolean(item.favorite);
       elements.addTemplateBtn.textContent = "Vorlage aktualisieren";
