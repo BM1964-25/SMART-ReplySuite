@@ -75,6 +75,7 @@ const tones = [
 ];
 
 const focuses = [
+  "Ausgewogen",
   "Kernaussagen",
   "Handlungsempfehlungen",
   "Konfliktvermeidung",
@@ -209,7 +210,7 @@ function init() {
   applySidebarState(localStorage.getItem(SIDEBAR_COLLAPSED_KEY) === "true");
   fillSelect(elements.responseType, responseTypes);
   fillSelect(elements.tone, tones, "geschäftlich-formell");
-  fillSelect(elements.focus, focuses, "Konfliktvermeidung");
+  fillSelect(elements.focus, focuses, "Ausgewogen");
 
   const savedKey = localStorage.getItem(STORAGE_KEY);
   const savedLicense = loadStoredLicense();
