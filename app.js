@@ -107,6 +107,10 @@ const elements = {
   contextPanels: document.querySelectorAll("[data-context-panel]"),
   setupAlert: document.querySelector("#setupAlert"),
   templatePicker: document.querySelector("#templatePicker"),
+  styleProfilePicker: document.querySelector("#styleProfilePicker"),
+  styleProfileName: document.querySelector("#styleProfileName"),
+  saveStyleProfileBtn: document.querySelector("#saveStyleProfileBtn"),
+  styleProfileList: document.querySelector("#styleProfileList"),
   generateBtn: document.querySelector("#generateBtn"),
   responseOutput: document.querySelector("#responseOutput"),
   qualityStrip: document.querySelector("#qualityStrip"),
@@ -797,6 +801,8 @@ function renderLists() {
   renderLibrary();
   renderHistory();
   renderTemplatePicker();
+  renderStyleProfilePicker();
+  renderStyleProfileList();
   renderTemplateTagFilters();
   renderHistoryFilter();
 }
@@ -879,6 +885,37 @@ function renderTemplatePicker() {
   if (dataState.templates.some((item) => item.id === currentValue)) {
     elements.templatePicker.value = currentValue;
   }
+}
+
+function renderStyleProfilePicker() {
+  const currentValue = elements.styleProfilePicker.value;
+  const profiles = dataState.styleProfiles || [];
+  elements.styleProfilePicker.innerHTML = [
+    `<option value="">Kein Stilprofil ausgewählt</option>`,
+    ...profiles.map((profile) => `<option value="${escapeHtml(profile.id)}">${escapeHtml(profile.name)}</option>`)
+  ].join("");
+  if (profiles.some((profile) => profile.id === currentValue)) {
+    elements.styleProfilePicker.value = currentValue;
+  }
+}
+
+function renderStyleProfileList() {
+  const profiles = dataState.styleProfiles || [];
+  if (!profiles.length) {
+    elements.styleProfileList.innerHTML = `<div class="empty-state">Noch keine Stilprofile gespeichert.</div>`;
+    return;
+  }
+
+  elements.styleProfileList.innerHTML = profiles.map((profile) => `
+    <article class="data-card compact-card">
+      <h3>${escapeHtml(profile.name)}</h3>
+      <small>${escapeHtml(profile.companyStyle)} · ${(profile.companyStyleAccents || []).length} Akzente · ${(profile.companyStyleNoGos || []).length} No-Gos</small>
+      <div class="card-actions">
+        <button type="button" data-apply-style-profile="${escapeHtml(profile.id)}">Anwenden</button>
+        <button type="button" data-delete-style-profile="${escapeHtml(profile.id)}" class="danger-action">Löschen</button>
+      </div>
+    </article>
+  `).join("");
 }
 
 function renderHistoryFilter() {
@@ -1127,6 +1164,7 @@ async function importData(event) {
     dataState.companyStyleNotes = imported.companyStyleNotes || dataState.companyStyleNotes;
     dataState.companyStyleAccents = Array.isArray(imported.companyStyleAccents) ? imported.companyStyleAccents : dataState.companyStyleAccents;
     dataState.companyStyleNoGos = Array.isArray(imported.companyStyleNoGos) ? imported.companyStyleNoGos : dataState.companyStyleNoGos;
+    dataState.styleProfiles = Array.isArray(imported.styleProfiles) ? imported.styleProfiles : dataState.styleProfiles;
     selectedStyleAccents = [...dataState.companyStyleAccents];
     selectedStyleNoGos = [...dataState.companyStyleNoGos];
     dataState.settings = { ...dataState.settings, ...(imported.settings || {}) };
@@ -1429,6 +1467,7 @@ function loadData() {
     companyStyleNotes: "",
     companyStyleAccents: [],
     companyStyleNoGos: [],
+    styleProfiles: [],
     settings: {
       defaultLanguage: "Deutsch",
       defaultTone: "geschäftlich-formell"

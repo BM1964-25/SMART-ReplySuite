@@ -16,6 +16,7 @@
         companyStyleNotes: "",
         companyStyleAccents: [],
         companyStyleNoGos: [],
+        styleProfiles: [],
         settings: {
           defaultLanguage: "Deutsch",
           defaultTone: "geschäftlich-formell"
@@ -95,6 +96,93 @@
         prependDiagnostic("Unternehmensstil", `${selectedStyle}, ${nextData.companyStyleAccents.length} Akzente, ${nextData.companyStyleNoGos.length} No-Gos`);
       }
 
+      function currentStyleProfileFromForm(name) {
+        return {
+          id: `style-${Date.now()}`,
+          name,
+          companyStyle: document.querySelector('input[name="stylePreset"]:checked')?.value || "modern",
+          companyStyleNotes: document.querySelector("#styleNotes")?.value.trim() || "",
+          companyStyleAccents: getActiveValues("[data-style-accent]", "styleAccent"),
+          companyStyleNoGos: getActiveValues("[data-style-nogo]", "styleNogo")
+        };
+      }
+
+      function renderStyleProfiles(data = loadLocalData()) {
+        const select = document.querySelector("#styleProfilePicker");
+        if (select) {
+          const currentValue = select.value;
+          select.innerHTML = [
+            '<option value="">Kein Stilprofil ausgewählt</option>',
+            ...(data.styleProfiles || []).map((profile) => `<option value="${escapeHtml(profile.id)}">${escapeHtml(profile.name)}</option>`)
+          ].join("");
+          if ((data.styleProfiles || []).some((profile) => profile.id === currentValue)) select.value = currentValue;
+        }
+
+        const list = document.querySelector("#styleProfileList");
+        if (!list) return;
+        const profiles = data.styleProfiles || [];
+        if (!profiles.length) {
+          list.innerHTML = '<div class="empty-state">Noch keine Stilprofile gespeichert.</div>';
+          return;
+        }
+        list.innerHTML = profiles.map((profile) => `
+          <article class="data-card compact-card">
+            <h3>${escapeHtml(profile.name)}</h3>
+            <small>${escapeHtml(profile.companyStyle)} · ${(profile.companyStyleAccents || []).length} Akzente · ${(profile.companyStyleNoGos || []).length} No-Gos</small>
+            <div class="card-actions">
+              <button type="button" onclick="window.SMART_STYLE?.applyStyleProfile('${escapeHtml(profile.id)}')">Anwenden</button>
+              <button type="button" class="danger-action" onclick="window.SMART_STYLE?.deleteStyleProfile('${escapeHtml(profile.id)}')">Löschen</button>
+            </div>
+          </article>
+        `).join("");
+      }
+
+      function saveStyleProfile() {
+        const nameInput = document.querySelector("#styleProfileName");
+        const name = nameInput?.value.trim();
+        if (!name) {
+          setFallbackStatus("Profilname fehlt");
+          return;
+        }
+        const current = loadLocalData();
+        const profile = currentStyleProfileFromForm(name);
+        const profiles = (current.styleProfiles || []).filter((item) => item.name.toLowerCase() !== name.toLowerCase());
+        const nextData = { ...current, styleProfiles: [profile, ...profiles] };
+        saveLocalData(nextData);
+        if (nameInput) nameInput.value = "";
+        renderStyleProfiles(nextData);
+        setFallbackStatus("Stilprofil gespeichert");
+        prependDiagnostic("Stilprofil", `${name} gespeichert`);
+      }
+
+      function applyStyleProfile(id) {
+        const data = loadLocalData();
+        const profile = (data.styleProfiles || []).find((item) => item.id === id);
+        if (!profile) return;
+        document.querySelector(`input[name="stylePreset"][value="${profile.companyStyle}"]`)?.click();
+        const companyStyleSelect = document.querySelector("#companyStyle");
+        if (companyStyleSelect) companyStyleSelect.value = profile.companyStyle;
+        const notes = document.querySelector("#styleNotes");
+        if (notes) notes.value = profile.companyStyleNotes || "";
+        renderStyleSelection(profile);
+        const picker = document.querySelector("#styleProfilePicker");
+        if (picker) picker.value = id;
+        setFallbackStatus("Stilprofil angewendet");
+      }
+
+      function applySelectedStyleProfile() {
+        const value = document.querySelector("#styleProfilePicker")?.value;
+        if (value) applyStyleProfile(value);
+      }
+
+      function deleteStyleProfile(id) {
+        const current = loadLocalData();
+        const nextData = { ...current, styleProfiles: (current.styleProfiles || []).filter((item) => item.id !== id) };
+        saveLocalData(nextData);
+        renderStyleProfiles(nextData);
+        setFallbackStatus("Stilprofil gelöscht");
+      }
+
       function exportJson() {
         const fileName = `smart-mailresponse-backup-${new Date().toISOString().slice(0, 10)}.json`;
         const blob = new Blob([JSON.stringify(loadLocalData(), null, 2)], { type: "application/json;charset=utf-8" });
@@ -130,6 +218,7 @@
             companyStyleNotes: imported.companyStyleNotes || current.companyStyleNotes,
             companyStyleAccents: Array.isArray(imported.companyStyleAccents) ? imported.companyStyleAccents : current.companyStyleAccents,
             companyStyleNoGos: Array.isArray(imported.companyStyleNoGos) ? imported.companyStyleNoGos : current.companyStyleNoGos,
+            styleProfiles: Array.isArray(imported.styleProfiles) ? imported.styleProfiles : current.styleProfiles,
             settings: { ...current.settings, ...(imported.settings || {}) }
           };
           localStorage.setItem(dataKey, JSON.stringify(nextData));
@@ -172,7 +261,7 @@
 
       window.SMART_APP = { showView, toggleSidebar, applySidebarState };
       window.SMART_BACKUP = { exportJson, openJsonImport, importJsonFile };
-      window.SMART_STYLE = { toggleStyleChip, saveStyleSelection, renderStyleSelection };
+      window.SMART_STYLE = { toggleStyleChip, saveStyleSelection, renderStyleSelection, saveStyleProfile, applyStyleProfile, applySelectedStyleProfile, deleteStyleProfile, renderStyleProfiles };
 
       document.addEventListener("DOMContentLoaded", () => {
         let storedCollapsed = false;
@@ -183,6 +272,7 @@
         }
         applySidebarState(storedCollapsed);
         renderStyleSelection();
+        renderStyleProfiles();
       });
     })();
   </script>
@@ -296,6 +386,12 @@
               <label for="templatePicker">Vorlage anwenden</label>
               <select id="templatePicker">
                 <option value="">Keine Vorlage ausgewählt</option>
+              </select>
+            </div>
+            <div class="field template-picker">
+              <label for="styleProfilePicker">Stilprofil anwenden</label>
+              <select id="styleProfilePicker" onchange="window.SMART_STYLE?.applySelectedStyleProfile()">
+                <option value="">Kein Stilprofil ausgewählt</option>
               </select>
             </div>
           </div>
@@ -450,7 +546,12 @@
             </article>
           </div>
           <textarea id="styleNotes" class="style-notes" placeholder="Eigene Stilregeln, verbotene Formulierungen, bevorzugte Grußformel, Corporate Wording..."></textarea>
-          <button type="button" class="primary-action narrow" id="saveStyleBtn" onclick="window.SMART_STYLE?.saveStyleSelection()">Stil speichern</button>
+          <div class="style-profile-actions">
+            <div class="field"><label for="styleProfileName">Stilprofilname</label><input id="styleProfileName" type="text" placeholder="z. B. Konfliktprofil, Juristisch vorsichtig, Bauprojekt"></div>
+            <button type="button" id="saveStyleProfileBtn" onclick="window.SMART_STYLE?.saveStyleProfile()">Als Stilprofil speichern</button>
+            <button type="button" class="primary-action" id="saveStyleBtn" onclick="window.SMART_STYLE?.saveStyleSelection()">Standardstil speichern</button>
+          </div>
+          <div class="style-profile-list" id="styleProfileList"></div>
         </section>
       </section>
 
@@ -646,6 +747,8 @@
             <li><strong>Akzente ergänzen:</strong> Mehrere Zusatzakzente wie diplomatisch, wertschätzend oder deeskalierend können kombiniert werden.</li>
             <li><strong>No-Gos anklicken:</strong> Grenzen wie keine Schuldzuweisungen, keine verbindlichen Zusagen oder keine internen Informationen werden per Chip ausgewählt.</li>
             <li><strong>Eigene Regeln:</strong> Im Textfeld können bevorzugte Formulierungen, Grußformeln oder No-Gos hinterlegt werden.</li>
+            <li><strong>Stilprofile speichern:</strong> Wiederkehrende Kombinationen aus Hauptstil, Akzenten, No-Gos und Regeln können als Profil gespeichert werden.</li>
+            <li><strong>In Neue Antwort nutzen:</strong> Gespeicherte Stilprofile können im Composer über „Stilprofil anwenden“ direkt ausgewählt werden.</li>
             <li><strong>Corporate Voice abbilden:</strong> Wiederkehrende Sprachregeln, Begriffe und Tonalität können als Standard hinterlegt werden.</li>
             <li><strong>Antworten steuern:</strong> Der Stil beeinflusst Wortwahl, Direktheit, Vorsicht, Management-Fokus und Verbindlichkeit.</li>
             <li><strong>Merksatz:</strong> Unternehmensstil = Corporate Voice für KI-Antworten.</li>
