@@ -442,13 +442,10 @@ Mit freundlichen Grüßen`,
             <div><h2>Neue Antwort</h2><p>Füge die eingegangene Nachricht, E-Mail oder das Schreiben und deinen Kontext ein.<br>Angaben hier gelten nur für diesen Vorgang und haben Vorrang vor Vorlage und Stilprofil.</p></div>
             <div class="source-metrics"><span class="counter" id="charCount">0 Zeichen</span><span class="quality-badge" id="mailQuality">Noch keine Nachricht</span></div>
           </div>
-          <div class="setup-alert" id="setupAlert">
-            <div>
-              <strong>API-Key einrichten</strong>
-              <p>Für KI-Antworten wird ein eigener Anthropic API-Key benötigt. Inhalte bleiben lokal gespeichert; nur die Anfrage wird an den gewählten KI-Anbieter gesendet.</p>
-            </div>
-            <button type="button" data-view-target="license">Lizenz & API öffnen</button>
-          </div>
+          <button type="button" class="api-status-pill" id="setupAlert" data-view-target="license" aria-label="Lizenz und API öffnen">
+            <span class="api-status-dot" aria-hidden="true"></span>
+            <span><strong data-api-status-title>Claude API: nicht verbunden</strong><small data-api-status-detail>API-Key fehlt - Lizenz & API öffnen</small></span>
+          </button>
           <div class="composer-guidance" aria-label="Vorgehensweise Neue Antwort">
             <strong>Vorgehen</strong>
             <ol>

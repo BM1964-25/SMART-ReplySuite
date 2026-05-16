@@ -1537,7 +1537,26 @@ function updateSystemHealth() {
   elements.sidebarLicenseStatus.textContent = licenseState.active ? "Aktiv" : "Nicht aktiviert";
   elements.sidebarApiStatus.textContent = apiKeyState.isConnected ? "Verbunden" : apiKeyState.value ? "Gespeichert" : "Fehlt";
   elements.sidebarStorageStatus.textContent = elements.rememberKey?.checked ? "Lokal + Key" : "Lokal";
-  elements.setupAlert.hidden = Boolean(apiKeyState.value);
+  updateComposerApiStatus();
+}
+
+function updateComposerApiStatus() {
+  if (!elements.setupAlert) return;
+  const title = elements.setupAlert.querySelector("[data-api-status-title]");
+  const detail = elements.setupAlert.querySelector("[data-api-status-detail]");
+  const state = apiKeyState.isConnected ? "connected" : apiKeyState.value ? "saved" : "missing";
+  const copy = {
+    connected: ["Claude API: verbunden", "KI-Anfragen sind bereit"],
+    saved: ["Claude API: Key gespeichert", "Verbindung noch nicht geprüft"],
+    missing: ["Claude API: nicht verbunden", "API-Key fehlt - Lizenz & API öffnen"]
+  }[state];
+
+  title.textContent = copy[0];
+  detail.textContent = copy[1];
+  elements.setupAlert.classList.toggle("is-connected", state === "connected");
+  elements.setupAlert.classList.toggle("is-saved", state === "saved");
+  elements.setupAlert.title = "Lizenz & API öffnen";
+  elements.setupAlert.setAttribute("aria-label", `${copy[0]}. ${copy[1]}. Lizenz und API öffnen.`);
 }
 
 function loadData() {
