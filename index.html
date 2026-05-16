@@ -648,14 +648,14 @@ Mit freundlichen Grüßen`,
 
       <section class="view" data-view-panel="settings">
         <section class="panel">
-          <div class="panel-heading"><div><h2>Einstellungen</h2><p>Export, Import, lokale Datensicherung und Diagnoseinformationen.</p></div></div>
+          <div class="panel-heading"><div><h2>Einstellungen</h2><p>Lokale Daten, Sicherung, Datenschutz und Diagnose.</p></div></div>
           <div class="info-note">
-            <strong>Antwortsteuerung</strong>
-            <p>Sprache, Tonalität, Länge, Fokus und Antworttyp werden direkt unter „Neue Antwort“ festgelegt. So ist immer klar, welche Auswahl für den aktuellen Vorgang gilt.</p>
+            <strong>Lokale Daten & Sicherung</strong>
+            <p>Exportiere Vorlagen, Verlauf, Stilprofile und App-Einstellungen als lokale <code>.json</code>-Datei oder importiere eine bestehende Sicherung zurück in diese App.</p>
           </div>
           <div class="info-note">
-            <strong>Export & Import als .json</strong>
-            <p>Der Export erstellt eine lokale Sicherungsdatei im JSON-Format. Die Datei wird vom Browser im Standard-Download-Ordner gespeichert, normalerweise unter <code>Downloads</code>, sofern kein anderer Speicherort abgefragt oder eingestellt wurde.</p>
+            <strong>Datenschutz & Speicher</strong>
+            <p>Die Sicherungsdatei wird vom Browser im Standard-Download-Ordner gespeichert, normalerweise unter <code>Downloads</code>, sofern kein anderer Speicherort abgefragt oder eingestellt wurde.</p>
           </div>
           <div class="settings-actions">
             <button type="button" id="exportDataBtn" onclick="window.SMART_BACKUP?.exportJson()">Lokale Daten als .json exportieren</button>
@@ -797,7 +797,7 @@ Mit freundlichen Grüßen`,
         </article>
         <article>
           <h3>Einstellungen</h3>
-          <p>In den Einstellungen verwaltest du lokale JSON-Sicherungen, Import, Export, Arbeitsdaten und Diagnoseinformationen. Die konkrete Antwortsteuerung erfolgt unter „Neue Antwort“.</p>
+          <p>In den Einstellungen verwaltest du lokale JSON-Sicherungen, Import, Export, Arbeitsdaten, Datenschutz- und Diagnoseinformationen.</p>
         </article>
       </div>
 
@@ -860,9 +860,10 @@ Mit freundlichen Grüßen`,
         <article>
           <h3>Was kann ich unter Einstellungen machen?</h3>
           <ul>
-            <li><strong>Daten exportieren:</strong> Vorlagen, Verlauf, Stilprofile und Einstellungen können als lokale <code>.json</code>-Sicherung gespeichert werden.</li>
-            <li><strong>Daten importieren:</strong> Eine zuvor exportierte <code>.json</code>-Datei kann wieder eingelesen werden.</li>
+            <li><strong>Lokale Daten sichern:</strong> Vorlagen, Verlauf, Stilprofile und Einstellungen können als lokale <code>.json</code>-Sicherung gespeichert werden.</li>
+            <li><strong>Sicherung importieren:</strong> Eine zuvor exportierte <code>.json</code>-Datei kann wieder eingelesen werden.</li>
             <li><strong>Arbeitsdaten leeren:</strong> Lokale Vorlagen und Verlaufseinträge können zurückgesetzt werden.</li>
+            <li><strong>Speicherort verstehen:</strong> Exportdateien landen normalerweise im Download-Ordner des Browsers, sofern kein anderer Speicherort gewählt wurde.</li>
             <li><strong>Diagnose prüfen:</strong> Der Diagnosebereich zeigt lokale Datenstände wie Vorlagen, Verlauf, Stilprofile, API-Key, Lizenz und Speicherstatus.</li>
           </ul>
         </article>
