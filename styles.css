@@ -863,7 +863,7 @@ textarea:focus, input:focus, select:focus {
 
 .style-assist {
   display: grid;
-  grid-template-columns: minmax(240px, 33%) minmax(0, 66%);
+  grid-template-columns: minmax(280px, 40%) minmax(0, 60%);
   gap: 12px;
   margin: 14px 0;
 }
