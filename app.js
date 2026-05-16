@@ -150,6 +150,7 @@ const elements = {
   resultTabs: document.querySelector("#resultTabs"),
   charCount: document.querySelector("#charCount"),
   mailQuality: document.querySelector("#mailQuality"),
+  copyOutputIconBtn: document.querySelector("#copyOutputIconBtn"),
   copyAllBtn: document.querySelector("#copyAllBtn"),
   saveTemplateFromOutputBtn: document.querySelector("#saveTemplateFromOutputBtn"),
   saveHistoryBtn: document.querySelector("#saveHistoryBtn"),
@@ -265,6 +266,7 @@ function bindEvents() {
   elements.historyTypeFilter.addEventListener("change", renderHistory);
   elements.inboundMessage.addEventListener("input", updateCharacterCount);
   elements.generateBtn.addEventListener("click", handleGenerate);
+  elements.copyOutputIconBtn.addEventListener("click", copyAll);
   elements.copyAllBtn.addEventListener("click", copyAll);
   elements.saveTemplateFromOutputBtn.addEventListener("click", saveCurrentAsTemplate);
   elements.saveHistoryBtn.addEventListener("click", saveCurrentHistory);
@@ -434,6 +436,7 @@ function hasGeneratedResponse() {
 
 function updateResultActions() {
   const hasResponse = hasGeneratedResponse();
+  elements.copyOutputIconBtn.disabled = !hasResponse;
   elements.copyAllBtn.disabled = !hasResponse;
   elements.saveTemplateFromOutputBtn.disabled = !hasResponse;
   elements.saveHistoryBtn.disabled = !hasResponse;

@@ -529,7 +529,12 @@ Mit freundlichen Grüßen`,
         </aside>
 
         <section class="panel output-panel">
-          <div class="panel-heading"><div><h2>KI-Analyse & Antwortvorschläge</h2><p>Jede Antwortvariante ist einzeln kopierbar.</p></div></div>
+          <div class="panel-heading">
+            <div><h2>KI-Analyse & Antwortvorschläge</h2><p>Jede Antwortvariante ist einzeln kopierbar.</p></div>
+            <button type="button" class="icon-button output-copy-button" id="copyOutputIconBtn" aria-label="Gesamte Ausgabe kopieren" title="Gesamte Ausgabe kopieren">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            </button>
+          </div>
           <div class="quality-strip" id="qualityStrip" hidden>
             <span class="score-badge" data-score="conflict">Konflikt: offen</span>
             <span class="score-badge" data-score="politeness">Höflichkeit: offen</span>
