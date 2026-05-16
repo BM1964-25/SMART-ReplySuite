@@ -463,17 +463,25 @@ Mit freundlichen Grüßen`,
               <button type="button" class="is-active" data-mode="reply">Antwort erstellen</button>
               <button type="button" data-mode="optimize">Entwurf optimieren</button>
             </div>
-            <div class="field template-picker">
-              <label for="templatePicker">Vorlage anwenden</label>
-              <select id="templatePicker">
-                <option value="">Keine Vorlage ausgewählt</option>
-              </select>
-            </div>
-            <div class="field template-picker">
-              <label for="styleProfilePicker">Stilprofil zugrunde legen</label>
-              <select id="styleProfilePicker" onchange="window.SMART_STYLE?.applySelectedStyleProfile()">
-                <option value="">Kein Stilprofil zugrunde gelegt</option>
-              </select>
+            <div class="optional-context">
+              <div>
+                <strong>Optionaler Kontext</strong>
+                <span>Vorlage und Stilprofil sind optional und ergänzen den aktuellen Vorgang.</span>
+              </div>
+              <div class="optional-context-fields">
+                <div class="field template-picker">
+                  <label for="templatePicker">Vorlage anwenden</label>
+                  <select id="templatePicker">
+                    <option value="">Keine Vorlage ausgewählt</option>
+                  </select>
+                </div>
+                <div class="field template-picker">
+                  <label for="styleProfilePicker">Stilprofil zugrunde legen</label>
+                  <select id="styleProfilePicker" onchange="window.SMART_STYLE?.applySelectedStyleProfile()">
+                    <option value="">Kein Stilprofil zugrunde gelegt</option>
+                  </select>
+                </div>
+              </div>
             </div>
           </div>
           <div class="mail-grid">
