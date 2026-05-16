@@ -241,9 +241,6 @@ function bindEvents() {
   elements.saveStyleBtn.addEventListener("click", saveStyle);
   elements.defaultLanguage.addEventListener("change", saveSettings);
   elements.defaultTone.addEventListener("change", saveSettings);
-  elements.exportDataBtn.addEventListener("click", exportData);
-  elements.importDataBtn.addEventListener("click", () => elements.importDataInput.click());
-  elements.importDataInput.addEventListener("change", importData);
   elements.clearDataBtn.addEventListener("click", clearWorkingData);
   elements.saveKeyBtn.addEventListener("click", handleSaveKey);
   elements.connectBtn.addEventListener("click", handleConnect);
@@ -1065,12 +1062,21 @@ function saveSettings() {
 }
 
 function exportData() {
+  const fileName = `smart-mailresponse-backup-${new Date().toISOString().slice(0, 10)}.json`;
   const blob = new Blob([JSON.stringify(dataState, null, 2)], { type: "application/json;charset=utf-8" });
   const link = document.createElement("a");
   link.href = URL.createObjectURL(blob);
-  link.download = "smart-mailresponse-backup.json";
+  link.download = fileName;
   link.click();
   URL.revokeObjectURL(link.href);
+  setStatus(".json-Export erstellt", "ready");
+  if (elements.diagnosticsOutput) {
+    renderDiagnostics();
+    elements.diagnosticsOutput.insertAdjacentHTML(
+      "afterbegin",
+      `<div class="diagnostic-row ready"><strong>Letzter Export</strong><span>${escapeHtml(fileName)} im Download-Ordner</span></div>`
+    );
+  }
 }
 
 async function importData(event) {
@@ -1078,6 +1084,10 @@ async function importData(event) {
   if (!file) return;
 
   try {
+    const isJsonFile = file.name.toLowerCase().endsWith(".json") || file.type === "application/json";
+    if (!isJsonFile) {
+      throw new Error("Bitte eine .json-Datei auswählen.");
+    }
     const imported = JSON.parse(await file.text());
     dataState.templates = Array.isArray(imported.templates) ? imported.templates : dataState.templates;
     dataState.history = Array.isArray(imported.history) ? imported.history : dataState.history;
@@ -1088,7 +1098,11 @@ async function importData(event) {
     renderLists();
     updateDashboard();
     renderDiagnostics();
-    setStatus("Daten importiert", "ready");
+    setStatus(".json-Datei importiert", "ready");
+    elements.diagnosticsOutput.insertAdjacentHTML(
+      "afterbegin",
+      `<div class="diagnostic-row ready"><strong>Letzter Import</strong><span>${escapeHtml(file.name)}</span></div>`
+    );
   } catch (error) {
     setStatus("Import fehlgeschlagen", "danger");
     elements.diagnosticsOutput.innerHTML = `<div class="diagnostic-row danger"><strong>Import</strong><span>${escapeHtml(error.message)}</span></div>`;
