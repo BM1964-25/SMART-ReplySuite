@@ -333,20 +333,6 @@ h1 {
 .status-dot.warn { background: var(--warn); box-shadow: 0 0 0 7px rgba(241, 190, 85, 0.12); }
 .status-dot.danger { background: var(--danger); box-shadow: 0 0 0 7px rgba(255, 107, 117, 0.12); }
 
-.workflow-panel {
-  display: grid;
-  grid-template-columns: minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr);
-  gap: 12px;
-  align-items: center;
-  padding: 14px 16px;
-  margin-bottom: 18px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: rgba(255,255,255,0.78);
-  box-shadow: 0 14px 40px rgba(20,32,51,0.08);
-}
-
-.workflow-step { display: grid; grid-template-columns: 30px minmax(0,1fr); gap: 12px; align-items: center; }
 .step-number {
   width: 30px;
   height: 30px;
@@ -362,10 +348,6 @@ h1 {
   text-align: center;
   font-variant-numeric: tabular-nums;
 }
-.workflow-step strong, .workflow-step div > span { display: block; }
-.workflow-step strong { margin-bottom: 2px; font-size: 0.9rem; }
-.workflow-step div span { color: var(--muted); font-size: 0.8rem; line-height: 1.3; }
-.workflow-arrow { color: var(--muted); font-weight: 800; }
 
 .view { display: none; }
 .view.is-visible { display: block; }
@@ -1320,8 +1302,6 @@ textarea:focus, input:focus, select:focus {
   .composer-view.is-visible { grid-template-columns: 1fr; }
   .settings-panel { position: static; }
   .dashboard-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
-  .workflow-panel { grid-template-columns: 1fr; }
-  .workflow-arrow { display: none; }
   .composer-tools, .composer-guidance ol, .style-profile-actions, .style-profile-card { grid-template-columns: 1fr; }
   .quality-strip, .result-tabs { grid-template-columns: repeat(2, minmax(0,1fr)); }
   .help-quickstart { grid-template-columns: repeat(2, minmax(0,1fr)); }
