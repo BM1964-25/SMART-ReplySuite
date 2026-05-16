@@ -199,11 +199,7 @@ const elements = {
   statusDot: document.querySelector("#statusDot"),
   sidebarLicenseStatus: document.querySelector("#sidebarLicenseStatus"),
   sidebarApiStatus: document.querySelector("#sidebarApiStatus"),
-  sidebarStorageStatus: document.querySelector("#sidebarStorageStatus"),
-  metricToday: document.querySelector("#metricToday"),
-  metricTemplates: document.querySelector("#metricTemplates"),
-  metricFocus: document.querySelector("#metricFocus"),
-  metricApi: document.querySelector("#metricApi")
+  sidebarStorageStatus: document.querySelector("#sidebarStorageStatus")
 };
 
 window.SMART_APP = {
@@ -244,7 +240,7 @@ function init() {
   renderApiKeyComponent();
   renderLicenseComponent();
   renderLists();
-  updateDashboard();
+  updateAppStatus();
   updateResultActions();
   setKeyFeedback(apiKeyState.value ? "Gespeicherter API-Key geladen." : "Noch kein gültiger API-Key gespeichert.", apiKeyState.value ? "success" : "info");
   setStatus(apiKeyState.value ? "Bereit" : "API-Key fehlt", apiKeyState.value ? "ready" : "warn");
@@ -295,7 +291,7 @@ function bindEvents() {
     apiKeyState.isConnected = false;
     sessionStorage.removeItem(SESSION_KEY);
     renderApiKeyComponent({ keepInput: true });
-    updateDashboard();
+    updateAppStatus();
     setStatus(apiKeyState.value ? "Bereit" : "API-Key fehlt", apiKeyState.value ? "ready" : "warn");
   });
   elements.apiKey.addEventListener("focus", () => {
@@ -836,7 +832,7 @@ function addTemplate() {
   elements.templateFavorite.checked = false;
   saveData();
   renderLists();
-  updateDashboard();
+  updateAppStatus();
   setStatus("Vorlage gespeichert", "ready");
 }
 
@@ -862,7 +858,7 @@ function saveCurrentAsTemplate() {
   });
   saveData();
   renderLists();
-  updateDashboard();
+  updateAppStatus();
   setStatus(`${section.title} als Vorlage gespeichert`, "ready");
 }
 
@@ -887,7 +883,7 @@ function saveCurrentHistory(options = {}) {
   dataState.history = dataState.history.slice(0, 50);
   saveData();
   renderLists();
-  updateDashboard();
+  updateAppStatus();
   if (!options.silent) setStatus("Im Verlauf gespeichert", "ready");
 }
 
@@ -1140,7 +1136,7 @@ document.addEventListener("click", async (event) => {
     if (editingTemplateId === deleteTemplateId) editingTemplateId = null;
     saveData();
     renderLists();
-    updateDashboard();
+    updateAppStatus();
     setStatus("Vorlage gelöscht", "ready");
   }
 
@@ -1171,7 +1167,7 @@ document.addEventListener("click", async (event) => {
     if (index >= 0) dataState.history.splice(index, 1);
     saveData();
     renderLists();
-    updateDashboard();
+    updateAppStatus();
     setStatus("Verlaufseintrag gelöscht", "ready");
   }
 
@@ -1327,7 +1323,7 @@ async function importData(event) {
     saveData();
     renderLists();
     renderStyleChips();
-    updateDashboard();
+    updateAppStatus();
     renderDiagnostics();
     setStatus(".json-Datei importiert", "ready");
     elements.diagnosticsOutput.insertAdjacentHTML(
@@ -1347,7 +1343,7 @@ function clearWorkingData() {
   dataState.history = [];
   saveData();
   renderLists();
-  updateDashboard();
+  updateAppStatus();
   renderDiagnostics();
   setStatus("Arbeitsdaten geleert", "ready");
 }
@@ -1420,7 +1416,7 @@ function handleSaveKey() {
   sessionStorage.removeItem(SESSION_KEY);
   persistApiKey();
   renderApiKeyComponent();
-  updateDashboard();
+  updateAppStatus();
   setKeyFeedback(elements.rememberKey.checked ? "API-Key lokal gespeichert." : "API-Key für diese Sitzung übernommen.", "success");
   setStatus("Bereit", "ready");
 }
@@ -1433,7 +1429,7 @@ async function handleConnect() {
   sessionStorage.setItem(SESSION_KEY, "true");
   setApiBusy(false);
   renderApiKeyComponent();
-  updateDashboard();
+  updateAppStatus();
   setKeyFeedback("Verbindung aktiv. Für technische Prüfung nutze Verbindung überprüfen.", "success");
   setStatus("Bereit", "ready");
 }
@@ -1458,7 +1454,7 @@ async function handleConnectionTest() {
   } finally {
     setApiBusy(false);
     renderApiKeyComponent();
-    updateDashboard();
+    updateAppStatus();
   }
 }
 
@@ -1466,7 +1462,7 @@ function handleDisconnect() {
   apiKeyState.isConnected = false;
   sessionStorage.removeItem(SESSION_KEY);
   renderApiKeyComponent();
-  updateDashboard();
+  updateAppStatus();
   setKeyFeedback("Verbindung getrennt. Der gespeicherte API-Key bleibt erhalten.", "info");
   setStatus(apiKeyState.value ? "Bereit" : "API-Key fehlt", apiKeyState.value ? "ready" : "warn");
 }
@@ -1579,12 +1575,7 @@ function setLicenseFeedback(message, type) {
   elements.licenseFeedback.classList.add(type);
 }
 
-function updateDashboard() {
-  const today = new Date().toDateString();
-  elements.metricToday.textContent = dataState.history.filter((item) => new Date(item.createdAt).toDateString() === today).length;
-  elements.metricTemplates.textContent = dataState.templates.length;
-  elements.metricFocus.textContent = dataState.history[0]?.focus || elements.focus.value || "-";
-  elements.metricApi.textContent = apiKeyState.isConnected ? "Verbunden" : apiKeyState.value ? "Bereit" : "Fehlt";
+function updateAppStatus() {
   updateSystemHealth();
   renderDiagnostics();
 }
