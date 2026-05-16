@@ -473,8 +473,8 @@ textarea:focus, input:focus, select:focus {
   grid-template-columns: 10px minmax(0, auto);
   gap: 9px;
   align-items: center;
-  min-height: 34px;
-  padding: 7px 11px;
+  min-height: 32px;
+  padding: 6px 11px;
   margin-bottom: 14px;
   border: 1px solid rgba(185,121,18,0.22);
   border-radius: 999px;
@@ -493,7 +493,7 @@ textarea:focus, input:focus, select:focus {
 
 .api-status-pill strong,
 .api-status-pill small {
-  display: block;
+  display: inline;
   line-height: 1.2;
 }
 
@@ -504,10 +504,16 @@ textarea:focus, input:focus, select:focus {
 }
 
 .api-status-pill small {
-  margin-top: 1px;
+  margin-left: 7px;
   color: var(--soft);
   font-size: 0.72rem;
   font-weight: 700;
+}
+
+.api-status-pill small::before {
+  content: "•";
+  margin-right: 7px;
+  color: currentColor;
 }
 
 .api-status-dot {
