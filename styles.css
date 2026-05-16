@@ -597,6 +597,26 @@ textarea:focus, input:focus, select:focus {
   margin-bottom: 16px;
 }
 
+.info-note {
+  padding: 13px 14px;
+  margin-bottom: 14px;
+  border: 1px solid rgba(22,104,184,0.18);
+  border-radius: var(--radius);
+  background: linear-gradient(180deg, #f8fbff, #eef6ff);
+}
+.info-note strong {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--text);
+  font-size: 0.95rem;
+}
+.info-note p {
+  margin-bottom: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
 .history-tools {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 240px;
