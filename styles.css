@@ -887,22 +887,30 @@ textarea:focus, input:focus, select:focus {
 
 .style-profile-actions {
   display: grid;
-  grid-template-columns: minmax(260px, 1fr) auto auto;
+  grid-template-columns: minmax(420px, 1fr) minmax(190px, auto) minmax(170px, auto);
   gap: 10px;
   align-items: end;
   margin-top: 12px;
 }
 
+.style-profile-actions .field {
+  margin-bottom: 0;
+}
+
 .style-profile-actions button {
+  width: auto;
   min-height: 42px;
+  padding: 9px 14px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--panel-strong);
   color: var(--text);
   font-weight: 750;
+  white-space: nowrap;
 }
 
 .style-profile-actions .primary-action {
+  width: auto;
   border-color: transparent;
   background: linear-gradient(180deg, var(--accent), var(--accent-strong));
   color: #fff;
