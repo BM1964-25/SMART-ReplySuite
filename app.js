@@ -244,6 +244,7 @@ function init() {
   renderLicenseComponent();
   renderLists();
   updateDashboard();
+  updateResultActions();
   setKeyFeedback(apiKeyState.value ? "Gespeicherter API-Key geladen." : "Noch kein gültiger API-Key gespeichert.", apiKeyState.value ? "success" : "info");
   setStatus(apiKeyState.value ? "Bereit" : "API-Key fehlt", apiKeyState.value ? "ready" : "warn");
 }
@@ -399,6 +400,18 @@ function setResponseOutput(text, isPlaceholder = false) {
   elements.resultTabs.hidden = isPlaceholder || currentSections.length === 0;
   elements.qualityStrip.hidden = isPlaceholder || currentSections.length === 0;
   if (!isPlaceholder) renderQualityStrip(currentResponseData);
+  updateResultActions();
+}
+
+function hasGeneratedResponse() {
+  return !!currentResponseData && !!currentResponseText.trim();
+}
+
+function updateResultActions() {
+  const hasResponse = hasGeneratedResponse();
+  elements.copyAllBtn.disabled = !hasResponse;
+  elements.saveTemplateFromOutputBtn.disabled = !hasResponse;
+  elements.saveHistoryBtn.disabled = !hasResponse;
 }
 
 function normalizeResponsePayload(value) {
@@ -780,7 +793,10 @@ function addTemplate() {
 }
 
 function saveCurrentAsTemplate() {
-  if (!currentResponseText || currentResponseText === "Noch keine Antwort erstellt.") return;
+  if (!hasGeneratedResponse()) {
+    setStatus("Noch keine KI-Ausgabe vorhanden", "warn");
+    return;
+  }
   dataState.templates.unshift({
     id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
     title: elements.subject.value.trim() || "Antwortvorschlag",
@@ -798,7 +814,10 @@ function saveCurrentAsTemplate() {
 }
 
 function saveCurrentHistory(options = {}) {
-  if (!currentResponseText || currentResponseText === "Noch keine Antwort erstellt.") return;
+  if (!hasGeneratedResponse()) {
+    if (!options.silent) setStatus("Noch keine KI-Ausgabe vorhanden", "warn");
+    return;
+  }
 
   dataState.history.unshift({
     id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
@@ -1109,9 +1128,12 @@ document.addEventListener("click", async (event) => {
 });
 
 async function copyAll() {
-  if (!currentResponseText || currentResponseText === "Noch keine Antwort erstellt.") return;
+  if (!hasGeneratedResponse()) {
+    setStatus("Noch keine KI-Ausgabe vorhanden", "warn");
+    return;
+  }
   await navigator.clipboard.writeText(currentResponseText);
-  setStatus("Alles kopiert", "ready");
+  setStatus("Gesamte Ausgabe kopiert", "ready");
 }
 
 function resetComposer() {
