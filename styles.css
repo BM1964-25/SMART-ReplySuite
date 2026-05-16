@@ -64,15 +64,15 @@ h1, h2, h3, p { margin-top: 0; }
 
 .brand-block {
   display: grid;
-  grid-template-columns: 44px minmax(0, 1fr);
+  grid-template-columns: 62px minmax(0, 1fr);
   gap: 12px;
   align-items: center;
   color: #fff;
 }
 
 .brand-mark {
-  width: 44px;
-  height: 44px;
+  width: 62px;
+  height: 62px;
   display: grid;
   place-items: center;
   border-radius: var(--radius);
@@ -208,7 +208,7 @@ h1, h2, h3, p { margin-top: 0; }
 }
 
 .is-sidebar-collapsed .brand-block {
-  grid-template-columns: 44px;
+  grid-template-columns: 62px;
   justify-content: center;
   gap: 10px;
 }
