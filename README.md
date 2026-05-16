@@ -41,6 +41,29 @@ Demo-Lizenz:
 SMART-DEMO-2026-LOCAL
 ```
 
+## Desktop-App und Icon
+
+Für die Desktop-Verpackung sind App-Icons vorbereitet:
+
+- macOS Dock/App: `build/icon.icns`
+- Windows EXE/Taskleiste/Startmenü: `build/icon.ico`
+- Linux AppImage/Deb: `build/icon.png`
+
+Die Electron-Konfiguration liegt in `electron/main.cjs`, die Packaging-Konfiguration in `package.json`.
+
+```bash
+npm install
+npm run desktop
+npm run build:desktop
+```
+
+Wenn das Icon geändert wird, können die Plattform-Icons lokal neu erzeugt werden:
+
+```bash
+npm run icon:ico
+npm run icon:icns
+```
+
 ## Funktionsumfang im aktuellen MVP
 
 - Dashboard
