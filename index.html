@@ -658,8 +658,8 @@ Mit freundlichen Grüßen`,
             <p>Die Sicherungsdatei wird vom Browser im Standard-Download-Ordner gespeichert, normalerweise unter <code>Downloads</code>, sofern kein anderer Speicherort abgefragt oder eingestellt wurde.</p>
           </div>
           <div class="settings-actions">
-            <button type="button" id="exportDataBtn" onclick="window.SMART_BACKUP?.exportJson()">Lokale Daten als .json exportieren</button>
-            <button type="button" id="importDataBtn" onclick="window.SMART_BACKUP?.openJsonImport()">.json-Datei importieren</button>
+            <button type="button" id="exportDataBtn" onclick="window.SMART_BACKUP?.exportJson()"><span class="button-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3v12"></path><path d="m7 10 5 5 5-5"></path><path d="M5 19h14"></path></svg></span><span>Lokale Daten als .json exportieren</span></button>
+            <button type="button" id="importDataBtn" onclick="window.SMART_BACKUP?.openJsonImport()"><span class="button-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 21V9"></path><path d="m7 14 5-5 5 5"></path><path d="M5 5h14"></path></svg></span><span>.json-Datei importieren</span></button>
             <input id="importDataInput" type="file" accept="application/json,.json" onchange="window.SMART_BACKUP?.importJsonFile(this)" hidden>
             <button type="button" id="clearDataBtn">Lokale Arbeitsdaten leeren</button>
           </div>
