@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SMART MailResponse</title>
-  <link rel="stylesheet" href="styles.css?v=file-menu-fix">
+  <link rel="stylesheet" href="styles.css?v=style-profile-multiple">
   <script>
     (function () {
       const collapsedKey = "smart-mailresponse-sidebar-collapsed";
@@ -97,9 +97,9 @@
         prependDiagnostic("Unternehmensstil", `${selectedStyle}, ${nextData.companyStyleAccents.length} Akzente, ${nextData.companyStyleNoGos.length} No-Gos`);
       }
 
-      function currentStyleProfileFromForm(name) {
+      function currentStyleProfileFromForm(name, profileId = null) {
         return {
-          id: editingStyleProfileId || `style-${Date.now()}`,
+          id: profileId || `style-${Date.now()}-${Math.random().toString(16).slice(2)}`,
           name,
           companyStyle: document.querySelector('input[name="stylePreset"]:checked')?.value || "modern",
           companyStyleNotes: document.querySelector("#styleNotes")?.value.trim() || "",
@@ -165,10 +165,11 @@
         }
         const current = loadLocalData();
         const profiles = current.styleProfiles || [];
-        const wasEditing = Boolean(editingStyleProfileId);
-        const normalizedName = editingStyleProfileId ? name : getUniqueProfileName(name, profiles);
-        const profile = currentStyleProfileFromForm(normalizedName);
-        const nextProfiles = editingStyleProfileId
+        const saveButton = document.querySelector("#saveStyleProfileBtn");
+        const shouldUpdate = Boolean(editingStyleProfileId) && saveButton?.textContent.trim() === "Stilprofil aktualisieren";
+        const normalizedName = shouldUpdate ? name : getUniqueProfileName(name, profiles);
+        const profile = currentStyleProfileFromForm(normalizedName, shouldUpdate ? editingStyleProfileId : null);
+        const nextProfiles = shouldUpdate
           ? profiles.map((item) => item.id === editingStyleProfileId ? profile : item)
           : [profile, ...profiles];
         const nextData = { ...current, styleProfiles: nextProfiles };
@@ -176,7 +177,7 @@
         if (nameInput) nameInput.value = "";
         setStyleProfileEditMode(null);
         renderStyleProfiles(nextData);
-        setFallbackStatus(wasEditing ? "Stilprofil aktualisiert" : "Stilprofil gespeichert");
+        setFallbackStatus(shouldUpdate ? "Stilprofil aktualisiert" : "Stilprofil gespeichert");
         prependDiagnostic("Stilprofil", `${normalizedName} gespeichert`);
       }
 
@@ -875,9 +876,9 @@
     </section>
   </div>
 
-  <script src="licenseClient.js?v=file-menu-fix"></script>
-  <script src="anthropicClient.js?v=file-menu-fix"></script>
-  <script src="app.js?v=file-menu-fix"></script>
+  <script src="licenseClient.js?v=style-profile-multiple"></script>
+  <script src="anthropicClient.js?v=style-profile-multiple"></script>
+  <script src="app.js?v=style-profile-multiple"></script>
   <script>
     (function () {
       const collapsedKey = "smart-mailresponse-sidebar-collapsed";
