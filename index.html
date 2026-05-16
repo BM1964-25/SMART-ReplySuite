@@ -131,6 +131,8 @@
             <small>${escapeHtml(profile.companyStyle)} · ${(profile.companyStyleAccents || []).length} Akzente · ${(profile.companyStyleNoGos || []).length} No-Gos</small>
             <div class="card-actions">
               <button type="button" onclick="window.SMART_STYLE?.applyStyleProfile('${escapeHtml(profile.id)}')">Anwenden</button>
+              <button type="button" onclick="window.SMART_STYLE?.editStyleProfile('${escapeHtml(profile.id)}')">Bearbeiten</button>
+              <button type="button" onclick="window.SMART_STYLE?.duplicateStyleProfile('${escapeHtml(profile.id)}')">Duplizieren</button>
               <button type="button" class="danger-action" onclick="window.SMART_STYLE?.deleteStyleProfile('${escapeHtml(profile.id)}')">Löschen</button>
             </div>
           </article>
@@ -173,6 +175,45 @@
       function applySelectedStyleProfile() {
         const value = document.querySelector("#styleProfilePicker")?.value;
         if (value) applyStyleProfile(value);
+      }
+
+      function editStyleProfile(id) {
+        const data = loadLocalData();
+        const profile = (data.styleProfiles || []).find((item) => item.id === id);
+        if (!profile) return;
+        applyStyleProfile(id);
+        const nameInput = document.querySelector("#styleProfileName");
+        if (nameInput) nameInput.value = profile.name;
+        setFallbackStatus("Stilprofil im Bearbeitungsmodus");
+      }
+
+      function uniqueCopyName(baseName, profiles) {
+        let candidate = `${baseName} Kopie`;
+        let counter = 2;
+        while (profiles.some((profile) => profile.name.toLowerCase() === candidate.toLowerCase())) {
+          candidate = `${baseName} Kopie ${counter}`;
+          counter += 1;
+        }
+        return candidate;
+      }
+
+      function duplicateStyleProfile(id) {
+        const current = loadLocalData();
+        const source = (current.styleProfiles || []).find((item) => item.id === id);
+        if (!source) return;
+        const copy = {
+          ...source,
+          id: `style-${Date.now()}`,
+          name: uniqueCopyName(source.name, current.styleProfiles || [])
+        };
+        const nextData = { ...current, styleProfiles: [copy, ...(current.styleProfiles || [])] };
+        saveLocalData(nextData);
+        renderStyleProfiles(nextData);
+        applyStyleProfile(copy.id);
+        const nameInput = document.querySelector("#styleProfileName");
+        if (nameInput) nameInput.value = copy.name;
+        setFallbackStatus("Stilprofil dupliziert");
+        prependDiagnostic("Stilprofil", `${copy.name} erstellt`);
       }
 
       function deleteStyleProfile(id) {
@@ -261,7 +302,7 @@
 
       window.SMART_APP = { showView, toggleSidebar, applySidebarState };
       window.SMART_BACKUP = { exportJson, openJsonImport, importJsonFile };
-      window.SMART_STYLE = { toggleStyleChip, saveStyleSelection, renderStyleSelection, saveStyleProfile, applyStyleProfile, applySelectedStyleProfile, deleteStyleProfile, renderStyleProfiles };
+      window.SMART_STYLE = { toggleStyleChip, saveStyleSelection, renderStyleSelection, saveStyleProfile, applyStyleProfile, applySelectedStyleProfile, editStyleProfile, duplicateStyleProfile, deleteStyleProfile, renderStyleProfiles };
 
       document.addEventListener("DOMContentLoaded", () => {
         let storedCollapsed = false;
@@ -748,6 +789,8 @@
             <li><strong>No-Gos anklicken:</strong> Grenzen wie keine Schuldzuweisungen, keine verbindlichen Zusagen oder keine internen Informationen werden per Chip ausgewählt.</li>
             <li><strong>Eigene Regeln:</strong> Im Textfeld können bevorzugte Formulierungen, Grußformeln oder No-Gos hinterlegt werden.</li>
             <li><strong>Stilprofile speichern:</strong> Wiederkehrende Kombinationen aus Hauptstil, Akzenten, No-Gos und Regeln können als Profil gespeichert werden.</li>
+            <li><strong>Profile bearbeiten:</strong> „Bearbeiten“ lädt ein Profil inklusive Namen zurück in die Maske; Speichern mit gleichem Namen aktualisiert es.</li>
+            <li><strong>Profile duplizieren:</strong> „Duplizieren“ erstellt eine Kopie als Grundlage für Varianten, z. B. ein juristisches Profil für Bauprojekte.</li>
             <li><strong>In Neue Antwort nutzen:</strong> Gespeicherte Stilprofile können im Composer über „Stilprofil anwenden“ direkt ausgewählt werden.</li>
             <li><strong>Corporate Voice abbilden:</strong> Wiederkehrende Sprachregeln, Begriffe und Tonalität können als Standard hinterlegt werden.</li>
             <li><strong>Antworten steuern:</strong> Der Stil beeinflusst Wortwahl, Direktheit, Vorsicht, Management-Fokus und Verbindlichkeit.</li>

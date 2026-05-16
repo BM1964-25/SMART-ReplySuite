@@ -912,6 +912,8 @@ function renderStyleProfileList() {
       <small>${escapeHtml(profile.companyStyle)} · ${(profile.companyStyleAccents || []).length} Akzente · ${(profile.companyStyleNoGos || []).length} No-Gos</small>
       <div class="card-actions">
         <button type="button" data-apply-style-profile="${escapeHtml(profile.id)}">Anwenden</button>
+        <button type="button" data-edit-style-profile="${escapeHtml(profile.id)}">Bearbeiten</button>
+        <button type="button" data-duplicate-style-profile="${escapeHtml(profile.id)}">Duplizieren</button>
         <button type="button" data-delete-style-profile="${escapeHtml(profile.id)}" class="danger-action">Löschen</button>
       </div>
     </article>
@@ -995,6 +997,10 @@ document.addEventListener("click", async (event) => {
   const historyId = event.target.dataset.copyHistory;
   const reuseHistoryId = event.target.dataset.reuseHistory;
   const deleteHistoryId = event.target.dataset.deleteHistory;
+  const applyStyleProfileId = event.target.dataset.applyStyleProfile;
+  const editStyleProfileId = event.target.dataset.editStyleProfile;
+  const duplicateStyleProfileId = event.target.dataset.duplicateStyleProfile;
+  const deleteStyleProfileId = event.target.dataset.deleteStyleProfile;
 
   if (templateId) {
     const item = dataState.templates.find((template) => template.id === templateId);
@@ -1073,6 +1079,11 @@ document.addEventListener("click", async (event) => {
     updateDashboard();
     setStatus("Verlaufseintrag gelöscht", "ready");
   }
+
+  if (applyStyleProfileId) applyStyleProfile(applyStyleProfileId);
+  if (editStyleProfileId) editStyleProfile(editStyleProfileId);
+  if (duplicateStyleProfileId) duplicateStyleProfile(duplicateStyleProfileId);
+  if (deleteStyleProfileId) deleteStyleProfile(deleteStyleProfileId);
 });
 
 async function copyAll() {
@@ -1119,6 +1130,67 @@ function getSelectedStyleChips(type) {
   const selector = type === "accent" ? "[data-style-accent].is-active" : "[data-style-nogo].is-active";
   const key = type === "accent" ? "styleAccent" : "styleNogo";
   return [...document.querySelectorAll(selector)].map((button) => button.dataset[key]);
+}
+
+function applyStyleProfile(id) {
+  const profile = dataState.styleProfiles.find((item) => item.id === id);
+  if (!profile) return;
+  document.querySelector(`input[name="stylePreset"][value="${profile.companyStyle}"]`)?.click();
+  elements.companyStyle.value = profile.companyStyle || elements.companyStyle.value;
+  elements.styleNotes.value = profile.companyStyleNotes || "";
+  selectedStyleAccents = [...(profile.companyStyleAccents || [])];
+  selectedStyleNoGos = [...(profile.companyStyleNoGos || [])];
+  renderStyleChips();
+  elements.styleProfilePicker.value = id;
+  setStatus("Stilprofil angewendet", "ready");
+}
+
+function editStyleProfile(id) {
+  const profile = dataState.styleProfiles.find((item) => item.id === id);
+  if (!profile) return;
+  applyStyleProfile(id);
+  elements.styleProfileName.value = profile.name;
+  showView("style");
+  setStatus("Stilprofil im Bearbeitungsmodus", "ready");
+}
+
+function getUniqueStyleProfileCopyName(baseName) {
+  let candidate = `${baseName} Kopie`;
+  let counter = 2;
+  while (dataState.styleProfiles.some((profile) => profile.name.toLowerCase() === candidate.toLowerCase())) {
+    candidate = `${baseName} Kopie ${counter}`;
+    counter += 1;
+  }
+  return candidate;
+}
+
+function duplicateStyleProfile(id) {
+  const source = dataState.styleProfiles.find((item) => item.id === id);
+  if (!source) return;
+  const copy = {
+    ...source,
+    id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
+    name: getUniqueStyleProfileCopyName(source.name)
+  };
+  dataState.styleProfiles.unshift(copy);
+  saveData();
+  renderStyleProfilePicker();
+  renderStyleProfileList();
+  applyStyleProfile(copy.id);
+  elements.styleProfileName.value = copy.name;
+  showView("style");
+  setStatus("Stilprofil dupliziert", "ready");
+}
+
+function deleteStyleProfile(id) {
+  const index = dataState.styleProfiles.findIndex((item) => item.id === id);
+  if (index < 0) return;
+  dataState.styleProfiles.splice(index, 1);
+  saveData();
+  renderStyleProfilePicker();
+  renderStyleProfileList();
+  if (elements.styleProfilePicker.value === id) elements.styleProfilePicker.value = "";
+  setStatus("Stilprofil gelöscht", "ready");
 }
 
 function saveSettings() {
