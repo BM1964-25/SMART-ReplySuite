@@ -1,6 +1,6 @@
-export const DEFAULT_MODEL = "claude-sonnet-4-20250514";
+const DEFAULT_MODEL = "claude-sonnet-4-20250514";
 
-export function buildMailResponsePrompts({
+function buildMailResponsePrompts({
   subject,
   inboundMessage,
   notes,
@@ -130,7 +130,7 @@ export function buildMailResponsePrompts({
   return { systemPrompt, userPrompt };
 }
 
-export async function requestClaudeMailResponse(options) {
+async function requestClaudeMailResponse(options) {
   const { systemPrompt, userPrompt } = buildMailResponsePrompts(options);
 
   const response = await fetch(options.proxyUrl || "/api/anthropic/messages", {
@@ -171,7 +171,7 @@ export async function requestClaudeMailResponse(options) {
   return result;
 }
 
-export async function testClaudeConnection({ apiKey, proxyUrl, model }) {
+async function testClaudeConnection({ apiKey, proxyUrl, model }) {
   const response = await fetch(proxyUrl || "/api/anthropic/messages", {
     method: "POST",
     headers: {
@@ -219,3 +219,10 @@ function createAnthropicError(payload, status) {
   error.code = "ANTHROPIC_API_ERROR";
   return error;
 }
+
+window.SMART_AI = {
+  DEFAULT_MODEL,
+  buildMailResponsePrompts,
+  requestClaudeMailResponse,
+  testClaudeConnection
+};

@@ -1,12 +1,12 @@
-import { requestClaudeMailResponse, testClaudeConnection } from "./anthropicClient.js";
-import {
+const { requestClaudeMailResponse, testClaudeConnection } = window.SMART_AI;
+const {
   clearLicenseSession,
   loadStoredLicense,
   normalizeLicenseKey,
   saveLicense,
   setLicenseSessionActive,
   verifyLicense
-} from "./licenseClient.js";
+} = window.SMART_LICENSE;
 
 const MAX_CHARS = 50000;
 const RECOMMENDED_CHARS = 12000;

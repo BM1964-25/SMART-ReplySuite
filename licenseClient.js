@@ -3,7 +3,7 @@ const LICENSE_EMAIL_KEY = "smart-mailresponse-license-email";
 const LICENSE_SESSION_KEY = "smart-mailresponse-license-active";
 const DEFAULT_LICENSE_ENDPOINT = "/api/license/verify";
 
-export function loadStoredLicense() {
+function loadStoredLicense() {
   return {
     key: localStorage.getItem(LICENSE_STORAGE_KEY) || "",
     email: localStorage.getItem(LICENSE_EMAIL_KEY) || "",
@@ -11,20 +11,20 @@ export function loadStoredLicense() {
   };
 }
 
-export function saveLicense({ key, email }) {
+function saveLicense({ key, email }) {
   localStorage.setItem(LICENSE_STORAGE_KEY, normalizeLicenseKey(key));
   localStorage.setItem(LICENSE_EMAIL_KEY, email.trim().toLowerCase());
 }
 
-export function clearLicenseSession() {
+function clearLicenseSession() {
   sessionStorage.removeItem(LICENSE_SESSION_KEY);
 }
 
-export function setLicenseSessionActive() {
+function setLicenseSessionActive() {
   sessionStorage.setItem(LICENSE_SESSION_KEY, "true");
 }
 
-export async function verifyLicense({ key, email }, endpoint = DEFAULT_LICENSE_ENDPOINT) {
+async function verifyLicense({ key, email }, endpoint = DEFAULT_LICENSE_ENDPOINT) {
   const normalizedKey = normalizeLicenseKey(key);
   const normalizedEmail = email.trim().toLowerCase();
 
@@ -72,11 +72,11 @@ export async function verifyLicense({ key, email }, endpoint = DEFAULT_LICENSE_E
   }
 }
 
-export function normalizeLicenseKey(key) {
+function normalizeLicenseKey(key) {
   return key.trim().toUpperCase();
 }
 
-export function isPlausibleLicenseKey(key) {
+function isPlausibleLicenseKey(key) {
   return /^SMART-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(key);
 }
 
@@ -110,3 +110,12 @@ function createLicenseError(message) {
   error.code = "LICENSE_INVALID";
   return error;
 }
+
+window.SMART_LICENSE = {
+  clearLicenseSession,
+  loadStoredLicense,
+  normalizeLicenseKey,
+  saveLicense,
+  setLicenseSessionActive,
+  verifyLicense
+};
