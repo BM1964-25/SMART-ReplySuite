@@ -770,6 +770,10 @@ textarea:focus, input:focus, select:focus {
 .primary-action {
   width: 100%;
   min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
   border: 1px solid rgba(15,90,167,0.48);
   border-radius: var(--radius);
   background: linear-gradient(180deg, #1976d2, #0f5aa7);
@@ -779,6 +783,25 @@ textarea:focus, input:focus, select:focus {
 }
 .primary-action:hover:not(:disabled) { transform: translateY(-1px); border-color: rgba(136,208,255,0.55); }
 .primary-action:disabled { cursor: not-allowed; opacity: 0.58; transform: none; }
+.primary-action.is-loading {
+  opacity: 1;
+  background: linear-gradient(180deg, #2c83d9, #0f5aa7);
+}
+
+.button-spinner,
+.loading-ring {
+  display: inline-block;
+  border-radius: 999px;
+  border: 2px solid rgba(255,255,255,0.34);
+  border-top-color: #fff;
+  animation: smart-spin 0.85s linear infinite;
+}
+
+.button-spinner {
+  width: 16px;
+  height: 16px;
+}
+
 .narrow { max-width: 260px; }
 
 .source-metrics { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
@@ -822,6 +845,10 @@ textarea:focus, input:focus, select:focus {
   line-height: 1.56;
 }
 .response-output.is-placeholder { color: var(--muted); }
+.response-output.is-loading {
+  border-color: rgba(15,90,167,0.22);
+  background: linear-gradient(180deg, #fff, #f2f8ff);
+}
 .response-section {
   display: none;
   position: relative;
@@ -870,6 +897,42 @@ textarea:focus, input:focus, select:focus {
   margin: 0 auto;
   color: var(--muted);
   line-height: 1.5;
+}
+
+.loading-output {
+  min-height: 360px;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 10px;
+  text-align: center;
+  border: 1px dashed rgba(22,104,184,0.24);
+  border-radius: var(--radius);
+  background: radial-gradient(circle at 50% 42%, rgba(25,118,210,0.1), transparent 32%), #f8fbff;
+}
+
+.loading-output strong {
+  color: var(--text);
+  font-size: 1.05rem;
+}
+
+.loading-output p {
+  max-width: 520px;
+  margin: 0 auto;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.loading-ring {
+  width: 34px;
+  height: 34px;
+  border-color: rgba(15,90,167,0.18);
+  border-top-color: var(--accent-strong);
+  box-shadow: 0 10px 26px rgba(15,90,167,0.16);
+}
+
+@keyframes smart-spin {
+  to { transform: rotate(360deg); }
 }
 
 .quality-strip {

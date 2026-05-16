@@ -349,7 +349,8 @@ async function handleGenerate() {
     return;
   }
 
-  elements.generateBtn.disabled = true;
+  setGeneratingState(true);
+  setResponseLoading();
   persistApiKey();
 
   try {
@@ -388,7 +389,7 @@ async function handleGenerate() {
       getApiRecoveryHint(error)
     ].join("\n"), true);
   } finally {
-    elements.generateBtn.disabled = false;
+    setGeneratingState(false);
   }
 }
 
@@ -396,10 +397,34 @@ function setResponseOutput(text, isPlaceholder = false) {
   currentResponseData = isPlaceholder ? null : normalizeResponsePayload(text);
   currentResponseText = isPlaceholder ? text : responseDataToText(currentResponseData);
   elements.responseOutput.classList.toggle("is-placeholder", isPlaceholder);
+  elements.responseOutput.classList.remove("is-loading");
   elements.responseOutput.innerHTML = isPlaceholder ? renderEmptyOutput(text) : renderResponseData(currentResponseData);
   elements.resultTabs.hidden = isPlaceholder || currentSections.length === 0;
   elements.qualityStrip.hidden = isPlaceholder || currentSections.length === 0;
   if (!isPlaceholder) renderQualityStrip(currentResponseData);
+  updateResultActions();
+}
+
+function getGenerateButtonLabel() {
+  return currentMode === "optimize" ? "Entwurf optimieren" : "Analyse & Antwortvorschläge erstellen";
+}
+
+function setGeneratingState(isGenerating) {
+  elements.generateBtn.disabled = isGenerating;
+  elements.generateBtn.classList.toggle("is-loading", isGenerating);
+  elements.generateBtn.innerHTML = isGenerating
+    ? `<span class="button-spinner" aria-hidden="true"></span><span>KI arbeitet...</span>`
+    : getGenerateButtonLabel();
+}
+
+function setResponseLoading() {
+  currentResponseData = null;
+  currentResponseText = "";
+  currentSections = [];
+  elements.responseOutput.classList.add("is-placeholder", "is-loading");
+  elements.responseOutput.innerHTML = renderLoadingOutput();
+  elements.resultTabs.hidden = true;
+  elements.qualityStrip.hidden = true;
   updateResultActions();
 }
 
@@ -582,6 +607,16 @@ function renderEmptyOutput(message) {
     <div class="empty-output">
       <strong>${escapeHtml(message)}</strong>
       <p>Füge eine Nachricht, E-Mail oder ein Schreiben ein, wähle Antworttyp und Tonalität, und erstelle dann eine professionelle Antwort mit Analyse, Varianten und Qualitätscheck.</p>
+    </div>
+  `;
+}
+
+function renderLoadingOutput() {
+  return `
+    <div class="loading-output" role="status" aria-live="polite">
+      <span class="loading-ring" aria-hidden="true"></span>
+      <strong>KI analysiert die Eingaben</strong>
+      <p>Antwortstrategie, Risiken und passende Antwortvarianten werden vorbereitet.</p>
     </div>
   `;
 }
@@ -1020,7 +1055,7 @@ function applyTemplateToComposer(item) {
 function setComposerMode(mode) {
   currentMode = mode === "optimize" ? "optimize" : "reply";
   elements.modeButtons.forEach((button) => button.classList.toggle("is-active", button.dataset.mode === currentMode));
-  elements.generateBtn.textContent = currentMode === "optimize" ? "Entwurf optimieren" : "Analyse & Antwortvorschläge erstellen";
+  elements.generateBtn.textContent = getGenerateButtonLabel();
   elements.inboundMessage.placeholder = currentMode === "optimize"
     ? "Eingegangene Nachricht, Schreiben und vorhandenen Antwortentwurf hier einfügen..."
     : "E-Mail, Brief, Nachricht oder Geschäftsschreiben hier einfügen...";
