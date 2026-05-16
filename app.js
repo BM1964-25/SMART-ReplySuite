@@ -1543,7 +1543,6 @@ function updateSystemHealth() {
 function updateComposerApiStatus() {
   if (!elements.setupAlert) return;
   const title = elements.setupAlert.querySelector("[data-api-status-title]");
-  const detail = elements.setupAlert.querySelector("[data-api-status-detail]");
   const state = apiKeyState.isConnected ? "connected" : apiKeyState.value ? "saved" : "missing";
   const copy = {
     connected: ["Claude API: verbunden", "KI-Anfragen sind bereit"],
@@ -1552,7 +1551,6 @@ function updateComposerApiStatus() {
   }[state];
 
   title.textContent = copy[0];
-  detail.textContent = copy[1];
   elements.setupAlert.classList.toggle("is-connected", state === "connected");
   elements.setupAlert.classList.toggle("is-saved", state === "saved");
   elements.setupAlert.title = "Lizenz & API öffnen";
