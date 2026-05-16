@@ -373,7 +373,7 @@ h1 {
 
 .panel-heading {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 16px;
   margin-bottom: 14px;
@@ -671,14 +671,20 @@ textarea:focus, input:focus, select:focus {
 .primary-action:disabled { cursor: not-allowed; opacity: 0.58; transform: none; }
 .narrow { max-width: 260px; }
 
-.source-metrics { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+.source-metrics { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
 .counter {
+  display: inline-flex;
+  align-items: center;
+  min-height: 27px;
   white-space: nowrap;
   color: var(--accent-strong);
   font-size: 0.9rem;
   font-weight: 750;
 }
 .quality-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 27px;
   padding: 4px 8px;
   border: 1px solid var(--line);
   border-radius: 999px;
