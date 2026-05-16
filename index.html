@@ -4,7 +4,49 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SMART MailResponse</title>
-  <link rel="stylesheet" href="styles.css?v=help-menu-linebreak">
+  <link rel="stylesheet" href="styles.css?v=file-menu-fix">
+  <script>
+    (function () {
+      const collapsedKey = "smart-mailresponse-sidebar-collapsed";
+
+      function showView(view) {
+        document.querySelectorAll(".nav-item[data-view]").forEach((item) => item.classList.toggle("is-active", item.dataset.view === view));
+        document.querySelectorAll("[data-view-panel]").forEach((panel) => panel.classList.toggle("is-visible", panel.dataset.viewPanel === view));
+      }
+
+      function applySidebarState(isCollapsed) {
+        const appShell = document.querySelector("#appShell");
+        const toggle = document.querySelector("#sidebarToggle");
+        appShell?.classList.toggle("is-sidebar-collapsed", isCollapsed);
+        toggle?.setAttribute("aria-pressed", String(isCollapsed));
+        toggle?.setAttribute("aria-label", isCollapsed ? "Sidebar ausklappen" : "Sidebar einklappen");
+        toggle?.setAttribute("title", isCollapsed ? "Sidebar ausklappen" : "Sidebar einklappen");
+      }
+
+      function toggleSidebar() {
+        const appShell = document.querySelector("#appShell");
+        const isCollapsed = !appShell?.classList.contains("is-sidebar-collapsed");
+        try {
+          localStorage.setItem(collapsedKey, String(isCollapsed));
+        } catch (error) {
+          // Lokale Datei-Ansicht kann Storage je nach Browser-Einstellung blockieren.
+        }
+        applySidebarState(isCollapsed);
+      }
+
+      window.SMART_APP = { showView, toggleSidebar, applySidebarState };
+
+      document.addEventListener("DOMContentLoaded", () => {
+        let storedCollapsed = false;
+        try {
+          storedCollapsed = localStorage.getItem(collapsedKey) === "true";
+        } catch (error) {
+          storedCollapsed = false;
+        }
+        applySidebarState(storedCollapsed);
+      });
+    })();
+  </script>
 </head>
 <body>
   <input type="checkbox" class="help-toggle" id="helpToggle" aria-hidden="true">
@@ -469,9 +511,9 @@
     </section>
   </div>
 
-  <script src="licenseClient.js?v=sidebar-controls"></script>
-  <script src="anthropicClient.js?v=sidebar-controls"></script>
-  <script src="app.js?v=sidebar-controls"></script>
+  <script src="licenseClient.js?v=file-menu-fix"></script>
+  <script src="anthropicClient.js?v=file-menu-fix"></script>
+  <script src="app.js?v=file-menu-fix"></script>
   <script>
     (function () {
       const collapsedKey = "smart-mailresponse-sidebar-collapsed";
@@ -496,13 +538,19 @@
         applySidebarState(isCollapsed);
       }
 
-      const existing = window.SMART_APP || {};
       window.SMART_APP = {
-        showView: existing.showView || showView,
-        toggleSidebar: existing.toggleSidebar || toggleSidebar
+        showView,
+        toggleSidebar,
+        applySidebarState
       };
 
-      applySidebarState(localStorage.getItem(collapsedKey) === "true");
+      let storedCollapsed = false;
+      try {
+        storedCollapsed = localStorage.getItem(collapsedKey) === "true";
+      } catch (error) {
+        storedCollapsed = false;
+      }
+      applySidebarState(storedCollapsed);
       document.querySelectorAll(".nav-item[data-view]").forEach((item) => {
         item.addEventListener("click", () => window.SMART_APP.showView(item.dataset.view));
       });
