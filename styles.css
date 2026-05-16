@@ -887,7 +887,7 @@ textarea:focus, input:focus, select:focus {
 
 .style-profile-actions {
   display: grid;
-  grid-template-columns: minmax(420px, 1fr) minmax(190px, auto) minmax(170px, auto);
+  grid-template-columns: minmax(420px, 1fr) minmax(190px, auto);
   gap: 10px;
   align-items: end;
   margin-top: 12px;
@@ -909,17 +909,40 @@ textarea:focus, input:focus, select:focus {
   white-space: nowrap;
 }
 
-.style-profile-actions .primary-action {
-  width: auto;
-  border-color: transparent;
-  background: linear-gradient(180deg, var(--accent), var(--accent-strong));
-  color: #fff;
-}
-
 .style-profile-list {
   display: grid;
   gap: 10px;
   margin-top: 14px;
+}
+
+.style-profile-card {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 12px;
+}
+
+.style-profile-title {
+  min-width: 0;
+  align-self: center;
+}
+
+.style-profile-title h3 {
+  margin-bottom: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.style-profile-title small {
+  margin-bottom: 0;
+}
+
+.style-profile-card .card-actions {
+  align-self: center;
+  justify-content: flex-end;
+  flex-wrap: nowrap;
 }
 
 .api-key-card {
@@ -1162,7 +1185,7 @@ textarea:focus, input:focus, select:focus {
   .dashboard-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
   .workflow-panel { grid-template-columns: 1fr; }
   .workflow-arrow { display: none; }
-  .composer-tools, .style-profile-actions { grid-template-columns: 1fr; }
+  .composer-tools, .style-profile-actions, .style-profile-card { grid-template-columns: 1fr; }
   .quality-strip, .result-tabs { grid-template-columns: repeat(2, minmax(0,1fr)); }
   .help-quickstart { grid-template-columns: repeat(2, minmax(0,1fr)); }
 }
@@ -1171,6 +1194,7 @@ textarea:focus, input:focus, select:focus {
   .app-shell { width: min(100% - 20px, 1580px); padding: 16px 0; }
   .app-header { align-items: stretch; flex-direction: column; }
   .header-actions { justify-content: space-between; }
-  .nav-list, .dashboard-grid, .two-column, .mail-grid, .template-form, .settings-grid, .settings-actions, .style-profile-actions, .license-grid, .api-action-row, .api-actions, .license-actions, .result-actions, .style-grid, .style-assist, .help-grid, .quick-actions, .signal-grid, .quality-strip, .result-tabs, .history-tools, .template-tools, .setup-alert, .help-quickstart, .help-reference { grid-template-columns: 1fr; }
+  .nav-list, .dashboard-grid, .two-column, .mail-grid, .template-form, .settings-grid, .settings-actions, .style-profile-actions, .style-profile-card, .license-grid, .api-action-row, .api-actions, .license-actions, .result-actions, .style-grid, .style-assist, .help-grid, .quick-actions, .signal-grid, .quality-strip, .result-tabs, .history-tools, .template-tools, .setup-alert, .help-quickstart, .help-reference { grid-template-columns: 1fr; }
+  .style-profile-card .card-actions { justify-content: flex-start; flex-wrap: wrap; }
   h1 { font-size: 2.1rem; }
 }

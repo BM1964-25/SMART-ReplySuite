@@ -80,23 +80,6 @@
         button.classList.toggle("is-active");
       }
 
-      function saveStyleSelection() {
-        const current = loadLocalData();
-        const selectedStyle = document.querySelector('input[name="stylePreset"]:checked')?.value || current.companyStyle || "modern";
-        const nextData = {
-          ...current,
-          companyStyle: selectedStyle,
-          companyStyleNotes: document.querySelector("#styleNotes")?.value.trim() || "",
-          companyStyleAccents: getActiveValues("[data-style-accent]", "styleAccent"),
-          companyStyleNoGos: getActiveValues("[data-style-nogo]", "styleNogo")
-        };
-        const companyStyleSelect = document.querySelector("#companyStyle");
-        if (companyStyleSelect) companyStyleSelect.value = selectedStyle;
-        saveLocalData(nextData);
-        setFallbackStatus("Stil gespeichert");
-        prependDiagnostic("Unternehmensstil", `${selectedStyle}, ${nextData.companyStyleAccents.length} Akzente, ${nextData.companyStyleNoGos.length} No-Gos`);
-      }
-
       function currentStyleProfileFromForm(name, profileId = null) {
         return {
           id: profileId || `style-${Date.now()}-${Math.random().toString(16).slice(2)}`,
@@ -143,9 +126,11 @@
           return;
         }
         list.innerHTML = profiles.map((profile) => `
-          <article class="data-card compact-card">
-            <h3>${escapeHtml(profile.name)}</h3>
-            <small>${escapeHtml(profile.companyStyle)} · ${(profile.companyStyleAccents || []).length} Akzente · ${(profile.companyStyleNoGos || []).length} No-Gos</small>
+          <article class="data-card compact-card style-profile-card">
+            <div class="style-profile-title">
+              <h3>${escapeHtml(profile.name)}</h3>
+              <small>${escapeHtml(profile.companyStyle)} · ${(profile.companyStyleAccents || []).length} Akzente · ${(profile.companyStyleNoGos || []).length} No-Gos</small>
+            </div>
             <div class="card-actions">
               <button type="button" onclick="window.SMART_STYLE?.applyStyleProfile('${escapeHtml(profile.id)}')">Anwenden</button>
               <button type="button" onclick="window.SMART_STYLE?.editStyleProfile('${escapeHtml(profile.id)}')">Bearbeiten</button>
@@ -330,7 +315,7 @@
 
       window.SMART_APP = { showView, toggleSidebar, applySidebarState };
       window.SMART_BACKUP = { exportJson, openJsonImport, importJsonFile };
-      window.SMART_STYLE = { toggleStyleChip, saveStyleSelection, renderStyleSelection, saveStyleProfile, applyStyleProfile, applySelectedStyleProfile, editStyleProfile, duplicateStyleProfile, deleteStyleProfile, renderStyleProfiles };
+      window.SMART_STYLE = { toggleStyleChip, renderStyleSelection, saveStyleProfile, applyStyleProfile, applySelectedStyleProfile, editStyleProfile, duplicateStyleProfile, deleteStyleProfile, renderStyleProfiles };
 
       document.addEventListener("DOMContentLoaded", () => {
         let storedCollapsed = false;
@@ -618,7 +603,6 @@
           <div class="style-profile-actions">
             <div class="field"><label for="styleProfileName">Stilprofilname</label><input id="styleProfileName" type="text" placeholder="z. B. Konfliktprofil, Juristisch vorsichtig, Bauprojekt"></div>
             <button type="button" id="saveStyleProfileBtn" onclick="window.SMART_STYLE?.saveStyleProfile()">Als Stilprofil speichern</button>
-            <button type="button" class="primary-action" id="saveStyleBtn" onclick="window.SMART_STYLE?.saveStyleSelection()">Standardstil speichern</button>
           </div>
           <div class="style-profile-list" id="styleProfileList"></div>
         </section>

@@ -140,7 +140,6 @@ const elements = {
   styleNotes: document.querySelector("#styleNotes"),
   styleAccentButtons: document.querySelectorAll("[data-style-accent]"),
   styleNoGoButtons: document.querySelectorAll("[data-style-nogo]"),
-  saveStyleBtn: document.querySelector("#saveStyleBtn"),
   defaultLanguage: document.querySelector("#defaultLanguage"),
   defaultTone: document.querySelector("#defaultTone"),
   exportDataBtn: document.querySelector("#exportDataBtn"),
@@ -248,7 +247,6 @@ function bindEvents() {
   elements.templateTagFilter.addEventListener("change", renderTemplates);
   elements.librarySearch.addEventListener("input", renderLibrary);
   elements.libraryTagFilter.addEventListener("change", renderLibrary);
-  elements.saveStyleBtn.addEventListener("click", saveStyle);
   document.querySelectorAll('input[name="stylePreset"]').forEach((input) => {
     input.addEventListener("change", () => {
       if (input.checked) elements.companyStyle.value = input.value;
@@ -908,9 +906,11 @@ function renderStyleProfileList() {
   }
 
   elements.styleProfileList.innerHTML = profiles.map((profile) => `
-    <article class="data-card compact-card">
-      <h3>${escapeHtml(profile.name)}</h3>
-      <small>${escapeHtml(profile.companyStyle)} · ${(profile.companyStyleAccents || []).length} Akzente · ${(profile.companyStyleNoGos || []).length} No-Gos</small>
+    <article class="data-card compact-card style-profile-card">
+      <div class="style-profile-title">
+        <h3>${escapeHtml(profile.name)}</h3>
+        <small>${escapeHtml(profile.companyStyle)} · ${(profile.companyStyleAccents || []).length} Akzente · ${(profile.companyStyleNoGos || []).length} No-Gos</small>
+      </div>
       <div class="card-actions">
         <button type="button" data-apply-style-profile="${escapeHtml(profile.id)}">Anwenden</button>
         <button type="button" data-edit-style-profile="${escapeHtml(profile.id)}">Bearbeiten</button>
@@ -1102,20 +1102,6 @@ function resetComposer() {
   setResponseOutput("Noch keine Antwort erstellt.", true);
   updateCharacterCount();
   setStatus(apiKeyState.value ? "Bereit" : "API-Key fehlt", apiKeyState.value ? "ready" : "warn");
-}
-
-function saveStyle() {
-  const selected = document.querySelector('input[name="stylePreset"]:checked')?.value || "modern";
-  selectedStyleAccents = getSelectedStyleChips("accent");
-  selectedStyleNoGos = getSelectedStyleChips("nogo");
-  dataState.companyStyle = selected;
-  dataState.companyStyleNotes = elements.styleNotes.value.trim();
-  dataState.companyStyleAccents = [...selectedStyleAccents];
-  dataState.companyStyleNoGos = [...selectedStyleNoGos];
-  elements.companyStyle.value = selected;
-  saveData();
-  updateDashboard();
-  setStatus("Stil gespeichert", "ready");
 }
 
 function renderStyleChips() {
