@@ -444,13 +444,18 @@ input, select, textarea {
 
 textarea {
   min-height: 250px;
+  max-height: 70vh;
   resize: vertical;
+  overflow: auto;
   display: block;
   padding: 16px;
   font-size: 0.96rem;
   line-height: 1.56;
 }
-.small-textarea { min-height: 128px; }
+.small-textarea {
+  min-height: 128px;
+  max-height: 52vh;
+}
 .style-notes {
   min-height: calc(2lh + 20px);
   height: calc(2lh + 20px);
@@ -741,7 +746,10 @@ textarea:focus, input:focus, select:focus {
 .quality-badge.danger { color: var(--danger); }
 
 .response-output {
-  min-height: 420px;
+  min-height: 260px;
+  height: 420px;
+  max-height: 72vh;
+  resize: vertical;
   overflow: auto;
   padding: 16px;
   border: 1px solid var(--line);
