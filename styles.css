@@ -890,18 +890,19 @@ textarea:focus, input:focus, select:focus {
 .chip-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 7px;
 }
 
 .chip-grid button {
-  min-height: 34px;
-  padding: 7px 10px;
+  min-height: 32px;
+  padding: 6px 9px;
   border: 1px solid rgba(22,104,184,0.18);
   border-radius: 999px;
   background: #fff;
   color: var(--soft);
-  font-size: 0.86rem;
+  font-size: 0.82rem;
   font-weight: 750;
+  white-space: nowrap;
 }
 
 .chip-grid button.is-active {
