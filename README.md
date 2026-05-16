@@ -83,7 +83,7 @@ npm run icon:icns
 - Bibliothek mit Suche und Tag-Filter
 - Verlauf mit Suche, Antworttyp-Filter, erneut verwenden, kopieren und löschen
 - Stilprofile
-- Einstellungen für Standardsprache und Standardton
+- Einstellungen für Export, Import, lokale Sicherung und Diagnose
 - Lokale Datenexport- und Import-Funktion
 - Diagnosebereich für lokale Daten, API-Key, Lizenz und Speicherstatus
 - Lizenz- und API-Key-Verwaltung im übernommenen Premium-Stil

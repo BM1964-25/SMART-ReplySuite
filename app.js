@@ -167,8 +167,6 @@ const elements = {
   styleNotes: document.querySelector("#styleNotes"),
   styleAccentButtons: document.querySelectorAll("[data-style-accent]"),
   styleNoGoButtons: document.querySelectorAll("[data-style-nogo]"),
-  defaultLanguage: document.querySelector("#defaultLanguage"),
-  defaultTone: document.querySelector("#defaultTone"),
   exportDataBtn: document.querySelector("#exportDataBtn"),
   importDataBtn: document.querySelector("#importDataBtn"),
   importDataInput: document.querySelector("#importDataInput"),
@@ -231,10 +229,6 @@ function init() {
   }
 
   elements.styleNotes.value = dataState.companyStyleNotes || "";
-  elements.defaultLanguage.value = dataState.settings.defaultLanguage || "Deutsch";
-  elements.defaultTone.value = dataState.settings.defaultTone || "geschäftlich-formell";
-  elements.language.value = dataState.settings.defaultLanguage || "Deutsch";
-  elements.tone.value = dataState.settings.defaultTone || "geschäftlich-formell";
   elements.companyStyle.value = dataState.companyStyle || "modern";
   document.querySelector(`input[name="stylePreset"][value="${dataState.companyStyle || "modern"}"]`)?.click();
   renderStyleChips();
@@ -279,8 +273,6 @@ function bindEvents() {
       if (input.checked) elements.companyStyle.value = input.value;
     });
   });
-  elements.defaultLanguage.addEventListener("change", saveSettings);
-  elements.defaultTone.addEventListener("change", saveSettings);
   elements.clearDataBtn.addEventListener("click", clearWorkingData);
   elements.saveKeyBtn.addEventListener("click", handleSaveKey);
   elements.connectBtn.addEventListener("click", handleConnect);
@@ -1214,15 +1206,6 @@ function deleteStyleProfile(id) {
   setStatus("Stilprofil gelöscht", "ready");
 }
 
-function saveSettings() {
-  dataState.settings.defaultLanguage = elements.defaultLanguage.value;
-  dataState.settings.defaultTone = elements.defaultTone.value;
-  elements.language.value = elements.defaultLanguage.value;
-  elements.tone.value = elements.defaultTone.value;
-  saveData();
-  setStatus("Einstellungen gespeichert", "ready");
-}
-
 function exportData() {
   const fileName = `smart-mailresponse-backup-${new Date().toISOString().slice(0, 10)}.json`;
   const blob = new Blob([JSON.stringify(dataState, null, 2)], { type: "application/json;charset=utf-8" });
@@ -1562,8 +1545,6 @@ function loadData() {
     companyStyleNoGos: [],
     styleProfiles: [],
     settings: {
-      defaultLanguage: "Deutsch",
-      defaultTone: "geschäftlich-formell",
       sampleTemplateSeeded: false
     }
   };
@@ -1585,8 +1566,6 @@ function saveData() {
 
 function seedSampleTemplate() {
   dataState.settings = {
-    defaultLanguage: "Deutsch",
-    defaultTone: "geschäftlich-formell",
     ...(dataState.settings || {})
   };
   const hasSample = dataState.templates.some((template) => template.id === sampleTemplate.id);
