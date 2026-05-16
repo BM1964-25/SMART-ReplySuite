@@ -448,85 +448,87 @@ Mit freundlichen Grüßen`,
       </section>
 
       <section class="view composer-view" data-view-panel="composer">
-        <section class="panel input-panel">
-          <div class="panel-heading">
-            <div><h2>Neue Antwort</h2><p>Text einfügen, Parameter wählen und Antwortvorschläge erstellen.</p></div>
-            <div class="source-metrics">
-              <span class="counter" id="charCount">0 Zeichen</span>
-              <span class="quality-badge" id="mailQuality">Noch keine Nachricht</span>
-              <button type="button" class="api-status-pill" id="setupAlert" data-view-target="license" aria-label="Lizenz und API öffnen">
-                <span class="api-status-dot" aria-hidden="true"></span>
-                <span data-api-status-title>Claude API: nicht verbunden</span>
-              </button>
+        <div class="composer-top">
+          <section class="panel input-panel">
+            <div class="panel-heading">
+              <div><h2>Neue Antwort</h2><p>Text einfügen, Parameter wählen und Antwortvorschläge erstellen.</p></div>
+              <div class="source-metrics">
+                <span class="counter" id="charCount">0 Zeichen</span>
+                <span class="quality-badge" id="mailQuality">Noch keine Nachricht</span>
+                <button type="button" class="api-status-pill" id="setupAlert" data-view-target="license" aria-label="Lizenz und API öffnen">
+                  <span class="api-status-dot" aria-hidden="true"></span>
+                  <span data-api-status-title>Claude API: nicht verbunden</span>
+                </button>
+              </div>
             </div>
-          </div>
-          <div class="composer-guidance" aria-label="Vorgehensweise Neue Antwort">
-            <strong>Vorgehen</strong>
-            <ol>
-              <li><span>1</span><div><strong>Text kopieren</strong><small>E-Mail, Brief oder Schreiben aus der Quelle kopieren</small></div></li>
-              <li><span>2</span><div><strong>Einfügen</strong><small>Nachricht, Ziel und Kontext erfassen</small></div></li>
-              <li><span>3</span><div><strong>Antwortparameter wählen</strong><small>Typ, Tonalität, Fokus, Sprache und Grundstil festlegen</small></div></li>
-              <li><span>4</span><div><strong>Antwort erstellen</strong><small>Analyse und Antwortvorschläge generieren und nutzen</small></div></li>
-            </ol>
-          </div>
-          <div class="composer-tools">
-            <div class="segmented-control" aria-label="Arbeitsmodus">
-              <button type="button" class="is-active" data-mode="reply">Antwort erstellen</button>
-              <button type="button" data-mode="optimize">Entwurf optimieren</button>
+            <div class="composer-guidance" aria-label="Vorgehensweise Neue Antwort">
+              <strong>Vorgehen</strong>
+              <ol>
+                <li><span>1</span><div><strong>Text kopieren</strong><small>E-Mail, Brief oder Schreiben aus der Quelle kopieren</small></div></li>
+                <li><span>2</span><div><strong>Einfügen</strong><small>Nachricht, Ziel und Kontext erfassen</small></div></li>
+                <li><span>3</span><div><strong>Antwortparameter wählen</strong><small>Typ, Tonalität, Fokus, Sprache und Grundstil festlegen</small></div></li>
+                <li><span>4</span><div><strong>Antwort erstellen</strong><small>Analyse und Antwortvorschläge generieren und nutzen</small></div></li>
+              </ol>
             </div>
-            <div class="optional-context">
-              <strong>Optionaler Kontext</strong>
-              <div class="optional-context-row">
-                <label for="templatePicker">Auswahl Vorlage</label>
-                <div class="field template-picker">
-                  <select id="templatePicker">
-                    <option value="">Keine Vorlage ausgewählt</option>
-                  </select>
+            <div class="composer-tools">
+              <div class="segmented-control" aria-label="Arbeitsmodus">
+                <button type="button" class="is-active" data-mode="reply">Antwort erstellen</button>
+                <button type="button" data-mode="optimize">Entwurf optimieren</button>
+              </div>
+              <div class="optional-context">
+                <strong>Optionaler Kontext</strong>
+                <div class="optional-context-row">
+                  <label for="templatePicker">Auswahl Vorlage</label>
+                  <div class="field template-picker">
+                    <select id="templatePicker">
+                      <option value="">Keine Vorlage ausgewählt</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="optional-context-row">
+                  <label for="styleProfilePicker">Auswahl Stilprofil</label>
+                  <div class="field template-picker">
+                    <select id="styleProfilePicker" onchange="window.SMART_STYLE?.applySelectedStyleProfile()">
+                      <option value="">Kein Stilprofil zugrunde gelegt</option>
+                    </select>
+                  </div>
                 </div>
               </div>
-              <div class="optional-context-row">
-                <label for="styleProfilePicker">Auswahl Stilprofil</label>
-                <div class="field template-picker">
-                  <select id="styleProfilePicker" onchange="window.SMART_STYLE?.applySelectedStyleProfile()">
-                    <option value="">Kein Stilprofil zugrunde gelegt</option>
-                  </select>
+            </div>
+            <div class="mail-grid">
+              <div class="field"><label for="subject">Betreff</label><input id="subject" type="text" placeholder="z. B. Rückfrage zum Nachtrag, Beschwerde, Terminabstimmung"></div>
+              <div class="field"><label for="responseGoal">Ziel der Antwort</label><input id="responseGoal" type="text" placeholder="z. B. klären, nachfassen, ablehnen, Termin abstimmen, Eskalation entschärfen"></div>
+              <div class="field full"><label for="inboundMessage">Eingegangene Nachricht / Schreiben</label><textarea id="inboundMessage" placeholder="E-Mail, Brief, Nachricht oder Geschäftsschreiben hier einfügen..." spellcheck="true"></textarea></div>
+              <div class="context-tabs full">
+                <div class="tab-buttons" aria-label="Kontextfelder">
+                  <button type="button" class="is-active" data-context-tab="notes">Eigene Notizen</button>
+                  <button type="button" data-context-tab="hints">Zusätzliche Hinweise</button>
+                </div>
+                <div class="context-panel is-active" data-context-panel="notes">
+                  <label for="notes">Eigene Notizen</label>
+                  <textarea id="notes" class="small-textarea" placeholder="Mit Eigene Notizen gibst du der KI interne Zusatzinformationen, die nicht direkt im eingefügten Text stehen, aber für die Antwort wichtig sind.&#10;&#10;z. B. interne Fakten, gewünschte Aussage, Grenzen, Fristen, Ansprechpartner, No-Gos oder nächste Schritte..."></textarea>
+                </div>
+                <div class="context-panel" data-context-panel="hints">
+                  <label for="extraHints">Zusätzliche Hinweise</label>
+                  <textarea id="extraHints" class="small-textarea" placeholder="Fristen, Ansprechpartner, sensibler Kontext, gewünschte Formulierungen..."></textarea>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="mail-grid">
-            <div class="field"><label for="subject">Betreff</label><input id="subject" type="text" placeholder="z. B. Rückfrage zum Nachtrag, Beschwerde, Terminabstimmung"></div>
-            <div class="field"><label for="responseGoal">Ziel der Antwort</label><input id="responseGoal" type="text" placeholder="z. B. klären, nachfassen, ablehnen, Termin abstimmen, Eskalation entschärfen"></div>
-            <div class="field full"><label for="inboundMessage">Eingegangene Nachricht / Schreiben</label><textarea id="inboundMessage" placeholder="E-Mail, Brief, Nachricht oder Geschäftsschreiben hier einfügen..." spellcheck="true"></textarea></div>
-            <div class="context-tabs full">
-              <div class="tab-buttons" aria-label="Kontextfelder">
-                <button type="button" class="is-active" data-context-tab="notes">Eigene Notizen</button>
-                <button type="button" data-context-tab="hints">Zusätzliche Hinweise</button>
-              </div>
-              <div class="context-panel is-active" data-context-panel="notes">
-                <label for="notes">Eigene Notizen</label>
-                <textarea id="notes" class="small-textarea" placeholder="Mit Eigene Notizen gibst du der KI interne Zusatzinformationen, die nicht direkt im eingefügten Text stehen, aber für die Antwort wichtig sind.&#10;&#10;z. B. interne Fakten, gewünschte Aussage, Grenzen, Fristen, Ansprechpartner, No-Gos oder nächste Schritte..."></textarea>
-              </div>
-              <div class="context-panel" data-context-panel="hints">
-                <label for="extraHints">Zusätzliche Hinweise</label>
-                <textarea id="extraHints" class="small-textarea" placeholder="Fristen, Ansprechpartner, sensibler Kontext, gewünschte Formulierungen..."></textarea>
-              </div>
-            </div>
-          </div>
-        </section>
+          </section>
 
-        <aside class="panel settings-panel">
-          <div class="panel-heading compact"><div><h2>Antwortparameter</h2><p>Die Antwortparameter steuern Form und Strategie der Antwort.<br>Diese Auswahl gilt nur für diesen Vorgang und hat Vorrang vor Vorlage und Stilprofil.</p></div></div>
-          <div class="control-grid">
-            <div class="field"><label for="responseType">Antworttyp</label><select id="responseType"></select></div>
-            <div class="field"><label for="focus">Fokus</label><select id="focus"></select></div>
-            <div class="field"><label for="tone">Tonalität = Klang der konkreten Antwort.</label><select id="tone"></select></div>
-            <div class="field"><label for="companyStyle">Grundstil = übergeordnete Schreibhaltung.</label><select id="companyStyle"><option>modern</option><option>konservativ</option><option>technisch</option><option>juristisch vorsichtig</option><option>managementorientiert</option></select></div>
-            <div class="field"><label for="length">Antwortlänge</label><select id="length"><option value="kurz">Kurz</option><option value="standard" selected>Standard</option><option value="ausfuehrlich">Ausführlich</option></select></div>
-            <div class="field"><label for="language">Antwortsprache</label><select id="language"><option>Deutsch</option><option>Englisch</option><option>Französisch</option><option>Spanisch</option><option>Italienisch</option></select></div>
-          </div>
-          <button type="button" class="primary-action" id="generateBtn">Analyse & Antwortvorschläge erstellen</button>
-        </aside>
+          <aside class="panel settings-panel">
+            <div class="panel-heading compact"><div><h2>Antwortparameter</h2><p>Die Antwortparameter steuern Form und Strategie der Antwort.<br>Diese Auswahl gilt nur für diesen Vorgang und hat Vorrang vor Vorlage und Stilprofil.</p></div></div>
+            <div class="control-grid">
+              <div class="field"><label for="responseType">Antworttyp</label><select id="responseType"></select></div>
+              <div class="field"><label for="focus">Fokus</label><select id="focus"></select></div>
+              <div class="field"><label for="tone">Tonalität = Klang der konkreten Antwort.</label><select id="tone"></select></div>
+              <div class="field"><label for="companyStyle">Grundstil = übergeordnete Schreibhaltung.</label><select id="companyStyle"><option>modern</option><option>konservativ</option><option>technisch</option><option>juristisch vorsichtig</option><option>managementorientiert</option></select></div>
+              <div class="field"><label for="length">Antwortlänge</label><select id="length"><option value="kurz">Kurz</option><option value="standard" selected>Standard</option><option value="ausfuehrlich">Ausführlich</option></select></div>
+              <div class="field"><label for="language">Antwortsprache</label><select id="language"><option>Deutsch</option><option>Englisch</option><option>Französisch</option><option>Spanisch</option><option>Italienisch</option></select></div>
+            </div>
+            <button type="button" class="primary-action" id="generateBtn">Analyse & Antwortvorschläge erstellen</button>
+          </aside>
+        </div>
 
         <section class="panel output-panel">
           <div class="panel-heading">

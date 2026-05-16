@@ -389,6 +389,11 @@ h1 {
 
 .composer-view.is-visible {
   display: grid;
+  gap: 18px;
+}
+
+.composer-top {
+  display: grid;
   grid-template-columns: minmax(0, 1.25fr) 380px;
   gap: 18px;
   align-items: start;
@@ -404,7 +409,7 @@ h1 {
 
 .input-panel { min-width: 0; }
 .settings-panel { position: sticky; top: 28px; }
-.output-panel { grid-column: 1 / -1; }
+.output-panel { min-width: 0; }
 
 .panel-heading {
   display: flex;
@@ -1546,7 +1551,7 @@ textarea:focus, input:focus, select:focus {
   .app-shell { grid-template-columns: 1fr; }
   .sidebar { position: static; height: auto; }
   .nav-list { grid-template-columns: repeat(4, minmax(0,1fr)); }
-  .composer-view.is-visible { grid-template-columns: 1fr; }
+  .composer-top { grid-template-columns: 1fr; }
   .settings-panel { position: static; }
   .dashboard-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
   .metric-card:nth-child(2n) { border-right: 0; }
