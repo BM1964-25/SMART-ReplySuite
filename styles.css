@@ -862,27 +862,17 @@ textarea:focus, input:focus, select:focus {
 .check-row input, .style-grid input { width: 16px; min-height: 16px; }
 
 .style-assist {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: minmax(220px, 25%) minmax(0, 75%);
   gap: 12px;
   margin: 14px 0;
 }
 
 .style-assist article {
-  width: 100%;
   padding: 13px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: #f8fbff;
-}
-
-.style-assist article:first-child {
-  width: 50%;
-}
-
-.style-assist article:nth-child(2) {
-  width: 75%;
 }
 
 .style-assist h3 {
