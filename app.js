@@ -1,18 +1,28 @@
-const { requestClaudeMailResponse, testClaudeConnection } = window.SMART_AI;
 const {
-  clearLicenseSession,
-  loadStoredLicense,
-  normalizeLicenseKey,
-  saveLicense,
-  setLicenseSessionActive,
-  verifyLicense
-} = window.SMART_LICENSE;
+  requestClaudeMailResponse = async () => {
+    throw new Error("Der KI-Client konnte nicht geladen werden. Bitte Seite neu laden oder den lokalen Server prüfen.");
+  },
+  testClaudeConnection = async () => {
+    throw new Error("Der KI-Client konnte nicht geladen werden. Bitte Seite neu laden oder den lokalen Server prüfen.");
+  }
+} = window.SMART_AI || {};
+const {
+  clearLicenseSession = () => {},
+  loadStoredLicense = () => ({ key: "", email: "", active: false }),
+  normalizeLicenseKey = (key = "") => key.trim().toUpperCase(),
+  saveLicense = () => {},
+  setLicenseSessionActive = () => {},
+  verifyLicense = async () => {
+    throw new Error("Der Lizenz-Client konnte nicht geladen werden. Bitte Seite neu laden oder den lokalen Server prüfen.");
+  }
+} = window.SMART_LICENSE || {};
 
 const MAX_CHARS = 50000;
 const RECOMMENDED_CHARS = 12000;
 const STORAGE_KEY = "smart-mailresponse-anthropic-key";
 const SESSION_KEY = "smart-mailresponse-session-active";
 const DATA_KEY = "smart-mailresponse-data";
+const SIDEBAR_COLLAPSED_KEY = "smart-mailresponse-sidebar-collapsed";
 const DEFAULT_PROXY_URL = "/api/anthropic/messages";
 const DEFAULT_CLAUDE_MODEL = "claude-sonnet-4-20250514";
 
@@ -74,6 +84,8 @@ let currentSections = [];
 let editingTemplateId = null;
 
 const elements = {
+  appShell: document.querySelector("#appShell"),
+  sidebarToggle: document.querySelector("#sidebarToggle"),
   navItems: document.querySelectorAll(".nav-item"),
   viewPanels: document.querySelectorAll("[data-view-panel]"),
   viewTargets: document.querySelectorAll("[data-view-target]"),
@@ -155,9 +167,15 @@ const elements = {
   metricApi: document.querySelector("#metricApi")
 };
 
+window.SMART_APP = {
+  showView,
+  toggleSidebar
+};
+
 init();
 
 function init() {
+  applySidebarState(localStorage.getItem(SIDEBAR_COLLAPSED_KEY) === "true");
   fillSelect(elements.responseType, responseTypes);
   fillSelect(elements.tone, tones, "geschäftlich-formell");
   fillSelect(elements.focus, focuses, "Konfliktvermeidung");
@@ -263,6 +281,18 @@ function bindEvents() {
     clearLicenseSession();
     renderLicenseComponent();
   });
+}
+
+function toggleSidebar() {
+  const isCollapsed = !elements.appShell.classList.contains("is-sidebar-collapsed");
+  applySidebarState(isCollapsed);
+  localStorage.setItem(SIDEBAR_COLLAPSED_KEY, String(isCollapsed));
+}
+
+function applySidebarState(isCollapsed) {
+  elements.appShell.classList.toggle("is-sidebar-collapsed", isCollapsed);
+  elements.sidebarToggle.setAttribute("aria-pressed", String(isCollapsed));
+  elements.sidebarToggle.setAttribute("aria-label", isCollapsed ? "Sidebar ausklappen" : "Sidebar einklappen");
 }
 
 async function handleGenerate() {

@@ -4,28 +4,31 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SMART MailResponse</title>
-  <link rel="stylesheet" href="styles.css?v=file-compatible">
+  <link rel="stylesheet" href="styles.css?v=sidebar-controls">
 </head>
 <body>
   <input type="checkbox" class="help-toggle" id="helpToggle" aria-hidden="true">
-  <div class="app-shell">
+  <div class="app-shell" id="appShell">
     <aside class="sidebar" aria-label="Hauptnavigation">
       <div class="brand-block">
         <span class="brand-mark">SM</span>
-        <div>
+        <div class="brand-copy">
           <strong>SMART MailResponse</strong>
           <span>Professional Reply Studio</span>
         </div>
+        <button type="button" class="sidebar-toggle" id="sidebarToggle" aria-label="Sidebar einklappen" aria-pressed="false" onclick="window.SMART_APP?.toggleSidebar()">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"></path></svg>
+        </button>
       </div>
       <nav class="nav-list">
-        <button type="button" class="nav-item is-active" data-view="dashboard">Dashboard</button>
-        <button type="button" class="nav-item" data-view="composer">Neue Antwort</button>
-        <button type="button" class="nav-item" data-view="templates">Vorlagen</button>
-        <button type="button" class="nav-item" data-view="library">Bibliothek</button>
-        <button type="button" class="nav-item" data-view="history">Verlauf</button>
-        <button type="button" class="nav-item" data-view="style">Unternehmensstil</button>
-        <button type="button" class="nav-item" data-view="settings">Einstellungen</button>
-        <button type="button" class="nav-item" data-view="license">Lizenz & API</button>
+        <button type="button" class="nav-item is-active" data-view="dashboard" title="Dashboard" onclick="window.SMART_APP?.showView('dashboard')"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4h5A1.5 1.5 0 0 1 12 5.5v5A1.5 1.5 0 0 1 10.5 12h-5A1.5 1.5 0 0 1 4 10.5v-5Z"></path><path d="M14 5.5A1.5 1.5 0 0 1 15.5 4h3A1.5 1.5 0 0 1 20 5.5v3A1.5 1.5 0 0 1 18.5 10h-3A1.5 1.5 0 0 1 14 8.5v-3Z"></path><path d="M14 13.5A1.5 1.5 0 0 1 15.5 12h3a1.5 1.5 0 0 1 1.5 1.5v5a1.5 1.5 0 0 1-1.5 1.5h-3a1.5 1.5 0 0 1-1.5-1.5v-5Z"></path><path d="M4 15.5A1.5 1.5 0 0 1 5.5 14h5a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-5A1.5 1.5 0 0 1 4 18.5v-3Z"></path></svg></span><span class="nav-label">Dashboard</span></button>
+        <button type="button" class="nav-item" data-view="composer" title="Neue Antwort" onclick="window.SMART_APP?.showView('composer')"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6.5h16v11H4v-11Z"></path><path d="m4 7 8 6 8-6"></path><path d="M17 3v6"></path><path d="M14 6h6"></path></svg></span><span class="nav-label">Neue Antwort</span></button>
+        <button type="button" class="nav-item" data-view="templates" title="Vorlagen" onclick="window.SMART_APP?.showView('templates')"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l4 4v14H7V3Z"></path><path d="M14 3v5h5"></path><path d="M10 12h6"></path><path d="M10 16h6"></path></svg></span><span class="nav-label">Vorlagen</span></button>
+        <button type="button" class="nav-item" data-view="library" title="Bibliothek" onclick="window.SMART_APP?.showView('library')"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5.5A2.5 2.5 0 0 1 7.5 3H19v16H7.5A2.5 2.5 0 0 0 5 21V5.5Z"></path><path d="M5 6v15"></path><path d="M9 7h6"></path><path d="M9 11h7"></path></svg></span><span class="nav-label">Bibliothek</span></button>
+        <button type="button" class="nav-item" data-view="history" title="Verlauf" onclick="window.SMART_APP?.showView('history')"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"></path><path d="M3 4v5h5"></path><path d="M12 7v5l3 2"></path></svg></span><span class="nav-label">Verlauf</span></button>
+        <button type="button" class="nav-item" data-view="style" title="Unternehmensstil" onclick="window.SMART_APP?.showView('style')"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4 7v5c0 4.6 3.2 7.5 8 9 4.8-1.5 8-4.4 8-9V7l-8-4Z"></path><path d="M9 12h6"></path><path d="M12 9v6"></path></svg></span><span class="nav-label">Unternehmensstil</span></button>
+        <button type="button" class="nav-item" data-view="settings" title="Einstellungen" onclick="window.SMART_APP?.showView('settings')"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.5A3.5 3.5 0 1 0 12 8a3.5 3.5 0 0 0 0 7.5Z"></path><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2 3.4-.2-.1a1.7 1.7 0 0 0-2 .2 1.7 1.7 0 0 0-.8 1.5V22H9.2v-.2a1.7 1.7 0 0 0-.8-1.5 1.7 1.7 0 0 0-2-.2l-.2.1-2-3.4.1-.1A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.5-1H3v-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1 2-3.4.2.1a1.7 1.7 0 0 0 2-.2A1.7 1.7 0 0 0 9.2 2V2h5.6v.1a1.7 1.7 0 0 0 .8 1.5 1.7 1.7 0 0 0 2 .2l.2-.1 2 3.4-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.5 1h.1v4h-.1a1.7 1.7 0 0 0-1.5 1Z"></path></svg></span><span class="nav-label">Einstellungen</span></button>
+        <button type="button" class="nav-item" data-view="license" title="Lizenz & API" onclick="window.SMART_APP?.showView('license')"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 11V8a5 5 0 0 1 10 0v3"></path><path d="M5 11h14v10H5V11Z"></path><path d="M12 15v2"></path></svg></span><span class="nav-label">Lizenz & API</span></button>
       </nav>
       <div class="sidebar-health" aria-label="Systemstatus">
         <div><span>Lizenz</span><strong id="sidebarLicenseStatus">Nicht aktiviert</strong></div>
@@ -208,6 +211,10 @@
       <section class="view" data-view-panel="history">
         <section class="panel">
           <div class="panel-heading"><div><h2>Verlauf</h2><p>Bisherige Vorgänge werden lokal gespeichert.</p></div></div>
+          <div class="info-note">
+            <strong>Was kann der Verlauf?</strong>
+            <p>Der Verlauf speichert bisherige Antwortvorgänge lokal, damit du frühere Fälle wiederfinden, kopieren oder erneut verwenden kannst. Suche und Antworttyp-Filter helfen dabei, ähnliche Kommunikation schnell als Ausgangspunkt für neue Antworten zu nutzen.</p>
+          </div>
           <div class="history-tools">
             <input id="historySearch" type="search" placeholder="Verlauf durchsuchen">
             <select id="historyTypeFilter">
@@ -221,6 +228,10 @@
       <section class="view" data-view-panel="style">
         <section class="panel">
           <div class="panel-heading"><div><h2>Unternehmensstil</h2><p>Definiere den Standard-Kommunikationsstil für künftige Antworten.</p></div></div>
+          <div class="info-note">
+            <strong>Was macht der Unternehmensstil?</strong>
+            <p>Der Unternehmensstil steuert die grundsätzliche Sprache deiner Antworten. Er wirkt wie ein Kommunikationsprofil für die KI, zum Beispiel konservativ, modern, technisch, juristisch vorsichtig oder managementorientiert.</p>
+          </div>
           <div class="style-grid">
             <label><input type="radio" name="stylePreset" value="konservativ"> konservativ</label>
             <label><input type="radio" name="stylePreset" value="modern" checked> modern</label>
@@ -365,7 +376,11 @@
         </article>
         <article>
           <h3>Verlauf</h3>
-          <p>Erstellte Vorgänge werden lokal im Verlauf gespeichert. Suche und Antworttyp-Filter helfen, ältere Antworten wiederzufinden und zu kopieren.</p>
+          <p>Der Verlauf speichert bisherige Vorgänge lokal. Du kannst ältere Antworten suchen, filtern, kopieren, löschen oder als Grundlage für eine neue Antwort erneut verwenden.</p>
+        </article>
+        <article>
+          <h3>Unternehmensstil</h3>
+          <p>Der Unternehmensstil wirkt als Kommunikationsprofil für die KI. Er beeinflusst Wortwahl, Verbindlichkeit, Vorsicht und Management-Fokus künftiger Antworten.</p>
         </article>
       </div>
 
@@ -390,6 +405,27 @@
             <li><strong>Filtern:</strong> Über Tags lassen sich Vorlagen nach Stil, Situation oder Branche eingrenzen.</li>
             <li><strong>Nutzen:</strong> Vorlagen können direkt in eine neue Antwort übernommen oder kopiert werden.</li>
             <li><strong>Merksatz:</strong> Vorlagen = Verwaltung. Bibliothek = schnelle Nutzung und Wiederfinden.</li>
+          </ul>
+        </article>
+        <article>
+          <h3>Was kann der Verlauf?</h3>
+          <ul>
+            <li><strong>Speichern:</strong> Erstellte Antwortvorgänge werden lokal abgelegt.</li>
+            <li><strong>Wiederfinden:</strong> Suche und Antworttyp-Filter helfen bei ähnlichen Fällen.</li>
+            <li><strong>Wiederverwenden:</strong> Ein Verlaufseintrag kann zurück in den Composer übernommen werden.</li>
+            <li><strong>Kopieren:</strong> Frühere Antworten können direkt in die Zwischenablage kopiert werden.</li>
+            <li><strong>Aufräumen:</strong> Nicht mehr benötigte Vorgänge lassen sich löschen.</li>
+            <li><strong>Merksatz:</strong> Verlauf = lokales Gedächtnis deiner Antwortarbeit.</li>
+          </ul>
+        </article>
+        <article>
+          <h3>Was macht der Unternehmensstil?</h3>
+          <ul>
+            <li><strong>Grundton setzen:</strong> Der Stil bestimmt, wie die KI grundsätzlich formuliert.</li>
+            <li><strong>Profile wählen:</strong> Möglich sind konservativ, modern, technisch, juristisch vorsichtig und managementorientiert.</li>
+            <li><strong>Eigene Regeln:</strong> Im Textfeld können bevorzugte Formulierungen, Grußformeln oder No-Gos hinterlegt werden.</li>
+            <li><strong>Antworten steuern:</strong> Der Stil beeinflusst Wortwahl, Direktheit, Vorsicht und Verbindlichkeit.</li>
+            <li><strong>Merksatz:</strong> Unternehmensstil = Corporate Voice für KI-Antworten.</li>
           </ul>
         </article>
         <article>
@@ -432,8 +468,47 @@
     </section>
   </div>
 
-  <script src="licenseClient.js?v=file-compatible"></script>
-  <script src="anthropicClient.js?v=file-compatible"></script>
-  <script src="app.js?v=file-compatible"></script>
+  <script src="licenseClient.js?v=sidebar-controls"></script>
+  <script src="anthropicClient.js?v=sidebar-controls"></script>
+  <script src="app.js?v=sidebar-controls"></script>
+  <script>
+    (function () {
+      const collapsedKey = "smart-mailresponse-sidebar-collapsed";
+
+      function showView(view) {
+        document.querySelectorAll(".nav-item").forEach((item) => item.classList.toggle("is-active", item.dataset.view === view));
+        document.querySelectorAll("[data-view-panel]").forEach((panel) => panel.classList.toggle("is-visible", panel.dataset.viewPanel === view));
+      }
+
+      function applySidebarState(isCollapsed) {
+        const appShell = document.querySelector("#appShell");
+        const toggle = document.querySelector("#sidebarToggle");
+        appShell?.classList.toggle("is-sidebar-collapsed", isCollapsed);
+        toggle?.setAttribute("aria-pressed", String(isCollapsed));
+        toggle?.setAttribute("aria-label", isCollapsed ? "Sidebar ausklappen" : "Sidebar einklappen");
+      }
+
+      function toggleSidebar() {
+        const appShell = document.querySelector("#appShell");
+        const isCollapsed = !appShell?.classList.contains("is-sidebar-collapsed");
+        localStorage.setItem(collapsedKey, String(isCollapsed));
+        applySidebarState(isCollapsed);
+      }
+
+      const existing = window.SMART_APP || {};
+      window.SMART_APP = {
+        showView: existing.showView || showView,
+        toggleSidebar: existing.toggleSidebar || toggleSidebar
+      };
+
+      applySidebarState(localStorage.getItem(collapsedKey) === "true");
+      document.querySelectorAll(".nav-item[data-view]").forEach((item) => {
+        item.addEventListener("click", () => window.SMART_APP.showView(item.dataset.view));
+      });
+      document.querySelectorAll("[data-view-target]").forEach((item) => {
+        item.addEventListener("click", () => window.SMART_APP.showView(item.dataset.viewTarget));
+      });
+    })();
+  </script>
 </body>
 </html>
