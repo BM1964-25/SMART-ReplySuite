@@ -81,6 +81,14 @@ h1, h2, h3, p { margin-top: 0; }
   font-weight: 900;
 }
 
+.brand-icon {
+  display: block;
+  object-fit: cover;
+  padding: 0;
+  border: 1px solid rgba(255,255,255,0.42);
+  box-shadow: 0 14px 34px rgba(4, 14, 29, 0.24), inset 0 1px 0 rgba(255,255,255,0.4);
+}
+
 .brand-block strong, .brand-block span { display: block; }
 .brand-block span { color: rgba(255,255,255,0.72); font-size: 0.82rem; }
 
