@@ -16,7 +16,7 @@ function createWindow() {
     height: 980,
     minWidth: 1180,
     minHeight: 780,
-    title: "SMART MailResponse",
+    title: "SMART ReplySuite",
     icon: getWindowIcon(),
     backgroundColor: "#071a33",
     webPreferences: {

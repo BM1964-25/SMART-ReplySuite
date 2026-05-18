@@ -1,6 +1,6 @@
-# SMART MailResponse
+# SMART ReplySuite
 
-SMART MailResponse ist eine lokale KI-Arbeitsoberfläche für professionelle Antwortvorschläge zu E-Mails, Briefen und allgemeiner Geschäftskorrespondenz. Die App übernimmt bewusst Design, Farbwelt, Statuslogik und API-Key-Darstellung aus dem SMART Summary Assistant, baut die Produktlogik aber neu auf.
+SMART ReplySuite ist eine lokale KI-Arbeitsoberfläche für professionelle Antwortvorschläge zu E-Mails, Briefen und allgemeiner Geschäftskorrespondenz. Die App übernimmt bewusst Design, Farbwelt, Statuslogik und API-Key-Darstellung aus dem SMART Summary Assistant, baut die Produktlogik aber neu auf.
 
 ## Einschätzung zur Wiederverwendung
 

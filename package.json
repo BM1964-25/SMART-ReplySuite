@@ -13,7 +13,7 @@
   },
   "build": {
     "appId": "de.smart.mailresponse",
-    "productName": "SMART MailResponse",
+    "productName": "SMART ReplySuite",
     "files": [
       "index.html",
       "styles.css",
