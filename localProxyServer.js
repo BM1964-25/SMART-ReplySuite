@@ -16,7 +16,7 @@ const mimeTypes = {
   ".md": "text/markdown; charset=utf-8"
 };
 
-const server = http.createServer(async (request, response) => {
+export const server = http.createServer(async (request, response) => {
   try {
     const url = new URL(request.url, `http://${request.headers.host}`);
 
@@ -47,9 +47,25 @@ const server = http.createServer(async (request, response) => {
   }
 });
 
-server.listen(PORT, HOST, () => {
-  console.log(`SMART MailResponse läuft unter http://${HOST}:${PORT}`);
+server.on("error", (error) => {
+  if (error.code === "EADDRINUSE") {
+    console.warn(`SMART MailResponse API-Proxy läuft bereits unter http://${HOST}:${PORT}`);
+    return;
+  }
+  console.error(error);
 });
+
+export function startServer() {
+  if (server.listening) return server;
+  server.listen(PORT, HOST, () => {
+    console.log(`SMART MailResponse läuft unter http://${HOST}:${PORT}`);
+  });
+  return server;
+}
+
+if (import.meta.url === `file://${process.argv[1]}`) {
+  startServer();
+}
 
 async function proxyAnthropicRequest(request, response) {
   const apiKey = request.headers["x-api-key"];

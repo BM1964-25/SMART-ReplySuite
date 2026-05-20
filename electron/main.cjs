@@ -1,13 +1,26 @@
 const path = require("node:path");
+const { pathToFileURL } = require("node:url");
 const { app, BrowserWindow } = require("electron");
 
 const rootDir = path.join(__dirname, "..");
 const iconPng = path.join(rootDir, "build", "icon.png");
 const iconIco = path.join(rootDir, "build", "icon.ico");
+const proxyServerPath = path.join(rootDir, "localProxyServer.js");
+
+let localProxyServer = null;
 
 function getWindowIcon() {
   if (process.platform === "win32") return iconIco;
   return iconPng;
+}
+
+async function startLocalProxy() {
+  try {
+    const proxyModule = await import(pathToFileURL(proxyServerPath).href);
+    localProxyServer = proxyModule.startServer?.() || null;
+  } catch (error) {
+    console.warn("Lokaler API-Proxy konnte nicht gestartet werden:", error.message);
+  }
 }
 
 function createWindow() {
@@ -29,7 +42,9 @@ function createWindow() {
   mainWindow.loadFile(path.join(rootDir, "index.html"));
 }
 
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
+  await startLocalProxy();
+
   if (process.platform === "darwin" && app.dock) {
     app.dock.setIcon(iconPng);
   }
@@ -43,4 +58,8 @@ app.whenReady().then(() => {
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") app.quit();
+});
+
+app.on("before-quit", () => {
+  if (localProxyServer?.listening) localProxyServer.close();
 });
