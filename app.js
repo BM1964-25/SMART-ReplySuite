@@ -24,7 +24,9 @@ const STORAGE_KEY = "smart-mailresponse-anthropic-key";
 const SESSION_KEY = "smart-mailresponse-session-active";
 const DATA_KEY = "smart-mailresponse-data";
 const SIDEBAR_COLLAPSED_KEY = "smart-mailresponse-sidebar-collapsed";
-const DEFAULT_PROXY_URL = "/api/anthropic/messages";
+const DEFAULT_PROXY_URL = window.location.protocol === "file:"
+  ? "http://127.0.0.1:8173/api/anthropic/messages"
+  : "/api/anthropic/messages";
 const DEFAULT_CLAUDE_MODEL = "claude-sonnet-4-20250514";
 const sampleTemplate = {
   id: "sample-template-bauprojekt-rueckfrage",

@@ -20,6 +20,12 @@ const server = http.createServer(async (request, response) => {
   try {
     const url = new URL(request.url, `http://${request.headers.host}`);
 
+    if (request.method === "OPTIONS") {
+      response.writeHead(204, getCorsHeaders(request));
+      response.end();
+      return;
+    }
+
     if (request.method === "POST" && url.pathname === "/api/anthropic/messages") {
       await proxyAnthropicRequest(request, response);
       return;
@@ -35,9 +41,9 @@ const server = http.createServer(async (request, response) => {
       return;
     }
 
-    sendJson(response, 405, { error: { message: "Methode nicht erlaubt." } });
+    sendJson(response, 405, { error: { message: "Methode nicht erlaubt." } }, request);
   } catch (error) {
-    sendJson(response, 500, { error: { message: error.message || "Interner Serverfehler." } });
+    sendJson(response, 500, { error: { message: error.message || "Interner Serverfehler." } }, request);
   }
 });
 
@@ -49,7 +55,7 @@ async function proxyAnthropicRequest(request, response) {
   const apiKey = request.headers["x-api-key"];
 
   if (!apiKey || Array.isArray(apiKey)) {
-    sendJson(response, 401, { error: { message: "Anthropic API-Key fehlt." } });
+    sendJson(response, 401, { error: { message: "Anthropic API-Key fehlt." } }, request);
     return;
   }
 
@@ -66,8 +72,8 @@ async function proxyAnthropicRequest(request, response) {
 
   const payload = await upstream.text();
   response.writeHead(upstream.status, {
+    ...getCorsHeaders(request),
     "Content-Type": upstream.headers.get("content-type") || "application/json; charset=utf-8",
-    "Access-Control-Allow-Origin": `http://${HOST}:${PORT}`
   });
   response.end(payload);
 }
@@ -84,14 +90,14 @@ async function verifyLicense(request, response) {
       email,
       expiresAt: "2026-12-31",
       activations: { used: 1, max: 3 }
-    });
+    }, request);
     return;
   }
 
   sendJson(response, 402, {
     valid: false,
     message: "Lizenz nicht aktiv. In Produktion prüft die Lizenz-API Stripe-Kauf, Laufzeit und Aktivierungen."
-  });
+  }, request);
 }
 
 async function serveStatic(pathname, response) {
@@ -125,7 +131,20 @@ function readRequestBody(request) {
   });
 }
 
-function sendJson(response, status, payload) {
-  response.writeHead(status, { "Content-Type": "application/json; charset=utf-8" });
+function getCorsHeaders(request) {
+  const origin = request?.headers?.origin;
+  return {
+    "Access-Control-Allow-Origin": origin || "*",
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type, X-API-Key, x-api-key",
+    "Vary": "Origin"
+  };
+}
+
+function sendJson(response, status, payload, request = null) {
+  response.writeHead(status, {
+    ...getCorsHeaders(request),
+    "Content-Type": "application/json; charset=utf-8"
+  });
   response.end(JSON.stringify(payload));
 }

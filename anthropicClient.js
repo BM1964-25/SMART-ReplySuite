@@ -1,5 +1,12 @@
 const DEFAULT_MODEL = "claude-sonnet-4-20250514";
 
+function resolveProxyUrl(proxyUrl) {
+  if (proxyUrl) return proxyUrl;
+  return window.location.protocol === "file:"
+    ? "http://127.0.0.1:8173/api/anthropic/messages"
+    : "/api/anthropic/messages";
+}
+
 function buildMailResponsePrompts({
   subject,
   inboundMessage,
@@ -143,7 +150,7 @@ function buildMailResponsePrompts({
 async function requestClaudeMailResponse(options) {
   const { systemPrompt, userPrompt } = buildMailResponsePrompts(options);
 
-  const response = await fetch(options.proxyUrl || "/api/anthropic/messages", {
+  const response = await fetch(resolveProxyUrl(options.proxyUrl), {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -182,7 +189,7 @@ async function requestClaudeMailResponse(options) {
 }
 
 async function testClaudeConnection({ apiKey, proxyUrl, model }) {
-  const response = await fetch(proxyUrl || "/api/anthropic/messages", {
+  const response = await fetch(resolveProxyUrl(proxyUrl), {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -234,5 +241,6 @@ window.SMART_AI = {
   DEFAULT_MODEL,
   buildMailResponsePrompts,
   requestClaudeMailResponse,
+  resolveProxyUrl,
   testClaudeConnection
 };
