@@ -24,10 +24,14 @@ const STORAGE_KEY = "smart-mailresponse-anthropic-key";
 const SESSION_KEY = "smart-mailresponse-session-active";
 const DATA_KEY = "smart-mailresponse-data";
 const SIDEBAR_COLLAPSED_KEY = "smart-mailresponse-sidebar-collapsed";
-const DEFAULT_PROXY_URL = window.location.protocol === "file:"
-  ? "http://127.0.0.1:8173/api/anthropic/messages"
-  : "/api/anthropic/messages";
+const LOCAL_PROXY_URL = "http://127.0.0.1:8173/api/anthropic/messages";
+const DEFAULT_PROXY_URL = isLocalBrowserHost() ? "/api/anthropic/messages" : LOCAL_PROXY_URL;
 const DEFAULT_CLAUDE_MODEL = "claude-sonnet-4-20250514";
+
+function isLocalBrowserHost() {
+  return ["127.0.0.1", "localhost", "::1"].includes(window.location.hostname);
+}
+
 const sampleTemplate = {
   id: "sample-template-bauprojekt-rueckfrage",
   title: "Mustervorlage: Rückfrage Bauprojekt",

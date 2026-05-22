@@ -1,7 +1,13 @@
 const LICENSE_STORAGE_KEY = "smart-mailresponse-license-key";
 const LICENSE_EMAIL_KEY = "smart-mailresponse-license-email";
 const LICENSE_SESSION_KEY = "smart-mailresponse-license-active";
-const DEFAULT_LICENSE_ENDPOINT = "/api/license/verify";
+const DEFAULT_LICENSE_ENDPOINT = isLocalBrowserHost()
+  ? "/api/license/verify"
+  : "http://127.0.0.1:8173/api/license/verify";
+
+function isLocalBrowserHost() {
+  return ["127.0.0.1", "localhost", "::1"].includes(location.hostname);
+}
 
 function loadStoredLicense() {
   return {

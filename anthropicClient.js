@@ -2,9 +2,13 @@ const DEFAULT_MODEL = "claude-sonnet-4-20250514";
 
 function resolveProxyUrl(proxyUrl) {
   if (proxyUrl) return proxyUrl;
-  return window.location.protocol === "file:"
-    ? "http://127.0.0.1:8173/api/anthropic/messages"
-    : "/api/anthropic/messages";
+  return isLocalBrowserHost()
+    ? "/api/anthropic/messages"
+    : "http://127.0.0.1:8173/api/anthropic/messages";
+}
+
+function isLocalBrowserHost() {
+  return ["127.0.0.1", "localhost", "::1"].includes(window.location.hostname);
 }
 
 function buildMailResponsePrompts({
@@ -269,6 +273,12 @@ function createAnthropicError(payload, status) {
   if (status === 403 || normalized.includes("permission")) {
     error.code = "PERMISSION_DENIED";
     error.message = "Der API-Key ist gültig, hat aber keinen Zugriff auf dieses Modell oder diese Anfrage.";
+    return error;
+  }
+
+  if (status === 405) {
+    error.code = "PROXY_METHOD_NOT_ALLOWED";
+    error.message = "Die API-Anfrage wurde vom falschen Server abgelehnt. Starte SMART ReplySuite über den lokalen Server und prüfe, ob http://127.0.0.1:8173 erreichbar ist.";
     return error;
   }
 
