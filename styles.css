@@ -531,33 +531,34 @@ textarea {
 }
 
 .textarea-action-wrap textarea {
-  padding-right: 64px;
+  padding-right: 52px;
 }
 
 .textarea-delete-button {
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: 14px;
+  right: 14px;
   z-index: 2;
-  width: 40px;
-  height: 40px;
-  min-height: 40px;
+  width: 24px;
+  height: 24px;
+  min-height: 24px;
   display: inline-grid;
   place-items: center;
   padding: 0;
-  border-color: rgba(201,54,68,0.2);
-  background: #fff7f8;
-  color: #9e2634;
+  border-color: transparent;
+  background: transparent;
+  color: var(--muted);
 }
 
 .textarea-delete-button:hover {
-  border-color: rgba(201,54,68,0.34);
-  background: #fff0f2;
+  border-color: transparent;
+  background: transparent;
+  color: var(--accent-strong);
 }
 
 .textarea-delete-button svg {
-  width: 19px;
-  height: 19px;
+  width: 20px;
+  height: 20px;
   fill: none;
   stroke: currentColor;
   stroke-linecap: round;
@@ -1094,15 +1095,15 @@ textarea:focus, input:focus, select:focus {
 
 .output-field-actions {
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: 14px;
+  right: 14px;
   z-index: 2;
   display: flex;
-  gap: 8px;
+  gap: 12px;
 }
 
 .response-output-wrap .response-output {
-  padding-right: 112px;
+  padding-right: 92px;
 }
 
 .response-output.is-placeholder { color: var(--muted); }
@@ -1637,31 +1638,33 @@ textarea:focus, input:focus, select:focus {
 }
 .output-copy-button,
 .output-delete-button {
-  width: 42px;
-  height: 42px;
+  width: 24px;
+  height: 24px;
+  min-height: 24px;
   flex: 0 0 auto;
   display: inline-grid;
   place-items: center;
   padding: 0;
+  border-color: transparent;
+  background: transparent;
+  color: var(--muted);
 }
 
 .output-copy-button {
-  border-color: rgba(15,90,167,0.2);
-  background: #f3f8ff;
-  color: var(--accent-strong);
+  color: var(--muted);
 }
 .output-copy-button:not(:disabled):hover {
-  border-color: rgba(15,90,167,0.36);
-  background: #e8f3ff;
+  border-color: transparent;
+  background: transparent;
+  color: var(--accent-strong);
 }
 .output-delete-button {
-  border-color: rgba(201,54,68,0.2);
-  background: #fff7f8;
-  color: #9e2634;
+  color: var(--muted);
 }
 .output-delete-button:hover {
-  border-color: rgba(201,54,68,0.34);
-  background: #fff0f2;
+  border-color: transparent;
+  background: transparent;
+  color: var(--accent-strong);
 }
 .output-copy-button svg,
 .output-delete-button svg {
@@ -1672,6 +1675,25 @@ textarea:focus, input:focus, select:focus {
   stroke-linecap: round;
   stroke-linejoin: round;
   stroke-width: 1.9;
+}
+#clearInboundBtn.textarea-delete-button,
+#copyOutputIconBtn.output-copy-button,
+#resetBtn.output-delete-button {
+  width: 24px;
+  height: 24px;
+  min-height: 24px;
+  padding: 0;
+  border-color: transparent;
+  background: transparent;
+  color: var(--muted);
+}
+
+#clearInboundBtn.textarea-delete-button:hover,
+#copyOutputIconBtn.output-copy-button:not(:disabled):hover,
+#resetBtn.output-delete-button:hover {
+  border-color: transparent;
+  background: transparent;
+  color: var(--accent-strong);
 }
 .eye-button { width: 44px; display: inline-grid; place-items: center; padding: 0; }
 .eye-button svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.8; }
