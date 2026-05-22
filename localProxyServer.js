@@ -63,7 +63,7 @@ export function startServer() {
   return server;
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (fileURLToPath(import.meta.url) === process.argv[1]) {
   startServer();
 }
 

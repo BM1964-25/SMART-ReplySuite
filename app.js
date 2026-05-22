@@ -138,6 +138,8 @@ const elements = {
   language: document.querySelector("#language"),
   companyStyle: document.querySelector("#companyStyle"),
   modeButtons: document.querySelectorAll("[data-mode]"),
+  workspaceViewButtons: document.querySelectorAll("[data-workspace-view]"),
+  composerWorkspace: document.querySelector("#composerWorkspace"),
   contextTabButtons: document.querySelectorAll("[data-context-tab]"),
   contextPanels: document.querySelectorAll("[data-context-panel]"),
   setupAlert: document.querySelector("#setupAlert"),
@@ -254,6 +256,7 @@ function bindEvents() {
   });
   elements.viewTargets.forEach((item) => item.addEventListener("click", () => showView(item.dataset.viewTarget)));
   elements.modeButtons.forEach((button) => button.addEventListener("click", () => setComposerMode(button.dataset.mode)));
+  elements.workspaceViewButtons.forEach((button) => button.addEventListener("click", () => setComposerWorkspaceView(button.dataset.workspaceView)));
   elements.contextTabButtons.forEach((button) => button.addEventListener("click", () => showContextPanel(button.dataset.contextTab)));
   elements.templatePicker.addEventListener("change", applySelectedTemplate);
   elements.resultTabs.addEventListener("click", (event) => {
@@ -1075,6 +1078,16 @@ function setComposerMode(mode) {
   elements.inboundMessage.placeholder = currentMode === "optimize"
     ? "Eingegangene Nachricht, Schreiben und vorhandenen Antwortentwurf hier einfügen..."
     : "E-Mail, Brief, Nachricht oder Geschäftsschreiben hier einfügen...";
+}
+
+function setComposerWorkspaceView(view) {
+  const normalizedView = ["source", "result", "split"].includes(view) ? view : "split";
+  elements.workspaceViewButtons.forEach((button) => {
+    button.classList.toggle("is-active", button.dataset.workspaceView === normalizedView);
+  });
+  elements.composerWorkspace.classList.toggle("is-source", normalizedView === "source");
+  elements.composerWorkspace.classList.toggle("is-result", normalizedView === "result");
+  elements.composerWorkspace.classList.toggle("is-split", normalizedView === "split");
 }
 
 function showContextPanel(name) {
