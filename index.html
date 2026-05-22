@@ -390,17 +390,6 @@ Mit freundlichen Grüßen`,
           <span>Lokale Verarbeitung, eigener API-Key</span>
         </div>
       </div>
-      <footer class="sidebar-legal" aria-label="Rechtliche Hinweise">
-        <span>© 2026 BuiltSmart Hub</span>
-        <strong>Powered by SmartBuilt-AI</strong>
-        <div>
-          <a href="#" aria-label="Impressum öffnen">Impressum</a>
-          <span aria-hidden="true">·</span>
-          <a href="#" aria-label="Datenschutz öffnen">Datenschutz</a>
-          <span aria-hidden="true">·</span>
-          <a href="#" aria-label="AGB öffnen">AGB</a>
-        </div>
-      </footer>
     </aside>
 
     <main class="main-shell">
@@ -487,10 +476,30 @@ Mit freundlichen Grüßen`,
             <div class="panel-heading compact">
               <div><h2>Quelle</h2><p>Füge hier den Ausgangstext ein und ergänze nur den Kontext, den die KI für diese Antwort berücksichtigen soll.</p></div>
             </div>
+            <div class="file-dropzone" id="fileDropZone" tabindex="0">
+              <input id="sourceFileInput" type="file" accept=".txt,.md,.pdf,.docx,.rtf,.html,.htm,.csv,text/plain,text/markdown,text/html,text/csv" hidden>
+              <strong>Datei ablegen oder Text einfügen</strong>
+              <span>TXT, MD, PDF, DOCX, RTF, HTML, CSV</span>
+              <small id="sourceFileStatus">Keine Datei ausgewählt</small>
+              <div class="file-drop-actions">
+                <button type="button" id="chooseSourceFileBtn">Datei auswählen</button>
+                <button type="button" id="pasteSourceTextBtn">Text einfügen</button>
+                <button type="button" class="success-action" id="loadExampleSourceBtn">Beispiel laden</button>
+              </div>
+              <p>Details zu Formaten, Grenzen und Datenschutz findest du in der <label for="helpToggle">Hilfe</label>.</p>
+            </div>
             <div class="mail-grid">
               <div class="field"><label for="subject">Betreff</label><input id="subject" type="text" placeholder="z. B. Rückfrage zum Nachtrag, Beschwerde, Terminabstimmung"></div>
               <div class="field"><label for="responseGoal">Ziel der Antwort</label><input id="responseGoal" type="text" placeholder="z. B. klären, nachfassen, ablehnen, Termin abstimmen, Eskalation entschärfen"></div>
-              <div class="field full"><label for="inboundMessage">Eingegangene Nachricht / Schreiben</label><textarea id="inboundMessage" placeholder="E-Mail, Brief, Nachricht oder Geschäftsschreiben hier einfügen..." spellcheck="true"></textarea></div>
+              <div class="field full">
+                <label for="inboundMessage">Eingegangene Nachricht / Schreiben</label>
+                <div class="textarea-action-wrap">
+                  <button type="button" class="icon-button textarea-delete-button" id="clearInboundBtn" aria-label="Eingegangene Nachricht leeren" title="Eingegangene Nachricht leeren">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16"></path><path d="M10 11v6"></path><path d="M14 11v6"></path><path d="M6 7l1 14h10l1-14"></path><path d="M9 7V4h6v3"></path></svg>
+                  </button>
+                  <textarea id="inboundMessage" placeholder="E-Mail, Brief, Nachricht oder Geschäftsschreiben hier einfügen..." spellcheck="true"></textarea>
+                </div>
+              </div>
               <div class="context-tabs full">
                 <div class="tab-buttons" aria-label="Kontextfelder">
                   <button type="button" class="is-active" data-context-tab="notes">Eigene Notizen</button>
@@ -727,6 +736,27 @@ Mit freundlichen Grüßen`,
           </details>
         </section>
       </section>
+      <footer class="app-footer" aria-label="Footer">
+        <div class="footer-brand">
+          <img class="footer-icon" src="assets/smart-mailresponse-icon.png" alt="" aria-hidden="true">
+          <div>
+            <strong>SMART ReplySuite</strong>
+            <p>Professionelle KI-Antworten für E-Mails, Briefe und Geschäftskommunikation.</p>
+          </div>
+        </div>
+        <div class="footer-legal">
+          <p>© 2026 SmartBuilt-AI · Powered by BuiltSmart Hub - Bernhard Metzger</p>
+          <nav aria-label="Rechtliche Links">
+            <a href="https://www.built-smart-hub.com/impressum" target="_blank" rel="noopener noreferrer">Impressum</a>
+            <span aria-hidden="true">|</span>
+            <a href="https://www.built-smart-hub.com/datenschutz" target="_blank" rel="noopener noreferrer">Datenschutz</a>
+            <span aria-hidden="true">|</span>
+            <a href="https://www.built-smart-hub.com/agb" target="_blank" rel="noopener noreferrer">AGB</a>
+            <span aria-hidden="true">|</span>
+            <a href="https://www.built-smart-hub.com/widerrufsbelehrung" target="_blank" rel="noopener noreferrer">Widerrufsbelehrung</a>
+          </nav>
+        </div>
+      </footer>
     </main>
   </div>
 
@@ -766,6 +796,7 @@ Mit freundlichen Grüßen`,
           <li><strong>Neue Antwort öffnen:</strong> In der Sidebar „Neue Antwort“ wählen.</li>
           <li><strong>Betreff eintragen:</strong> Der Betreff hilft der KI, Kontext und Dringlichkeit besser zu erkennen.</li>
           <li><strong>Nachricht einfügen:</strong> Den Inhalt aus Outlook, Gmail, einem Brief, PDF-Text oder anderem Schriftverkehr direkt in „Eingegangene Nachricht / Schreiben“ kopieren.</li>
+          <li><strong>Datei nutzen:</strong> Textbasierte Dateien wie TXT, MD, CSV, HTML oder RTF können in der Quelle per Drag & Drop oder Dateiauswahl übernommen werden. Bei PDF und DOCX sollte der relevante Text aktuell markiert und per Copy & Paste eingefügt werden.</li>
           <li><strong>Ziel formulieren:</strong> Kurz beschreiben, was die Antwort erreichen soll, z. B. „Termin abstimmen“, „Rückfrage stellen“ oder „Eskalation entschärfen“.</li>
           <li><strong>Eigene Notizen ergänzen:</strong> Interne Fakten, gewünschte Aussagen, Grenzen, Fristen, Ansprechpartner, No-Gos oder nächste Schritte hinterlegen. Diese Informationen stehen oft nicht im eingefügten Text, sind aber für die Antwort wichtig.</li>
           <li><strong>Zusätzliche Hinweise erfassen:</strong> Konkrete Schreib- und Antwortanweisungen ergänzen, z. B. bestimmte Formulierungen verwenden, besonders kurz antworten, auf eine Anlage verweisen oder eine Rückfrage einbauen.</li>
@@ -774,6 +805,22 @@ Mit freundlichen Grüßen`,
       </div>
 
       <div class="help-grid">
+        <article>
+          <h3>Arbeitsansichten</h3>
+          <p>„Quelle“ zeigt Eingabe und Kontext, „Ergebnis“ zeigt Analyse und Antwortvarianten, „Geteilt“ stellt beides nebeneinander zum Prüfen und Vergleichen dar.</p>
+        </article>
+        <article>
+          <h3>Antwortparameter</h3>
+          <p>Vorlage, Stilprofil, Antworttyp, Fokus, Tonalität, Grundstil, Länge der Hauptantwort und Antwortsprache gelten für den aktuellen Vorgang und steuern Form, Strategie und Ausgabesprache.</p>
+        </article>
+        <article>
+          <h3>Quelle</h3>
+          <p>In der Quelle werden Ausgangstext, Betreff, Ziel, eigene Notizen und zusätzliche Hinweise erfasst. Das Lösch-Icon im Nachrichtenfeld entfernt nur den eingefügten Ausgangstext.</p>
+        </article>
+        <article>
+          <h3>Ergebnisaktionen</h3>
+          <p>Das Kopier-Icon im Ergebnisfeld kopiert die gesamte Ausgabe. Das Lösch-Icon leert Eingabe und Ergebnis. Einzelne Antwortvarianten können zusätzlich separat kopiert werden.</p>
+        </article>
         <article>
           <h3>Entwurf optimieren</h3>
           <p>Wähle „Entwurf optimieren“, wenn bereits ein eigener Antwortentwurf vorliegt. Die KI verbessert diesen Entwurf, z. B. klarer, höflicher, verbindlicher, kürzer oder diplomatischer. Füge Ausgangsnachricht und Entwurf gemeinsam in das Nachrichtenfeld ein und nutze Notizen für gewünschte Änderungen.</p>
@@ -788,7 +835,7 @@ Mit freundlichen Grüßen`,
         </article>
         <article>
           <h3>Antwortvarianten</h3>
-          <p>Die Ergebnis-Tabs trennen Analyse, Hauptantwort, Alternative, Kurzfassung, diplomatische Version und Qualitätsbewertung. Jede Karte kann einzeln kopiert werden.</p>
+          <p>Die Ergebnis-Tabs trennen Analyse, Hauptantwort, Alternative, Kurzfassung, diplomatische Version und Qualitätsbewertung. „Aktuelle Variante als Vorlage speichern“ speichert nur die sichtbar gewählte Antwortvariante.</p>
         </article>
         <article>
           <h3>Qualitätsbadges</h3>
@@ -861,11 +908,24 @@ Mit freundlichen Grüßen`,
         <article>
           <h3>Welche Angaben haben Vorrang?</h3>
           <ul>
-            <li><strong>Antwortparameter:</strong> Sprache, Tonalität, Länge, Fokus und Antworttyp gelten nur für den aktuellen Vorgang.</li>
-            <li><strong>Stilprofil:</strong> Ergänzt die Antwort um Corporate Voice, Akzente, No-Gos und eigene Regeln.</li>
-            <li><strong>Vorlage:</strong> Liefert wiederverwendbare Textbausteine oder Formulierungslogik.</li>
-            <li><strong>Eigene Notizen und Hinweise:</strong> Haben den stärksten Bezug zum aktuellen Fall und sollen bei Widersprüchen zuerst berücksichtigt werden.</li>
-            <li><strong>Priorität:</strong> Eigene Notizen und Hinweise > Antwortparameter > gewähltes Stilprofil > Vorlage.</li>
+            <li><strong>1. Eingegangene Nachricht und Fakten:</strong> Der tatsächliche Inhalt des Schreibens bildet die Grundlage.</li>
+            <li><strong>2. Ziel, eigene Notizen und zusätzliche Hinweise:</strong> Diese Angaben konkretisieren, was die Antwort erreichen soll.</li>
+            <li><strong>3. No-Gos:</strong> Verbindliche Grenzen wie keine Schuldeingeständnisse oder keine ungeprüften Zusagen werden besonders berücksichtigt.</li>
+            <li><strong>4. Stilprofil und Stilregeln:</strong> Corporate Voice, Akzente und eigene Regeln verfeinern die Formulierung.</li>
+            <li><strong>5. Antwortparameter:</strong> Antworttyp, Fokus, Tonalität, Grundstil, Länge und Sprache steuern Form und Strategie des aktuellen Vorgangs.</li>
+            <li><strong>6. Vorlage:</strong> Vorlagen liefern Formulierungslogik und Textbausteine, werden aber an den konkreten Fall angepasst.</li>
+          </ul>
+        </article>
+        <article>
+          <h3>Dateien in der Quelle</h3>
+          <ul>
+            <li><strong>Direkt lesbar:</strong> TXT, MD, CSV, HTML und RTF können in das Nachrichtenfeld übernommen werden.</li>
+            <li><strong>Copy & Paste:</strong> Text kann direkt in „Eingegangene Nachricht / Schreiben“ eingefügt oder über „Text einfügen“ aus der Zwischenablage übernommen werden.</li>
+            <li><strong>Text per Drag & Drop:</strong> Markierter Text kann auf die Ablagefläche gezogen werden und wird ebenfalls in das Nachrichtenfeld eingetragen.</li>
+            <li><strong>Nachricht leeren:</strong> Das Lösch-Icon im Nachrichtenfeld entfernt nur die eingegangene Nachricht; Betreff, Ziel, Notizen und Ergebnis bleiben erhalten.</li>
+            <li><strong>PDF und DOCX:</strong> Aktuell bitte den relevanten Text im Dokument markieren und per Copy & Paste einfügen.</li>
+            <li><strong>Datenschutz:</strong> Dateien werden lokal gelesen; eine KI-Übertragung erfolgt erst, wenn eine Antwort erstellt wird.</li>
+            <li><strong>Beispiel laden:</strong> Füllt Quelle, Ziel und Notizen mit einem Musterfall zum schnellen Testen.</li>
           </ul>
         </article>
         <article>
@@ -884,7 +944,7 @@ Mit freundlichen Grüßen`,
             <li>API-Key unter „Lizenz & API“ einfügen.</li>
             <li>„Speichern“ übernimmt den Key für die Sitzung oder lokal, wenn die Checkbox aktiv ist.</li>
             <li>„Verbindung überprüfen“ sendet eine kurze Testanfrage an Anthropic.</li>
-            <li>Für Tests kann die Lizenz <code>SMART-DEMO-2026-LOCAL</code> verwendet werden.</li>
+            <li>Eine Lizenz kann mit Lizenzschlüssel und Kauf-E-Mail lokal gespeichert und geprüft werden.</li>
           </ul>
         </article>
         <article>

@@ -50,6 +50,16 @@ Mit freundlichen Grüßen`,
   updatedAt: "2026-05-16T00:00:00.000Z"
 };
 
+const sampleSourceText = `Betreff: Rückfrage zu Terminabstimmung und offenen Unterlagen
+
+Sehr geehrte Damen und Herren,
+
+vielen Dank für Ihre Nachricht. Wir haben die angekündigten Unterlagen bisher noch nicht vollständig erhalten. Für die weitere Bearbeitung benötigen wir bitte eine kurze Rückmeldung zum aktuellen Stand sowie einen Terminvorschlag für die Abstimmung der nächsten Schritte.
+
+Bitte teilen Sie uns außerdem mit, ob aus Ihrer Sicht Fristen oder besondere Abhängigkeiten zu berücksichtigen sind.
+
+Mit freundlichen Grüßen`;
+
 const responseTypes = [
   "Zustimmung",
   "Ablehnung",
@@ -128,6 +138,7 @@ const elements = {
   viewTargets: document.querySelectorAll("[data-view-target]"),
   subject: document.querySelector("#subject"),
   inboundMessage: document.querySelector("#inboundMessage"),
+  clearInboundBtn: document.querySelector("#clearInboundBtn"),
   notes: document.querySelector("#notes"),
   responseGoal: document.querySelector("#responseGoal"),
   extraHints: document.querySelector("#extraHints"),
@@ -140,6 +151,12 @@ const elements = {
   modeButtons: document.querySelectorAll("[data-mode]"),
   workspaceViewButtons: document.querySelectorAll("[data-workspace-view]"),
   composerWorkspace: document.querySelector("#composerWorkspace"),
+  fileDropZone: document.querySelector("#fileDropZone"),
+  sourceFileInput: document.querySelector("#sourceFileInput"),
+  chooseSourceFileBtn: document.querySelector("#chooseSourceFileBtn"),
+  pasteSourceTextBtn: document.querySelector("#pasteSourceTextBtn"),
+  loadExampleSourceBtn: document.querySelector("#loadExampleSourceBtn"),
+  sourceFileStatus: document.querySelector("#sourceFileStatus"),
   contextTabButtons: document.querySelectorAll("[data-context-tab]"),
   contextPanels: document.querySelectorAll("[data-context-panel]"),
   setupAlert: document.querySelector("#setupAlert"),
@@ -257,6 +274,7 @@ function bindEvents() {
   elements.viewTargets.forEach((item) => item.addEventListener("click", () => showView(item.dataset.viewTarget)));
   elements.modeButtons.forEach((button) => button.addEventListener("click", () => setComposerMode(button.dataset.mode)));
   elements.workspaceViewButtons.forEach((button) => button.addEventListener("click", () => setComposerWorkspaceView(button.dataset.workspaceView)));
+  bindSourceFileEvents();
   elements.contextTabButtons.forEach((button) => button.addEventListener("click", () => showContextPanel(button.dataset.contextTab)));
   elements.templatePicker.addEventListener("change", applySelectedTemplate);
   elements.resultTabs.addEventListener("click", (event) => {
@@ -266,6 +284,7 @@ function bindEvents() {
   elements.historySearch.addEventListener("input", renderHistory);
   elements.historyTypeFilter.addEventListener("change", renderHistory);
   elements.inboundMessage.addEventListener("input", updateCharacterCount);
+  elements.clearInboundBtn.addEventListener("click", clearInboundMessage);
   elements.generateBtn.addEventListener("click", handleGenerate);
   elements.copyOutputIconBtn.addEventListener("click", copyAll);
   elements.copyAllBtn.addEventListener("click", copyAll);
@@ -1071,6 +1090,139 @@ function applyTemplateToComposer(item) {
   showContextPanel("hints");
 }
 
+function bindSourceFileEvents() {
+  elements.chooseSourceFileBtn?.addEventListener("click", () => elements.sourceFileInput?.click());
+  elements.pasteSourceTextBtn?.addEventListener("click", pasteSourceTextFromClipboard);
+  elements.loadExampleSourceBtn?.addEventListener("click", loadExampleSource);
+  elements.sourceFileInput?.addEventListener("change", () => {
+    const file = elements.sourceFileInput.files?.[0];
+    if (file) importSourceFile(file);
+  });
+
+  if (!elements.fileDropZone) return;
+  ["dragenter", "dragover"].forEach((eventName) => {
+    elements.fileDropZone.addEventListener(eventName, (event) => {
+      event.preventDefault();
+      elements.fileDropZone.classList.add("is-dragging");
+    });
+  });
+  ["dragleave", "drop"].forEach((eventName) => {
+    elements.fileDropZone.addEventListener(eventName, (event) => {
+      event.preventDefault();
+      elements.fileDropZone.classList.remove("is-dragging");
+    });
+  });
+  elements.fileDropZone.addEventListener("drop", (event) => {
+    const file = event.dataTransfer?.files?.[0];
+    const droppedText = event.dataTransfer?.getData("text/plain")?.trim();
+    if (file) {
+      importSourceFile(file);
+    } else if (droppedText) {
+      insertSourceText(droppedText, "Text per Drag & Drop übernommen");
+    }
+  });
+  elements.fileDropZone.addEventListener("paste", (event) => {
+    const pastedText = event.clipboardData?.getData("text/plain")?.trim();
+    if (!pastedText) return;
+    event.preventDefault();
+    insertSourceText(pastedText, "Text aus Zwischenablage übernommen");
+  });
+}
+
+function loadExampleSource() {
+  elements.subject.value = "Rückfrage zu Terminabstimmung und offenen Unterlagen";
+  elements.responseGoal.value = "verbindlich nachfassen, Termin abstimmen und fehlende Unterlagen anfordern";
+  elements.inboundMessage.value = sampleSourceText;
+  elements.notes.value = "Bitte sachlich und freundlich formulieren. Keine Frist zusagen, bevor die Unterlagen geprüft wurden.";
+  setSourceFileStatus("Beispiel geladen");
+  updateCharacterCount();
+  setStatus("Beispiel geladen", "ready");
+}
+
+async function importSourceFile(file) {
+  const extension = getFileExtension(file.name);
+  const readableTextFormats = new Set(["txt", "md", "csv", "html", "htm", "rtf"]);
+
+  if (!readableTextFormats.has(extension)) {
+    setSourceFileStatus(`${file.name}: Bitte Inhalt markieren und per Copy & Paste einfügen.`);
+    setStatus("Format nicht direkt auslesbar", "warn");
+    return;
+  }
+
+  try {
+    const rawText = await file.text();
+    const normalizedText = normalizeImportedSourceText(rawText, extension);
+    if (!normalizedText.trim()) {
+      setSourceFileStatus(`${file.name}: kein lesbarer Text gefunden`);
+      setStatus("Datei ohne Text", "warn");
+      return;
+    }
+    elements.inboundMessage.value = normalizedText.trim();
+    if (!elements.subject.value.trim()) elements.subject.value = file.name.replace(/\.[^.]+$/, "");
+    setSourceFileStatus(`${file.name} geladen`);
+    updateCharacterCount();
+    setStatus("Quelle geladen", "ready");
+  } catch (error) {
+    setSourceFileStatus(`${file.name}: konnte nicht gelesen werden`);
+    setStatus("Dateiimport fehlgeschlagen", "danger");
+  }
+}
+
+async function pasteSourceTextFromClipboard() {
+  try {
+    const text = await navigator.clipboard.readText();
+    if (!text.trim()) {
+      setSourceFileStatus("Zwischenablage enthält keinen Text");
+      setStatus("Kein Text gefunden", "warn");
+      return;
+    }
+    insertSourceText(text.trim(), "Text aus Zwischenablage übernommen");
+  } catch (error) {
+    setSourceFileStatus("Bitte Text direkt in das Nachrichtenfeld einfügen");
+    setStatus("Zwischenablage nicht lesbar", "warn");
+  }
+}
+
+function clearInboundMessage() {
+  elements.inboundMessage.value = "";
+  setSourceFileStatus("Keine Datei ausgewählt");
+  updateCharacterCount();
+  elements.inboundMessage.focus();
+  setStatus("Nachricht geleert", apiKeyState.value ? "ready" : "warn");
+}
+
+function insertSourceText(text, statusMessage) {
+  const existing = elements.inboundMessage.value.trim();
+  elements.inboundMessage.value = existing ? `${existing}\n\n${text}` : text;
+  setSourceFileStatus(statusMessage);
+  updateCharacterCount();
+  setStatus("Quelle übernommen", "ready");
+}
+
+function getFileExtension(fileName) {
+  return String(fileName || "").split(".").pop().toLowerCase();
+}
+
+function normalizeImportedSourceText(rawText, extension) {
+  if (extension === "html" || extension === "htm") {
+    const documentValue = new DOMParser().parseFromString(rawText, "text/html");
+    return documentValue.body.textContent || "";
+  }
+  if (extension === "rtf") {
+    return rawText
+      .replace(/\\par[d]?/g, "\n")
+      .replace(/\\'[0-9a-fA-F]{2}/g, "")
+      .replace(/[{}]/g, "")
+      .replace(/\\[a-zA-Z]+-?\d* ?/g, "")
+      .replace(/\n{3,}/g, "\n\n");
+  }
+  return rawText;
+}
+
+function setSourceFileStatus(message) {
+  if (elements.sourceFileStatus) elements.sourceFileStatus.textContent = message;
+}
+
 function setComposerMode(mode) {
   currentMode = mode === "optimize" ? "optimize" : "reply";
   elements.modeButtons.forEach((button) => button.classList.toggle("is-active", button.dataset.mode === currentMode));
@@ -1206,6 +1358,8 @@ function resetComposer() {
   elements.notes.value = "";
   elements.responseGoal.value = "";
   elements.extraHints.value = "";
+  if (elements.sourceFileInput) elements.sourceFileInput.value = "";
+  setSourceFileStatus("Keine Datei ausgewählt");
   setResponseOutput("Noch keine Antwort erstellt.", true);
   updateCharacterCount();
   setStatus(apiKeyState.value ? "Bereit" : "API-Key fehlt", apiKeyState.value ? "ready" : "warn");
