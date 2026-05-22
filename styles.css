@@ -612,9 +612,24 @@ textarea:focus, input:focus, select:focus {
 
 .composer-action-row {
   display: grid;
-  grid-template-columns: minmax(280px, 0.34fr) minmax(260px, 0.66fr);
+  grid-template-columns: minmax(390px, 0.44fr) minmax(320px, 0.56fr);
   gap: 12px;
   align-items: center;
+}
+
+.mode-control {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  min-width: 0;
+}
+
+.mode-control > span {
+  color: var(--soft);
+  font-size: 0.82rem;
+  font-weight: 850;
+  white-space: nowrap;
 }
 
 .api-status-pill {
@@ -961,6 +976,14 @@ textarea:focus, input:focus, select:focus {
 }
 
 .segmented-control { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+.mode-control .segmented-control {
+  width: 100%;
+  min-height: 42px;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #eef5fc, #e6eef7);
+}
+
 .segmented-control button,
 .tab-buttons button,
 .result-tabs button {
@@ -973,6 +996,13 @@ textarea:focus, input:focus, select:focus {
   font-size: 0.86rem;
   font-weight: 850;
   white-space: nowrap;
+}
+
+.mode-control .segmented-control button {
+  min-height: 34px;
+  padding-inline: 12px;
+  border-radius: 6px;
+  font-size: 0.84rem;
 }
 
 .segmented-control button.is-active,
@@ -1023,6 +1053,7 @@ textarea:focus, input:focus, select:focus {
   background: linear-gradient(180deg, #1976d2, #0f5aa7);
   color: #fff;
   font-weight: 850;
+  box-shadow: 0 12px 28px rgba(15,90,167,0.16), inset 0 1px 0 rgba(255,255,255,0.16);
   transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
 }
 .primary-action:hover:not(:disabled) { transform: translateY(-1px); border-color: rgba(136,208,255,0.55); }

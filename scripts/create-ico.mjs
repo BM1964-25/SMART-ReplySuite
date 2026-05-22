@@ -1,12 +1,12 @@
 import { readFile, writeFile } from "node:fs/promises";
 
 const images = [
-  { size: 16, path: "build/icon-16.png" },
-  { size: 32, path: "build/icon-32.png" },
-  { size: 48, path: "build/icon-48.png" },
-  { size: 64, path: "build/icon-64.png" },
-  { size: 128, path: "build/icon-128.png" },
-  { size: 256, path: "build/icon-256.png" }
+  { size: 16, path: "build/replysuite-icon-16.png" },
+  { size: 32, path: "build/replysuite-icon-32.png" },
+  { size: 48, path: "build/replysuite-icon-48.png" },
+  { size: 64, path: "build/replysuite-icon-64.png" },
+  { size: 128, path: "build/replysuite-icon-128.png" },
+  { size: 256, path: "build/replysuite-icon-256.png" }
 ];
 
 const pngs = await Promise.all(images.map(async (image) => ({
@@ -37,4 +37,4 @@ pngs.forEach((image, index) => {
   offset += image.bytes.length;
 });
 
-await writeFile("build/icon.ico", Buffer.concat([header, ...pngs.map((image) => image.bytes)]));
+await writeFile("build/replysuite-icon.ico", Buffer.concat([header, ...pngs.map((image) => image.bytes)]));

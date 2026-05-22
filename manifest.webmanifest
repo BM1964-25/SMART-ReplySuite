@@ -1,0 +1,37 @@
+{
+  "name": "SMART ReplySuite",
+  "short_name": "ReplySuite",
+  "description": "Browserbasierte KI-Arbeitsoberfläche für professionelle Antwortvorschläge.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "landscape-primary",
+  "background_color": "#071a33",
+  "theme_color": "#071a33",
+  "icons": [
+    {
+      "src": "build/replysuite-icon-128.png?v=replysuite-20260522",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "build/replysuite-icon-256.png?v=replysuite-20260522",
+      "sizes": "256x256",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "build/replysuite-icon-512.png?v=replysuite-20260522",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/smart-replysuite-icon.png?v=replysuite-20260522",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

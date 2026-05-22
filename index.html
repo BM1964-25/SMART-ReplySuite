@@ -4,6 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SMART ReplySuite</title>
+  <meta name="theme-color" content="#071a33">
+  <link rel="icon" type="image/png" sizes="512x512" href="build/replysuite-icon-512.png?v=replysuite-20260522">
+  <link rel="icon" type="image/png" sizes="256x256" href="build/replysuite-icon-256.png?v=replysuite-20260522">
+  <link rel="icon" type="image/png" sizes="128x128" href="build/replysuite-icon-128.png?v=replysuite-20260522">
+  <link rel="icon" type="image/x-icon" href="build/replysuite-icon.ico?v=replysuite-20260522">
+  <link rel="apple-touch-icon" sizes="256x256" href="build/replysuite-icon-256.png?v=replysuite-20260522">
+  <link rel="manifest" href="manifest.webmanifest?v=replysuite-20260522">
   <link rel="stylesheet" href="styles.css?v=help-question-icon">
   <script>
     window.addEventListener("error", (event) => {
@@ -263,7 +270,7 @@ Mit freundlichen Grüßen`,
       }
 
       function exportJson() {
-        const fileName = `smart-mailresponse-backup-${new Date().toISOString().slice(0, 10)}.json`;
+        const fileName = `smart-replysuite-backup-${new Date().toISOString().slice(0, 10)}.json`;
         const blob = new Blob([JSON.stringify(loadLocalData(), null, 2)], { type: "application/json;charset=utf-8" });
         const link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
@@ -361,7 +368,7 @@ Mit freundlichen Grüßen`,
   <div class="app-shell" id="appShell">
     <aside class="sidebar" aria-label="Hauptnavigation">
       <div class="brand-block">
-        <img class="brand-mark brand-icon" src="assets/smart-mailresponse-icon.png" alt="" aria-hidden="true">
+        <img class="brand-mark brand-icon" src="assets/smart-replysuite-icon.png" alt="" aria-hidden="true">
         <div class="brand-copy">
           <strong>SMART ReplySuite</strong>
           <span>Professional Reply Studio</span>
@@ -395,9 +402,9 @@ Mit freundlichen Grüßen`,
     <main class="main-shell">
       <header class="app-header">
         <div class="header-brand">
-          <img class="header-icon" src="assets/smart-mailresponse-icon.png" alt="" aria-hidden="true">
+          <img class="header-icon" src="assets/smart-replysuite-icon.png" alt="" aria-hidden="true">
           <div>
-            <p class="eyebrow">Lokale KI-Arbeitsoberfläche</p>
+            <p class="eyebrow">Browserbasierte KI-Arbeitsoberfläche</p>
             <h1>SMART ReplySuite</h1>
             <p class="lead">KI-gestützte Antwortvorschläge für E-Mails, Briefe und professionelle Geschäftskommunikation.<br>Klar formuliert, stilistisch steuerbar, datenschutzbewusst verarbeitet und direkt einsatzbereit.</p>
           </div>
@@ -429,7 +436,7 @@ Mit freundlichen Grüßen`,
               <li><span>1</span><div><strong>Text kopieren</strong><small>E-Mail, Brief oder Schreiben aus der Quelle kopieren</small></div></li>
               <li><span>2</span><div><strong>Einfügen</strong><small>Nachricht, Ziel und Kontext erfassen</small></div></li>
               <li><span>3</span><div><strong>Antwortparameter wählen</strong><small>Typ, Tonalität, Fokus, Sprache und Grundstil festlegen</small></div></li>
-              <li><span>4</span><div><strong>Antwort erstellen</strong><small>Analyse und Antwortvorschläge generieren und nutzen</small></div></li>
+              <li><span>4</span><div><strong>Vorschläge erzeugen</strong><small>Analyse starten, Varianten prüfen und passende Antwort nutzen</small></div></li>
             </ol>
           </div>
           <div class="composer-parameters">
@@ -456,11 +463,14 @@ Mit freundlichen Grüßen`,
               <div class="field"><label for="language">Antwortsprache</label><select id="language"><option>Deutsch</option><option>Englisch</option><option>Französisch</option><option>Spanisch</option><option>Italienisch</option></select></div>
             </div>
             <div class="composer-action-row">
-              <div class="segmented-control" aria-label="Arbeitsmodus">
-                <button type="button" class="is-active" data-mode="reply">Antwort erstellen</button>
-                <button type="button" data-mode="optimize">Entwurf optimieren</button>
+              <div class="mode-control">
+                <span>Arbeitsmodus:</span>
+                <div class="segmented-control" aria-label="Arbeitsmodus">
+                  <button type="button" class="is-active" data-mode="reply" aria-label="Neue Antwort formulieren" title="Neue Antwort formulieren">Neue Antwort</button>
+                  <button type="button" data-mode="optimize" aria-label="Vorhandenen Entwurf verbessern" title="Vorhandenen Entwurf verbessern">Entwurf verbessern</button>
+                </div>
               </div>
-              <button type="button" class="primary-action" id="generateBtn">Analyse & Antwortvorschläge erstellen</button>
+              <button type="button" class="primary-action" id="generateBtn">Analyse starten & Vorschläge erzeugen</button>
             </div>
           </div>
         </section>
@@ -519,7 +529,7 @@ Mit freundlichen Grüßen`,
 
           <section class="panel output-panel workspace-panel result-panel" id="resultPanel">
             <div class="panel-heading">
-              <div><h2>Ergebnis</h2><p>Hier erscheinen Analyse, Antwortvarianten und Qualitätsbewertung. Die Ausgabe kann vollständig oder je Variante kopiert werden.</p></div>
+              <div><h2>Ergebnis</h2><p>Hier erscheinen Analyse, erzeugte Antwortvorschläge oder optimierte Entwurfsfassungen sowie die Qualitätsbewertung. Die Ausgabe kann vollständig oder je sichtbarer Variante kopiert werden.</p></div>
             </div>
             <div class="quality-strip" id="qualityStrip" hidden>
               <span class="score-badge" data-score="conflict">Konflikt: offen</span>
@@ -731,14 +741,14 @@ Mit freundlichen Grüßen`,
                 <div class="api-actions"><button type="button" id="saveKeyBtn">Speichern</button><button type="button" id="connectBtn">Verbindung</button><button type="button" id="testConnectionBtn">Verbindung überprüfen</button><button type="button" id="disconnectBtn">Verbindung trennen</button></div>
                 <div class="key-feedback" id="keyFeedback">Noch kein API-Key gespeichert.</div>
               </div>
-              <div class="privacy-note"><strong>Datenschutz-Hinweis</strong><p>Inhalte werden nur für die KI-Anfrage über den lokalen Proxy an Anthropic übertragen. API-Key, Lizenz, Verlauf und Vorlagen bleiben lokal. Für die Electron-Version ist verschlüsselte Speicherung im OS-Keychain plus SQLite vorgesehen.</p></div>
+              <div class="privacy-note"><strong>Datenschutz-Hinweis</strong><p>Inhalte werden nur für die KI-Anfrage über den lokalen Proxy an Anthropic übertragen. API-Key, Lizenz, Verlauf und Vorlagen bleiben im lokalen Browser-Speicher dieser Anwendung.</p></div>
             </div>
           </details>
         </section>
       </section>
       <footer class="app-footer" aria-label="Footer">
         <div class="footer-brand">
-          <img class="footer-icon" src="assets/smart-mailresponse-icon.png" alt="" aria-hidden="true">
+          <img class="footer-icon" src="assets/smart-replysuite-icon.png" alt="" aria-hidden="true">
           <div>
             <strong>SMART ReplySuite</strong>
             <p>Professionelle KI-Antworten für E-Mails, Briefe und Geschäftskommunikation.</p>
@@ -791,7 +801,7 @@ Mit freundlichen Grüßen`,
       </div>
 
       <div class="help-section">
-        <h3>Antwort erstellen</h3>
+        <h3>Neue Antwort formulieren</h3>
         <ol class="help-steps">
           <li><strong>Neue Antwort öffnen:</strong> In der Sidebar „Neue Antwort“ wählen.</li>
           <li><strong>Betreff eintragen:</strong> Der Betreff hilft der KI, Kontext und Dringlichkeit besser zu erkennen.</li>
@@ -800,7 +810,7 @@ Mit freundlichen Grüßen`,
           <li><strong>Ziel formulieren:</strong> Kurz beschreiben, was die Antwort erreichen soll, z. B. „Termin abstimmen“, „Rückfrage stellen“ oder „Eskalation entschärfen“.</li>
           <li><strong>Eigene Notizen ergänzen:</strong> Interne Fakten, gewünschte Aussagen, Grenzen, Fristen, Ansprechpartner, No-Gos oder nächste Schritte hinterlegen. Diese Informationen stehen oft nicht im eingefügten Text, sind aber für die Antwort wichtig.</li>
           <li><strong>Zusätzliche Hinweise erfassen:</strong> Konkrete Schreib- und Antwortanweisungen ergänzen, z. B. bestimmte Formulierungen verwenden, besonders kurz antworten, auf eine Anlage verweisen oder eine Rückfrage einbauen.</li>
-          <li><strong>Antwort erstellen:</strong> Die App erzeugt aus Nachricht, Ziel, Kontext, Vorlage, Stilprofil und Antwortparametern eine KI-Analyse, Hauptantwort, Alternative, Kurzversion, diplomatische Version und Qualitätsbewertung.</li>
+          <li><strong>Analyse starten:</strong> Die App erzeugt aus Nachricht, Ziel, Kontext, Vorlage, Stilprofil und Antwortparametern eine KI-Analyse, Hauptantwort, Alternative, Kurzversion, diplomatische Version und Qualitätsbewertung.</li>
         </ol>
       </div>
 
@@ -822,8 +832,8 @@ Mit freundlichen Grüßen`,
           <p>Das Kopier-Icon im Ergebnisfeld kopiert die gesamte Ausgabe. Das Lösch-Icon leert Eingabe und Ergebnis. Einzelne Antwortvarianten können zusätzlich separat kopiert werden.</p>
         </article>
         <article>
-          <h3>Entwurf optimieren</h3>
-          <p>Wähle „Entwurf optimieren“, wenn bereits ein eigener Antwortentwurf vorliegt. Die KI verbessert diesen Entwurf, z. B. klarer, höflicher, verbindlicher, kürzer oder diplomatischer. Füge Ausgangsnachricht und Entwurf gemeinsam in das Nachrichtenfeld ein und nutze Notizen für gewünschte Änderungen.</p>
+          <h3>Vorhandenen Entwurf verbessern</h3>
+          <p>Wähle diesen Modus, wenn bereits ein eigener Antwortentwurf vorliegt. Die KI verbessert diesen Entwurf, z. B. klarer, höflicher, verbindlicher, kürzer oder diplomatischer. Füge Ausgangsnachricht und Entwurf gemeinsam in das Nachrichtenfeld ein und nutze Notizen für gewünschte Änderungen.</p>
         </article>
         <article>
           <h3>Eigene Notizen & Hinweise</h3>

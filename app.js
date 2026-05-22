@@ -428,7 +428,7 @@ function setResponseOutput(text, isPlaceholder = false) {
 }
 
 function getGenerateButtonLabel() {
-  return currentMode === "optimize" ? "Entwurf optimieren" : "Analyse & Antwortvorschläge erstellen";
+  return "Analyse starten & Vorschläge erzeugen";
 }
 
 function setGeneratingState(isGenerating) {
@@ -1452,7 +1452,7 @@ function deleteStyleProfile(id) {
 }
 
 function exportData() {
-  const fileName = `smart-mailresponse-backup-${new Date().toISOString().slice(0, 10)}.json`;
+  const fileName = `smart-replysuite-backup-${new Date().toISOString().slice(0, 10)}.json`;
   const blob = new Blob([JSON.stringify(dataState, null, 2)], { type: "application/json;charset=utf-8" });
   const link = document.createElement("a");
   link.href = URL.createObjectURL(blob);
@@ -1756,7 +1756,7 @@ function renderDiagnostics() {
     ["Verlauf", `${dataState.history.length} lokale Vorgänge`, dataState.history.length ? "success" : ""],
     ["API-Key", apiKeyState.value ? "vorhanden" : "fehlt", apiKeyState.value ? "success" : "warn"],
     ["Lizenz", licenseState.active ? "aktiv" : "nicht aktiviert", licenseState.active ? "success" : "warn"],
-    ["Speicher", "Browser-Prototyp, Desktop-Blueprint vorhanden", ""]
+    ["Speicher", "Browser-Speicher lokal", ""]
   ];
 
   elements.diagnosticsOutput.innerHTML = rows.map(([label, value, state]) => `

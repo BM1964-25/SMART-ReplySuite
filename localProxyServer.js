@@ -13,7 +13,14 @@ const mimeTypes = {
   ".html": "text/html; charset=utf-8",
   ".css": "text/css; charset=utf-8",
   ".js": "text/javascript; charset=utf-8",
-  ".md": "text/markdown; charset=utf-8"
+  ".json": "application/json; charset=utf-8",
+  ".webmanifest": "application/manifest+json; charset=utf-8",
+  ".md": "text/markdown; charset=utf-8",
+  ".png": "image/png",
+  ".ico": "image/x-icon",
+  ".jpg": "image/jpeg",
+  ".jpeg": "image/jpeg",
+  ".svg": "image/svg+xml"
 };
 
 export const server = http.createServer(async (request, response) => {
@@ -49,7 +56,7 @@ export const server = http.createServer(async (request, response) => {
 
 server.on("error", (error) => {
   if (error.code === "EADDRINUSE") {
-    console.warn(`SMART MailResponse API-Proxy läuft bereits unter http://${HOST}:${PORT}`);
+    console.warn(`SMART ReplySuite API-Proxy läuft bereits unter http://${HOST}:${PORT}`);
     return;
   }
   console.error(error);
@@ -58,7 +65,7 @@ server.on("error", (error) => {
 export function startServer() {
   if (server.listening) return server;
   server.listen(PORT, HOST, () => {
-    console.log(`SMART MailResponse läuft unter http://${HOST}:${PORT}`);
+    console.log(`SMART ReplySuite läuft unter http://${HOST}:${PORT}`);
   });
   return server;
 }

@@ -1,57 +1,10 @@
 {
-  "name": "smart-mailresponse",
+  "name": "smart-replysuite",
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "main": "electron/main.cjs",
   "scripts": {
     "start": "node localProxyServer.js",
-    "desktop": "electron .",
-    "build:desktop": "electron-builder",
-    "icon:ico": "node scripts/create-ico.mjs",
-    "icon:icns": "node scripts/create-icns.mjs"
-  },
-  "build": {
-    "appId": "de.smart.mailresponse",
-    "productName": "SMART ReplySuite",
-    "files": [
-      "index.html",
-      "styles.css",
-      "app.js",
-      "anthropicClient.js",
-      "licenseClient.js",
-      "assets/**",
-      "build/icon.png",
-      "build/icon.ico",
-      "build/icon.icns",
-      "electron/**"
-    ],
-    "mac": {
-      "category": "public.app-category.productivity",
-      "icon": "build/icon.icns",
-      "target": [
-        "dmg",
-        "zip"
-      ]
-    },
-    "win": {
-      "icon": "build/icon.ico",
-      "target": [
-        "nsis",
-        "portable"
-      ]
-    },
-    "linux": {
-      "icon": "build/icon.png",
-      "target": [
-        "AppImage",
-        "deb"
-      ],
-      "category": "Office"
-    }
-  },
-  "devDependencies": {
-    "electron": "^31.7.7",
-    "electron-builder": "^24.13.3"
+    "icon:ico": "node scripts/create-ico.mjs"
   }
 }
