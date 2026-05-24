@@ -16,6 +16,26 @@ Die Anwendung ist ausdruecklich keine Desktop-App. Sie laeuft im Browser, speich
 
 ## Start
 
+### Einfacher Start fuer Nutzer ohne Terminalfenster
+
+macOS:
+
+```text
+SMART ReplySuite.app
+```
+
+Die App kann in das Dock gezogen werden. Sie enthaelt die fuer den Start benoetigten App-Dateien im Bundle und startet den lokalen Server im Hintergrund.
+
+Windows:
+
+```text
+SMART ReplySuite starten.vbs
+```
+
+Der Starter startet den lokalen Server im Hintergrund und oeffnet die App automatisch im Browser unter `http://127.0.0.1:8173`. Der Nutzer muss kein Terminalfenster offen halten. Voraussetzung ist eine installierte Node.js-Laufzeit.
+
+### Technischer Start
+
 ```bash
 npm start
 ```
