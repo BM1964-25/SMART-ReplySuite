@@ -492,9 +492,9 @@ Mit freundlichen Grüßen`,
               <div><h2>Quelle</h2><p>Füge hier den Ausgangstext ein und ergänze nur den Kontext, den die KI für diese Antwort berücksichtigen soll.</p></div>
             </div>
             <div class="file-dropzone" id="fileDropZone" tabindex="0">
-              <input id="sourceFileInput" type="file" accept=".txt,.md,.pdf,.docx,.rtf,.html,.htm,.csv,text/plain,text/markdown,text/html,text/csv" hidden>
+              <input id="sourceFileInput" type="file" accept=".txt,.md,.pdf,.docx,.rtf,.html,.htm,.csv,text/plain,text/markdown,text/html,text/csv,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document" hidden>
               <strong>Datei ablegen oder Text einfügen</strong>
-              <span>TXT, MD, PDF, DOCX, RTF, HTML, CSV</span>
+              <span>PDF, DOCX, TXT, MD, RTF, HTML, CSV</span>
               <small id="sourceFileStatus">Keine Datei ausgewählt</small>
               <div class="file-drop-actions">
                 <button type="button" id="chooseSourceFileBtn">Datei auswählen</button>
@@ -811,7 +811,7 @@ Mit freundlichen Grüßen`,
           <li><strong>Neue Antwort öffnen:</strong> In der Sidebar „Neue Antwort“ wählen.</li>
           <li><strong>Betreff eintragen:</strong> Der Betreff hilft der KI, Kontext und Dringlichkeit besser zu erkennen.</li>
           <li><strong>Nachricht einfügen:</strong> Den Inhalt aus Outlook, Gmail, einem Brief, PDF-Text oder anderem Schriftverkehr direkt in „Eingegangene Nachricht / Schreiben“ kopieren.</li>
-          <li><strong>Datei nutzen:</strong> Textbasierte Dateien wie TXT, MD, CSV, HTML oder RTF können in der Quelle per Drag & Drop oder Dateiauswahl übernommen werden. Bei PDF und DOCX sollte der relevante Text aktuell markiert und per Copy & Paste eingefügt werden.</li>
+          <li><strong>Datei nutzen:</strong> PDF, DOCX, TXT, MD, CSV, HTML und RTF können in der Quelle per Drag & Drop oder Dateiauswahl übernommen werden. Gescannte PDFs ohne Text benötigen weiterhin OCR.</li>
           <li><strong>Ziel formulieren:</strong> Kurz beschreiben, was die Antwort erreichen soll, z. B. „Termin abstimmen“, „Rückfrage stellen“ oder „Eskalation entschärfen“.</li>
           <li><strong>Eigene Notizen ergänzen:</strong> Interne Fakten, gewünschte Aussagen, Grenzen, Fristen, Ansprechpartner, No-Gos oder nächste Schritte hinterlegen. Diese Informationen stehen oft nicht im eingefügten Text, sind aber für die Antwort wichtig.</li>
           <li><strong>Zusätzliche Hinweise erfassen:</strong> Konkrete Schreib- und Antwortanweisungen ergänzen, z. B. bestimmte Formulierungen verwenden, besonders kurz antworten, auf eine Anlage verweisen oder eine Rückfrage einbauen.</li>
@@ -934,11 +934,11 @@ Mit freundlichen Grüßen`,
         <article>
           <h3>Dateien in der Quelle</h3>
           <ul>
-            <li><strong>Direkt lesbar:</strong> TXT, MD, CSV, HTML und RTF können in das Nachrichtenfeld übernommen werden.</li>
+            <li><strong>Direkt lesbar:</strong> PDF, DOCX, TXT, MD, CSV, HTML und RTF können in das Nachrichtenfeld übernommen werden.</li>
             <li><strong>Copy & Paste:</strong> Text kann direkt in „Eingegangene Nachricht / Schreiben“ eingefügt oder über „Text einfügen“ aus der Zwischenablage übernommen werden.</li>
             <li><strong>Text per Drag & Drop:</strong> Markierter Text kann auf die Ablagefläche gezogen werden und wird ebenfalls in das Nachrichtenfeld eingetragen.</li>
             <li><strong>Nachricht leeren:</strong> Das Lösch-Icon im Nachrichtenfeld entfernt nur die eingegangene Nachricht; Betreff, Ziel, Notizen und Ergebnis bleiben erhalten.</li>
-            <li><strong>PDF und DOCX:</strong> Aktuell bitte den relevanten Text im Dokument markieren und per Copy & Paste einfügen.</li>
+            <li><strong>PDF und DOCX:</strong> Der Text wird lokal über den App-Server extrahiert. Bei gescannten PDFs ohne Texterkennung wird kein Text gefunden.</li>
             <li><strong>Datenschutz:</strong> Dateien werden lokal gelesen; eine KI-Übertragung erfolgt erst, wenn eine Antwort erstellt wird.</li>
             <li><strong>Beispiel laden:</strong> Füllt Quelle, Ziel und Notizen mit einem Musterfall zum schnellen Testen.</li>
           </ul>

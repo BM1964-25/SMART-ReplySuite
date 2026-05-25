@@ -3,6 +3,8 @@ import { execFile } from "node:child_process";
 import { readFile } from "node:fs/promises";
 import { extname, join, normalize } from "node:path";
 import { fileURLToPath } from "node:url";
+import mammoth from "mammoth";
+import { PDFParse } from "pdf-parse";
 
 const PORT = Number(process.env.PORT || 8173);
 const HOST = "127.0.0.1";
@@ -41,6 +43,11 @@ export const server = http.createServer(async (request, response) => {
 
     if (request.method === "POST" && url.pathname === "/api/license/verify") {
       await verifyLicense(request, response);
+      return;
+    }
+
+    if (request.method === "POST" && url.pathname === "/api/source/extract") {
+      await extractSourceFile(request, response);
       return;
     }
 
@@ -121,6 +128,50 @@ async function proxyAnthropicRequest(request, response) {
   response.end(payload);
 }
 
+async function extractSourceFile(request, response) {
+  const fileName = decodeURIComponent(String(request.headers["x-file-name"] || "quelle").slice(0, 180));
+  const extension = getExtension(String(request.headers["x-file-extension"] || fileName));
+  const buffer = await readRequestBuffer(request);
+  let text = "";
+
+  if (!buffer.length) {
+    sendJson(response, 400, { error: { message: "Die Datei enthält keine lesbaren Daten." } }, request);
+    return;
+  }
+
+  if (extension === "docx") {
+    const result = await mammoth.extractRawText({ buffer });
+    text = result.value || "";
+  } else if (extension === "pdf") {
+    const parser = new PDFParse({ data: buffer });
+    const result = await parser.getText();
+    await parser.destroy();
+    text = result.text || "";
+  } else {
+    sendJson(response, 415, { error: { message: "Dieses Format wird vom lokalen Dateiimport nicht unterstützt." } }, request);
+    return;
+  }
+
+  const normalizedText = normalizeExtractedText(text);
+  if (!normalizedText) {
+    sendJson(response, 422, {
+      error: {
+        message: extension === "pdf"
+          ? "Aus dieser PDF konnte kein Text extrahiert werden. Vermutlich handelt es sich um einen Scan ohne Texterkennung."
+          : "Aus dieser Datei konnte kein Text extrahiert werden."
+      }
+    }, request);
+    return;
+  }
+
+  sendJson(response, 200, {
+    fileName,
+    extension,
+    text: normalizedText,
+    characters: normalizedText.length
+  }, request);
+}
+
 async function verifyLicense(request, response) {
   const body = JSON.parse(await readRequestBody(request) || "{}");
   const licenseKey = String(body.licenseKey || "").trim().toUpperCase();
@@ -174,12 +225,34 @@ function readRequestBody(request) {
   });
 }
 
+function readRequestBuffer(request) {
+  return new Promise((resolve, reject) => {
+    const chunks = [];
+    request.on("data", (chunk) => chunks.push(chunk));
+    request.on("end", () => resolve(Buffer.concat(chunks)));
+    request.on("error", reject);
+  });
+}
+
+function getExtension(fileName) {
+  return String(fileName || "").split(".").pop().toLowerCase();
+}
+
+function normalizeExtractedText(text) {
+  return String(text || "")
+    .replace(/\r/g, "\n")
+    .replace(/^--\s*\d+\s+of\s+\d+\s*--$/gim, "")
+    .replace(/[ \t]+\n/g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
 function getCorsHeaders(request) {
   const origin = request?.headers?.origin;
   return {
     "Access-Control-Allow-Origin": origin || "*",
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, X-API-Key, x-api-key",
+    "Access-Control-Allow-Headers": "Content-Type, X-API-Key, x-api-key, X-File-Name, X-File-Extension",
     "Vary": "Origin"
   };
 }

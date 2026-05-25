@@ -52,7 +52,7 @@ Der lokale Server liefert HTML, CSS, JavaScript, Bilder, Favicon und Webmanifest
 
 - Neue Antwort fuer E-Mails, Briefe, Nachrichten und Geschaeftsschreiben
 - Quelle mit Betreff, Ziel, eingegangener Nachricht, eigenen Notizen und zusaetzlichen Hinweisen
-- Dateiablage fuer TXT, MD, CSV, HTML und RTF
+- Dateiablage fuer PDF, DOCX, TXT, MD, CSV, HTML und RTF
 - Copy & Paste sowie Drag & Drop von markiertem Text in die Quelle
 - Beispielquelle zum schnellen Testen
 - Antwortparameter fuer Antworttyp, Fokus, Tonalitaet, Grundstil, Laenge der Hauptantwort und Antwortsprache

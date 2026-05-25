@@ -84,6 +84,18 @@ int main(void) {
   char app_root[4096];
   snprintf(app_root, sizeof(app_root), "%s/Contents/Resources/app", bundle_path);
 
+  char project_root[4096];
+  snprintf(project_root, sizeof(project_root), "%s/..", bundle_path);
+
+  char project_server[4096];
+  snprintf(project_server, sizeof(project_server), "%s/localProxyServer.js", project_root);
+
+  char project_modules[4096];
+  snprintf(project_modules, sizeof(project_modules), "%s/node_modules/mammoth", project_root);
+  if (path_exists(project_server) && path_exists(project_modules)) {
+    snprintf(app_root, sizeof(app_root), "%s", project_root);
+  }
+
   char server_path[4096];
   snprintf(server_path, sizeof(server_path), "%s/localProxyServer.js", app_root);
   if (!path_exists(server_path)) return 1;

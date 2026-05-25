@@ -26,6 +26,8 @@ const DATA_KEY = "smart-mailresponse-data";
 const SIDEBAR_COLLAPSED_KEY = "smart-mailresponse-sidebar-collapsed";
 const LOCAL_PROXY_URL = "http://127.0.0.1:8173/api/anthropic/messages";
 const DEFAULT_PROXY_URL = isLocalBrowserHost() ? "/api/anthropic/messages" : LOCAL_PROXY_URL;
+const LOCAL_SOURCE_EXTRACT_URL = "http://127.0.0.1:8173/api/source/extract";
+const DEFAULT_SOURCE_EXTRACT_URL = isLocalBrowserHost() ? "/api/source/extract" : LOCAL_SOURCE_EXTRACT_URL;
 const DEFAULT_CLAUDE_MODEL = "claude-sonnet-4-20250514";
 
 function isLocalBrowserHost() {
@@ -365,7 +367,7 @@ async function handleGenerate() {
 
   if (!inboundMessage) {
     setStatus("Nachricht fehlt", "danger");
-    setResponseOutput("Bitte füge zuerst die eingegangene Nachricht oder das Schreiben ein.", true);
+    setResponseOutput(getMissingInboundMessage(), true);
     return;
   }
 
@@ -1063,7 +1065,7 @@ function dataCard(item, type) {
         <button type="button" data-copy-template="${item.id}">Kopieren</button>
         ${type === "template" ? `<button type="button" data-edit-template="${item.id}">Bearbeiten</button>` : ""}
         ${type === "template" ? `<button type="button" data-toggle-favorite="${item.id}">${item.favorite ? "Favorit entfernen" : "Favorit"}</button>` : ""}
-        ${type === "template" ? `<button type="button" data-delete-template="${item.id}" class="danger-action">Löschen</button>` : ""}
+        ${["template", "library"].includes(type) ? `<button type="button" data-delete-template="${item.id}" class="danger-action">Löschen</button>` : ""}
       </div>
     </article>
   `;
@@ -1146,16 +1148,20 @@ function loadExampleSource() {
 async function importSourceFile(file) {
   const extension = getFileExtension(file.name);
   const readableTextFormats = new Set(["txt", "md", "csv", "html", "htm", "rtf"]);
+  const extractableFormats = new Set(["pdf", "docx"]);
 
-  if (!readableTextFormats.has(extension)) {
-    setSourceFileStatus(`${file.name}: Bitte Inhalt markieren und per Copy & Paste einfügen.`);
+  if (!readableTextFormats.has(extension) && !extractableFormats.has(extension)) {
+    setSourceFileStatus(`${file.name}: nicht direkt auslesbar - bitte Text markieren und einfügen.`);
     setStatus("Format nicht direkt auslesbar", "warn");
     return;
   }
 
   try {
-    const rawText = await file.text();
-    const normalizedText = normalizeImportedSourceText(rawText, extension);
+    setSourceFileStatus(`${file.name}: Text wird ausgelesen...`);
+    setStatus("Datei wird gelesen", "warn");
+    const normalizedText = readableTextFormats.has(extension)
+      ? normalizeImportedSourceText(await file.text(), extension)
+      : await extractSourceFileText(file, extension);
     if (!normalizedText.trim()) {
       setSourceFileStatus(`${file.name}: kein lesbarer Text gefunden`);
       setStatus("Datei ohne Text", "warn");
@@ -1167,7 +1173,7 @@ async function importSourceFile(file) {
     updateCharacterCount();
     setStatus("Quelle geladen", "ready");
   } catch (error) {
-    setSourceFileStatus(`${file.name}: konnte nicht gelesen werden`);
+    setSourceFileStatus(`${file.name}: ${error.message || "konnte nicht gelesen werden"}`);
     setStatus("Dateiimport fehlgeschlagen", "danger");
   }
 }
@@ -1205,6 +1211,36 @@ function insertSourceText(text, statusMessage) {
 
 function getFileExtension(fileName) {
   return String(fileName || "").split(".").pop().toLowerCase();
+}
+
+function getMissingInboundMessage() {
+  const selectedFile = elements.sourceFileInput?.files?.[0];
+  if (selectedFile) {
+    return [
+      "Die Datei wurde ausgewählt, aber es wurde kein Text in das Nachrichtenfeld übernommen.",
+      "",
+      "Bitte prüfe, ob die Datei Text enthält. Gescannte PDFs benötigen Texterkennung (OCR). Alternativ kannst du den relevanten Text kopieren und in das Feld „Eingegangene Nachricht / Schreiben“ einfügen."
+    ].join("\n");
+  }
+
+  return "Bitte füge zuerst die eingegangene Nachricht oder das Schreiben ein.";
+}
+
+async function extractSourceFileText(file, extension) {
+  const response = await fetch(DEFAULT_SOURCE_EXTRACT_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/octet-stream",
+      "X-File-Name": encodeURIComponent(file.name),
+      "X-File-Extension": extension
+    },
+    body: await file.arrayBuffer()
+  });
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(payload?.error?.message || `Datei konnte nicht ausgelesen werden (${response.status}).`);
+  }
+  return payload.text || "";
 }
 
 function normalizeImportedSourceText(rawText, extension) {
@@ -1302,6 +1338,8 @@ document.addEventListener("click", async (event) => {
   }
 
   if (deleteTemplateId) {
+    const item = dataState.templates.find((template) => template.id === deleteTemplateId);
+    if (!item || !confirm(`Vorlage "${item.title}" wirklich löschen?`)) return;
     const index = dataState.templates.findIndex((template) => template.id === deleteTemplateId);
     if (index >= 0) dataState.templates.splice(index, 1);
     if (editingTemplateId === deleteTemplateId) editingTemplateId = null;
@@ -1334,6 +1372,8 @@ document.addEventListener("click", async (event) => {
   }
 
   if (deleteHistoryId) {
+    const item = dataState.history.find((history) => history.id === deleteHistoryId);
+    if (!item || !confirm(`Verlaufseintrag "${item.subject || "Ohne Betreff"}" wirklich löschen?`)) return;
     const index = dataState.history.findIndex((history) => history.id === deleteHistoryId);
     if (index >= 0) dataState.history.splice(index, 1);
     saveData();
@@ -1730,9 +1770,11 @@ function persistApiKey() {
 }
 
 function setStatus(label, type) {
-  elements.statusText.textContent = label === "Bereit" ? "System bereit" : label;
-  elements.statusDot.classList.toggle("warn", type === "warn");
-  elements.statusDot.classList.toggle("danger", type === "danger");
+  if (elements.statusText && elements.statusDot) {
+    elements.statusText.textContent = label === "Bereit" ? "System bereit" : label;
+    elements.statusDot.classList.toggle("warn", type === "warn");
+    elements.statusDot.classList.toggle("danger", type === "danger");
+  }
   updateSystemHealth();
 }
 
