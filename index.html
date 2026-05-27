@@ -366,16 +366,26 @@ Mit freundlichen Grüßen`,
 <body>
   <input type="checkbox" class="help-toggle" id="helpToggle" aria-hidden="true">
   <div class="app-shell" id="appShell">
-    <aside class="sidebar" aria-label="Hauptnavigation">
-      <div class="brand-block">
-        <img class="brand-mark brand-icon" src="assets/smart-replysuite-icon.png" alt="" aria-hidden="true">
-        <div class="brand-copy">
-          <strong>SMART ReplySuite</strong>
-          <span>Professional Reply Studio</span>
+    <header class="app-header">
+      <div class="header-brand">
+        <img class="header-icon" src="assets/smart-replysuite-icon.png" alt="" aria-hidden="true">
+        <div>
+          <p class="eyebrow">SMARTBUILT-AI</p>
+          <h1>SMART ReplySuite</h1>
+          <p class="lead">KI-gestützte Antwortvorschläge für E-Mails, Briefe und professionelle Geschäftskommunikation.</p>
         </div>
       </div>
+      <div class="header-actions">
+        <label class="help-button" for="helpToggle" aria-label="Hilfe öffnen" title="Hilfe öffnen">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21a9 9 0 1 0-9-9 9 9 0 0 0 9 9Z"></path><path d="M9.8 9.4a2.45 2.45 0 0 1 4.65 1.1c0 1.65-2.25 2.05-2.25 3.7"></path><path d="M12.2 17.2h.01"></path></svg>
+        </label>
+        <span class="header-status-pill">Browser-Speicher aktiv</span>
+        <button type="button" class="primary-action header-action" data-view-target="composer">Neue Antwort</button>
+      </div>
+    </header>
+    <div class="app-body">
+      <aside class="sidebar" aria-label="Hauptnavigation">
       <nav class="nav-list">
-        <button type="button" class="nav-item sidebar-toggle-item" id="sidebarToggle" aria-label="Sidebar einklappen" aria-pressed="false" title="Sidebar einklappen" onclick="window.SMART_APP?.toggleSidebar()"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"></rect><path d="M9 4v16"></path><path d="m15 9-3 3 3 3"></path></svg></span></button>
         <button type="button" class="nav-item is-active" data-view="composer" title="Neue Antwort" onclick="window.SMART_APP?.showView('composer')"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6.5h16v11H4v-11Z"></path><path d="m4 7 8 6 8-6"></path><path d="M17 3v6"></path><path d="M14 6h6"></path></svg></span><span class="nav-label">Neue Antwort</span></button>
         <button type="button" class="nav-item" data-view="library" title="Bibliothek" onclick="window.SMART_APP?.showView('library')"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5.5A2.5 2.5 0 0 1 7.5 3H19v16H7.5A2.5 2.5 0 0 0 5 21V5.5Z"></path><path d="M5 6v15"></path><path d="M9 7h6"></path><path d="M9 11h7"></path></svg></span><span class="nav-label">Bibliothek</span></button>
         <button type="button" class="nav-item" data-view="templates" title="Vorlagen" onclick="window.SMART_APP?.showView('templates')"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l4 4v14H7V3Z"></path><path d="M14 3v5h5"></path><path d="M10 12h6"></path><path d="M10 16h6"></path></svg></span><span class="nav-label">Vorlagen</span></button>
@@ -385,43 +395,17 @@ Mit freundlichen Grüßen`,
         <button type="button" class="nav-item" data-view="license" title="Lizenz & API" onclick="window.SMART_APP?.showView('license')"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 11V8a5 5 0 0 1 10 0v3"></path><path d="M5 11h14v10H5V11Z"></path><path d="M12 15v2"></path></svg></span><span class="nav-label">Lizenz & API</span></button>
         <button type="button" class="nav-item help-menu-item" title="Hilfe" onclick="document.querySelector('#helpToggle').checked = true"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21a9 9 0 1 0-9-9 9 9 0 0 0 9 9Z"></path><path d="M9.8 9.4a2.45 2.45 0 0 1 4.65 1.1c0 1.65-2.25 2.05-2.25 3.7"></path><path d="M12.2 17.2h.01"></path></svg></span><span class="nav-label">Hilfe</span></button>
       </nav>
+      <div class="sidebar-controls">
+        <button type="button" class="nav-item sidebar-toggle-item" id="sidebarToggle" aria-label="Sidebar einklappen" aria-pressed="false" title="Sidebar einklappen" onclick="window.SMART_APP?.toggleSidebar()"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"></rect><path d="M9 4v16"></path><path d="m15 9-3 3 3 3"></path></svg></span><span class="nav-label">Einklappen</span></button>
+      </div>
       <div class="sidebar-health" aria-label="Systemstatus">
         <div><span>Lizenz</span><strong id="sidebarLicenseStatus">Nicht aktiviert</strong></div>
         <div><span>KI</span><strong id="sidebarApiStatus"><i aria-hidden="true"></i>API fehlt</strong></div>
         <div><span>Speicher</span><strong id="sidebarStorageStatus"><i aria-hidden="true"></i>Browser-Speicher</strong></div>
       </div>
-      <div class="sidebar-footer">
-        <p>© 2026 BuiltSmart AI</p>
-        <p>powered by BuiltSmart Hub</p>
-        <nav aria-label="Rechtliche Links">
-          <a href="https://www.built-smart-hub.com/impressum" target="_blank" rel="noopener noreferrer">Impressum</a>
-          <span>|</span>
-          <a href="https://www.built-smart-hub.com/datenschutz" target="_blank" rel="noopener noreferrer">Datenschutz</a>
-          <span>|</span>
-          <a href="https://www.built-smart-hub.com/agb" target="_blank" rel="noopener noreferrer">AGB</a>
-          <a href="https://www.built-smart-hub.com/widerrufbelehrung" target="_blank" rel="noopener noreferrer">Widerrufbelehrung</a>
-        </nav>
-      </div>
-    </aside>
+      </aside>
 
-    <main class="main-shell">
-      <header class="app-header">
-        <div class="header-brand">
-          <img class="header-icon" src="assets/smart-replysuite-icon.png" alt="" aria-hidden="true">
-          <div>
-            <p class="eyebrow">Browserbasierte KI-Arbeitsoberfläche</p>
-            <h1>SMART ReplySuite</h1>
-            <p class="lead">KI-gestützte Antwortvorschläge für E-Mails, Briefe und professionelle Geschäftskommunikation.<br>Klar formuliert, stilistisch steuerbar, datenschutzbewusst verarbeitet und direkt einsatzbereit.</p>
-          </div>
-        </div>
-        <div class="header-actions">
-          <label class="help-button" for="helpToggle" aria-label="Hilfe öffnen" title="Hilfe öffnen">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21a9 9 0 1 0-9-9 9 9 0 0 0 9 9Z"></path><path d="M9.8 9.4a2.45 2.45 0 0 1 4.65 1.1c0 1.65-2.25 2.05-2.25 3.7"></path><path d="M12.2 17.2h.01"></path></svg>
-          </label>
-          <button type="button" class="primary-action header-action" data-view-target="composer">Neue Antwort</button>
-        </div>
-      </header>
-
+      <main class="main-shell">
       <section class="view composer-view is-visible" data-view-panel="composer">
         <section class="panel composer-control-panel">
           <div class="panel-heading">
@@ -751,28 +735,28 @@ Mit freundlichen Grüßen`,
           </details>
         </section>
       </section>
-      <footer class="app-footer" aria-label="Footer">
-        <div class="footer-brand">
-          <img class="footer-icon" src="assets/smart-replysuite-icon.png" alt="" aria-hidden="true">
-          <div>
-            <strong>SMART ReplySuite</strong>
-            <p>Professionelle KI-Antworten für E-Mails, Briefe und Geschäftskommunikation.</p>
-          </div>
+      </main>
+    </div>
+    <footer class="app-footer" aria-label="Footer">
+      <div class="footer-brand">
+        <div>
+          <strong>SMART ReplySuite</strong>
+          <p>Professionelle KI-Antworten für E-Mails, Briefe und Geschäftskommunikation.</p>
         </div>
-        <div class="footer-legal">
-          <p>© 2026 SmartBuilt-AI · Powered by BuiltSmart Hub - Bernhard Metzger</p>
-          <nav aria-label="Rechtliche Links">
-            <a href="https://www.built-smart-hub.com/impressum" target="_blank" rel="noopener noreferrer">Impressum</a>
-            <span aria-hidden="true">|</span>
-            <a href="https://www.built-smart-hub.com/datenschutz" target="_blank" rel="noopener noreferrer">Datenschutz</a>
-            <span aria-hidden="true">|</span>
-            <a href="https://www.built-smart-hub.com/agb" target="_blank" rel="noopener noreferrer">AGB</a>
-            <span aria-hidden="true">|</span>
-            <a href="https://www.built-smart-hub.com/widerrufsbelehrung" target="_blank" rel="noopener noreferrer">Widerrufsbelehrung</a>
-          </nav>
-        </div>
-      </footer>
-    </main>
+      </div>
+      <div class="footer-legal">
+        <p>© 2026 SmartBuilt-AI · Powered by BuiltSmart Hub - Bernhard Metzger</p>
+        <nav aria-label="Rechtliche Links">
+          <a href="https://www.built-smart-hub.com/impressum" target="_blank" rel="noopener noreferrer">Impressum</a>
+          <span aria-hidden="true">|</span>
+          <a href="https://www.built-smart-hub.com/datenschutz" target="_blank" rel="noopener noreferrer">Datenschutz</a>
+          <span aria-hidden="true">|</span>
+          <a href="https://www.built-smart-hub.com/agb" target="_blank" rel="noopener noreferrer">AGB</a>
+          <span aria-hidden="true">|</span>
+          <a href="https://www.built-smart-hub.com/widerrufsbelehrung" target="_blank" rel="noopener noreferrer">Widerrufsbelehrung</a>
+        </nav>
+      </div>
+    </footer>
   </div>
 
   <div class="modal-backdrop" id="helpModal">
