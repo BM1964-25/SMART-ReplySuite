@@ -362,23 +362,35 @@ h1 {
 .app-footer {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(360px, auto);
-  gap: 32px;
+  gap: 24px;
   align-items: center;
   margin-top: 18px;
-  padding: 32px 0 2px;
-  border-top: 0;
+  padding: 14px 0 2px;
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
   color: rgba(255, 255, 255, 0.76);
 }
 
 .footer-brand {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
   min-width: 0;
+}
+
+.footer-icon {
+  width: 34px;
+  height: 34px;
+  display: block;
+  object-fit: cover;
+  border-radius: 9px;
 }
 
 .footer-brand strong {
   display: block;
-  margin-bottom: 4px;
+  margin-bottom: 1px;
   color: #fff;
-  font-size: 0.98rem;
+  font-size: 0.9rem;
   font-weight: 900;
 }
 
@@ -390,12 +402,12 @@ h1 {
 
 .footer-brand p {
   max-width: 560px;
-  font-size: 0.88rem;
+  font-size: 0.82rem;
 }
 
 .footer-legal {
   display: grid;
-  gap: 7px;
+  gap: 4px;
   justify-items: end;
   text-align: right;
   font-size: 0.78rem;
@@ -1925,22 +1937,6 @@ textarea:focus, input:focus, select:focus {
   .composer-tools, .composer-guidance ol, .optional-context, .optional-context-row, .style-profile-actions, .style-profile-card { grid-template-columns: 1fr; }
   .quality-strip, .result-tabs { grid-template-columns: repeat(2, minmax(0,1fr)); }
   .help-quickstart { grid-template-columns: repeat(2, minmax(0,1fr)); }
-  .app-footer {
-    grid-template-columns: 1fr;
-    justify-items: center;
-    text-align: center;
-  }
-  .footer-brand {
-    grid-template-columns: 1fr;
-    justify-items: center;
-  }
-  .footer-legal {
-    justify-items: center;
-    text-align: center;
-  }
-  .footer-legal nav {
-    justify-content: center;
-  }
 }
 
 @media (max-width: 760px) {
@@ -1951,6 +1947,22 @@ textarea:focus, input:focus, select:focus {
   .header-actions { justify-content: space-between; }
   .nav-list, .two-column, .mail-grid, .template-form, .settings-grid, .settings-actions, .profile-row, .parameter-grid, .composer-action-row, .composer-workspace, .workspace-switch, .optional-context, .optional-context-row, .style-profile-actions, .style-profile-card, .license-grid, .api-action-row, .api-actions, .license-actions, .result-actions, .style-grid, .style-assist, .help-grid, .quick-actions, .signal-grid, .quality-strip, .result-tabs, .history-tools, .template-tools, .composer-guidance ol, .help-quickstart, .help-reference { grid-template-columns: 1fr; }
   .app-footer { margin-top: 38px; padding-top: 24px; }
+  .app-footer {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+  }
+  .footer-brand {
+    grid-template-columns: 34px minmax(0, auto);
+    justify-content: center;
+  }
+  .footer-legal {
+    justify-items: center;
+    text-align: center;
+  }
+  .footer-legal nav {
+    justify-content: center;
+  }
   .style-profile-card .card-actions { justify-content: flex-start; flex-wrap: wrap; }
   h1 { font-size: 24px; }
 }
