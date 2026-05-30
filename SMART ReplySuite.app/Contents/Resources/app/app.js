@@ -125,6 +125,13 @@ const licenseState = {
   isBusy: false
 };
 
+const SpeechRecognitionApi = window.SpeechRecognition || window.webkitSpeechRecognition || null;
+const dictationState = {
+  recognition: null,
+  isListening: false,
+  stopRequested: false
+};
+
 const dataState = loadData();
 let currentResponseText = "Noch keine Antwort erstellt.";
 let currentResponseData = null;
@@ -145,6 +152,7 @@ const elements = {
   subject: document.querySelector("#subject"),
   inboundMessage: document.querySelector("#inboundMessage"),
   clearInboundBtn: document.querySelector("#clearInboundBtn"),
+  sourceDictateBtn: document.querySelector("#sourceDictateBtn"),
   notes: document.querySelector("#notes"),
   responseGoal: document.querySelector("#responseGoal"),
   extraHints: document.querySelector("#extraHints"),
@@ -269,6 +277,7 @@ function init() {
   renderLists();
   updateAppStatus();
   updateResultActions();
+  renderDictationControl();
   setKeyFeedback(apiKeyState.value ? "Gespeicherter API-Key geladen." : "Noch kein gültiger API-Key gespeichert.", apiKeyState.value ? "success" : "info");
   setStatus(apiKeyState.value ? "Bereit" : "API-Key fehlt", apiKeyState.value ? "ready" : "warn");
 }
@@ -291,6 +300,7 @@ function bindEvents() {
   elements.historyTypeFilter.addEventListener("change", renderHistory);
   elements.inboundMessage.addEventListener("input", updateCharacterCount);
   elements.clearInboundBtn.addEventListener("click", clearInboundMessage);
+  elements.sourceDictateBtn?.addEventListener("click", toggleSourceDictation);
   elements.generateBtn.addEventListener("click", handleGenerate);
   elements.copyOutputIconBtn.addEventListener("click", copyAll);
   elements.copyAllBtn.addEventListener("click", copyAll);
@@ -1194,11 +1204,124 @@ async function pasteSourceTextFromClipboard() {
 }
 
 function clearInboundMessage() {
+  if (dictationState.isListening) stopSourceDictation("Diktat gestoppt");
   elements.inboundMessage.value = "";
   setSourceFileStatus("Keine Datei ausgewählt");
   updateCharacterCount();
   elements.inboundMessage.focus();
   setStatus("Nachricht geleert", apiKeyState.value ? "ready" : "warn");
+}
+
+function toggleSourceDictation() {
+  if (!SpeechRecognitionApi) {
+    setSourceFileStatus("Diktat wird von diesem Browser nicht unterstützt");
+    setStatus("Diktat nicht verfügbar", "warn");
+    renderDictationControl();
+    return;
+  }
+
+  if (dictationState.isListening) {
+    stopSourceDictation("Diktat gestoppt");
+    return;
+  }
+
+  startSourceDictation();
+}
+
+function startSourceDictation() {
+  const recognition = new SpeechRecognitionApi();
+  recognition.lang = "de-DE";
+  recognition.continuous = true;
+  recognition.interimResults = true;
+
+  dictationState.recognition = recognition;
+  dictationState.stopRequested = false;
+
+  recognition.onstart = () => {
+    dictationState.isListening = true;
+    renderDictationControl();
+    setSourceFileStatus("Diktat läuft - sprich jetzt");
+    setStatus("Diktat läuft", "ready");
+  };
+
+  recognition.onresult = (event) => {
+    let finalText = "";
+    for (let index = event.resultIndex; index < event.results.length; index += 1) {
+      if (event.results[index].isFinal) finalText += event.results[index][0].transcript;
+    }
+    if (finalText.trim()) insertDictationText(finalText);
+  };
+
+  recognition.onerror = (event) => {
+    const message = event.error === "not-allowed"
+      ? "Mikrofonzugriff nicht erlaubt"
+      : "Diktat konnte nicht gestartet werden";
+    dictationState.stopRequested = true;
+    setSourceFileStatus(message);
+    setStatus(message, "warn");
+  };
+
+  recognition.onend = () => {
+    dictationState.isListening = false;
+    dictationState.recognition = null;
+    renderDictationControl();
+    if (!dictationState.stopRequested) setSourceFileStatus("Diktat beendet");
+  };
+
+  try {
+    recognition.start();
+  } catch (error) {
+    dictationState.recognition = null;
+    dictationState.isListening = false;
+    setSourceFileStatus("Diktat konnte nicht gestartet werden");
+    setStatus("Diktat nicht gestartet", "warn");
+    renderDictationControl();
+  }
+}
+
+function stopSourceDictation(message = "Diktat beendet") {
+  dictationState.stopRequested = true;
+  try {
+    dictationState.recognition?.stop();
+  } catch (error) {
+    // Browser kann stop() ablehnen, wenn die Erkennung schon beendet ist.
+  }
+  dictationState.isListening = false;
+  setSourceFileStatus(message);
+  renderDictationControl();
+}
+
+function insertDictationText(text) {
+  const textarea = elements.inboundMessage;
+  const transcript = text.trim();
+  if (!transcript) return;
+
+  const start = textarea.selectionStart ?? textarea.value.length;
+  const end = textarea.selectionEnd ?? textarea.value.length;
+  const before = textarea.value.slice(0, start);
+  const after = textarea.value.slice(end);
+  const prefix = before && !/[\s\n]$/.test(before) ? " " : "";
+  const suffix = after && !/^[\s\n.,;:!?]/.test(after) ? " " : "";
+  const insertion = `${prefix}${transcript}${suffix}`;
+
+  textarea.value = `${before}${insertion}${after}`;
+  const cursor = before.length + insertion.length;
+  textarea.setSelectionRange(cursor, cursor);
+  textarea.focus();
+  setSourceFileStatus("Diktat übernommen");
+  updateCharacterCount();
+}
+
+function renderDictationControl() {
+  if (!elements.sourceDictateBtn) return;
+  const isSupported = Boolean(SpeechRecognitionApi);
+  elements.sourceDictateBtn.disabled = !isSupported;
+  elements.sourceDictateBtn.classList.toggle("is-listening", dictationState.isListening);
+  elements.sourceDictateBtn.setAttribute("aria-pressed", String(dictationState.isListening));
+  elements.sourceDictateBtn.setAttribute("aria-label", dictationState.isListening ? "Diktat stoppen" : "Diktat starten");
+  elements.sourceDictateBtn.title = isSupported
+    ? dictationState.isListening ? "Diktat stoppen" : "Diktat starten"
+    : "Diktat wird von diesem Browser nicht unterstützt";
 }
 
 function insertSourceText(text, statusMessage) {
@@ -1219,7 +1342,7 @@ function getMissingInboundMessage() {
     return [
       "Die Datei wurde ausgewählt, aber es wurde kein Text in das Nachrichtenfeld übernommen.",
       "",
-      "Bitte prüfe, ob die Datei Text enthält. Gescannte PDFs benötigen Texterkennung (OCR). Alternativ kannst du den relevanten Text kopieren und in das Feld „Eingegangene Nachricht / Schreiben“ einfügen."
+      "Bitte prüfe, ob die Datei Text enthält. Bei gescannten PDFs versucht SMART ReplySuite eine lokale OCR-Erkennung, sofern die OCR-Werkzeuge mitgeliefert oder eingerichtet sind. Alternativ kannst du den relevanten Text kopieren und in das Feld „Eingegangene Nachricht / Schreiben“ einfügen."
     ].join("\n");
   }
 
@@ -1397,6 +1520,7 @@ async function copyAll() {
 }
 
 function resetComposer() {
+  if (dictationState.isListening) stopSourceDictation("Diktat gestoppt");
   elements.subject.value = "";
   elements.inboundMessage.value = "";
   elements.notes.value = "";
@@ -1700,7 +1824,7 @@ function renderApiKeyComponent(options = {}) {
   elements.saveKeyBtn.disabled = apiKeyState.isBusy;
   elements.keyHint.textContent = apiKeyState.value
     ? "Gespeicherter Key wird teilweise angezeigt. Das Auge zeigt den vollständigen Schlüssel."
-    : "Gib deinen Anthropic API-Key ein. Ohne Key wird keine KI-Anfrage gesendet.";
+    : "Optional: eigener Anthropic API-Key für lokale KI-Nutzung. BuiltSmart AI Guthaben funktioniert ohne eigenen Key.";
   updateSystemHealth();
 }
 

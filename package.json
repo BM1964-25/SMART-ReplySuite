@@ -5,7 +5,10 @@
   "type": "module",
   "scripts": {
     "start": "node localProxyServer.js",
-    "icon:ico": "node scripts/create-ico.mjs"
+    "icon:ico": "node scripts/create-ico.mjs",
+    "vendor:macos": "node scripts/vendor-macos-runtime.mjs",
+    "package:macos": "node scripts/package-macos.mjs",
+    "package:windows": "node scripts/package-windows.mjs"
   },
   "dependencies": {
     "mammoth": "^1.12.0",

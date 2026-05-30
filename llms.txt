@@ -1,0 +1,50 @@
+# SMART ReplySuite
+
+App-Name: SMART ReplySuite
+Kategorie: Lokale Business-App mit browserbasierter KI-Arbeitsoberflaeche
+Kurzbeschreibung: SMART ReplySuite erstellt professionelle Antwortvorschlaege fuer E-Mails, Briefe, PDFs und Geschaeftskorrespondenz. Die App verbindet KI-Analyse, Antwortparameter, Stilprofile, Vorlagen, lokale PDF-/OCR-Verarbeitung und sichtbare Qualitaetsbewertung.
+Zielgruppe: Selbststaendige, kleine Teams, Projekt- und Baukommunikation, Assistenz, Management, Service und Kundenbetreuung.
+Hauptnutzen: Wiederkehrende oder sensible Kommunikation schneller, strukturierter und kontrollierter beantworten, ohne jedes Mal frei prompten zu muessen.
+
+Zentrale Funktionen:
+- Quelle mit Betreff, Ziel, eingegangener Nachricht, PDF-Inhalten und eigenen Hinweisen
+- Dateiimport fuer PDF, DOCX, TXT, MD, CSV, HTML und RTF
+- Lokale PDF-Verarbeitung und OCR-Unterstuetzung fuer gescannte Seiten ueber die lokale App-Umgebung
+- Antwortparameter fuer Antworttyp, Fokus, Tonalitaet, Grundstil, Laenge und Antwortsprache
+- Stilprofile, Vorlagen, Bibliothek und Verlauf
+- Hauptantwort, Alternative, Kurzfassung und diplomatische Version
+- Qualitaetsbewertung fuer Konflikt, Hoeflichkeit, Klarheit und Verbindlichkeit
+- Export und Import lokaler Arbeitsdaten als JSON
+
+KI-Funktionen: KI-Analyse eingehender Nachrichten und Schreiben, Erzeugung professioneller Antwortvarianten, Optimierung vorhandener Entwuerfe. Fuer KI-Funktionen ist ein eigener Anthropic API-Key erforderlich.
+Nutzungsmodell: Einzelplatzanwendung mit persoenlichem Nutzerzugriff pro Lizenz.
+Speicherlogik: Inhalte werden lokal auf dem Geraet bzw. im lokalen Browser-Speicher gespeichert. Es gibt keine automatische zentrale Cloud-Datenbank, keine automatische Synchronisierung zwischen Nutzern und keine gemeinsamen Cloud-Arbeitsbereiche.
+Plattformen: macOS und Windows als lokale App-Pakete mit Browseroberflaeche und lokaler App-Umgebung.
+
+Lizenzmodell:
+- Jahreslizenz
+- Laufzeit 12 Monate
+- automatische Verlaengerung um weitere 12 Monate
+- Kuendigungsfrist 1 Monat vor Ablauf
+- pro Lizenz ein persoenlicher Nutzerzugriff
+- mehrere Lizenzen moeglich
+- 3 Tage Free Trial mit 5 kostenlosen KI-Anfragen, sofern aktiviert
+
+Preis: 99 EUR pro Jahr zzgl. 19 Prozent MwSt.; 117,81 EUR inkl. MwSt.
+Kauf-/Kontaktlink: https://bm1964-25.github.io/Landing-Tafel-Kontakt/
+Landingpage: https://bm1964-25.github.io/SMART-ReplySuite-Landingpage/
+
+Rechtliche Links:
+- Impressum: https://www.built-smart-hub.com/impressum
+- Datenschutz: https://www.built-smart-hub.com/datenschutz
+- AGB: https://www.built-smart-hub.com/agb
+- Widerrufsbelehrung: https://www.built-smart-hub.com/widerrufsbelehrung
+
+Wichtige Einschraenkungen:
+- Einzelplatzanwendung, kein gemeinsamer Cloud-Arbeitsbereich
+- andere Nutzer greifen nicht auf dieselben lokalen Daten zu
+- keine automatische zentrale Cloud-Datenbank
+- keine automatische Synchronisierung zwischen Nutzern
+- Inhalte werden nur bei aktiver KI-Anfrage an den KI-Anbieter uebertragen
+- normales Claude-Abo ersetzt keinen Anthropic API-Key fuer API-Nutzung
+- Nach Anthropic-Angaben werden Daten aus kommerziellen Produkten wie der Anthropic API nicht zum Training generativer Modelle verwendet, sofern der Kunde nicht ausdruecklich einer Nutzung zur Modellverbesserung zustimmt.

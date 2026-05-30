@@ -1,8 +1,10 @@
 import http from "node:http";
 import { execFile } from "node:child_process";
-import { readFile } from "node:fs/promises";
+import { mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
 import { extname, join, normalize } from "node:path";
 import { fileURLToPath } from "node:url";
+import { promisify } from "node:util";
 import mammoth from "mammoth";
 import { PDFParse } from "pdf-parse";
 
@@ -11,6 +13,13 @@ const HOST = "127.0.0.1";
 const ROOT = fileURLToPath(new URL(".", import.meta.url));
 const ANTHROPIC_URL = "https://api.anthropic.com/v1/messages";
 const ANTHROPIC_VERSION = "2023-06-01";
+const execFileAsync = promisify(execFile);
+const OCR_MIN_TEXT_LENGTH = 120;
+const OCR_MAX_PAGES = Number(process.env.SMART_OCR_MAX_PAGES || 20);
+const OCR_DPI = Number(process.env.SMART_OCR_DPI || 220);
+const OCR_LANGUAGES = process.env.SMART_OCR_LANGUAGES || "deu+eng";
+const POPPLER_PDFTOPPM_CANDIDATES = getBinaryCandidates("SMART_PDFTOPPM_PATH", "pdftoppm");
+const TESSERACT_CANDIDATES = getBinaryCandidates("SMART_TESSERACT_PATH", "tesseract", { usesTessdata: true });
 
 const mimeTypes = {
   ".html": "text/html; charset=utf-8",
@@ -147,6 +156,10 @@ async function extractSourceFile(request, response) {
     const result = await parser.getText();
     await parser.destroy();
     text = result.text || "";
+
+    if (normalizeExtractedText(text).length < OCR_MIN_TEXT_LENGTH) {
+      text = await extractPdfTextWithOcr(buffer, fileName);
+    }
   } else {
     sendJson(response, 415, { error: { message: "Dieses Format wird vom lokalen Dateiimport nicht unterstützt." } }, request);
     return;
@@ -157,7 +170,7 @@ async function extractSourceFile(request, response) {
     sendJson(response, 422, {
       error: {
         message: extension === "pdf"
-          ? "Aus dieser PDF konnte kein Text extrahiert werden. Vermutlich handelt es sich um einen Scan ohne Texterkennung."
+          ? "Aus dieser PDF konnte kein Text extrahiert werden. Für gescannte PDFs werden Poppler (pdftoppm) und Tesseract benötigt."
           : "Aus dieser Datei konnte kein Text extrahiert werden."
       }
     }, request);
@@ -192,6 +205,57 @@ async function verifyLicense(request, response) {
     valid: false,
     message: "Lizenz nicht aktiv. In Produktion prüft die Lizenz-API Stripe-Kauf, Laufzeit und Aktivierungen."
   }, request);
+}
+
+async function extractPdfTextWithOcr(buffer, fileName) {
+  const tempDir = await mkdtemp(join(tmpdir(), "smart-replysuite-ocr-"));
+  const pdfPath = join(tempDir, sanitizeTempFileName(fileName || "source.pdf"));
+  const imagePrefix = join(tempDir, "page");
+
+  try {
+    await writeFile(pdfPath, buffer);
+    await execFirstAvailable(POPPLER_PDFTOPPM_CANDIDATES, [
+      "-r",
+      String(OCR_DPI),
+      "-png",
+      "-f",
+      "1",
+      "-l",
+      String(OCR_MAX_PAGES),
+      pdfPath,
+      imagePrefix
+    ], { timeout: 120000, maxBuffer: 1024 * 1024 * 8 });
+
+    const imageFiles = (await readdir(tempDir))
+      .filter((entry) => /^page-\d+\.png$/i.test(entry))
+      .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+
+    if (!imageFiles.length) return "";
+
+    const pages = [];
+    for (const imageFile of imageFiles) {
+      const imagePath = join(tempDir, imageFile);
+      const { stdout } = await execFirstAvailable(TESSERACT_CANDIDATES, [
+        imagePath,
+        "stdout",
+        "-l",
+        OCR_LANGUAGES,
+        "--psm",
+        "6"
+      ], { timeout: 120000, maxBuffer: 1024 * 1024 * 8 });
+      const pageText = normalizeExtractedText(stdout);
+      if (pageText) pages.push(pageText);
+    }
+
+    return pages.join("\n\n");
+  } catch (error) {
+    if (error?.code === "ENOENT") {
+      throw new Error("OCR ist noch nicht eingerichtet. Bitte ein App-Paket mit OCR-Werkzeugen verwenden oder die Pfade über SMART_PDFTOPPM_PATH und SMART_TESSERACT_PATH setzen.");
+    }
+    throw new Error(`OCR konnte diese PDF nicht verarbeiten: ${error.message || "Unbekannter Fehler"}`);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
 }
 
 async function serveStatic(pathname, response) {
@@ -236,6 +300,62 @@ function readRequestBuffer(request) {
 
 function getExtension(fileName) {
   return String(fileName || "").split(".").pop().toLowerCase();
+}
+
+function getBinaryCandidates(envName, binaryName, options = {}) {
+  const executable = process.platform === "win32" ? `${binaryName}.exe` : binaryName;
+  const bundledRoot = join(ROOT, "vendor", "ocr");
+  const platformDir = `${process.platform}-${process.arch}`;
+  const platformOnlyDir = process.platform;
+  const bundledCandidates = [
+    getBundledBinaryCandidate(join(bundledRoot, platformDir), executable, options),
+    getBundledBinaryCandidate(join(bundledRoot, platformOnlyDir), executable, options),
+    getBundledBinaryCandidate(join(ROOT, "bin", platformDir), executable, options),
+    getBundledBinaryCandidate(join(ROOT, "bin", platformOnlyDir), executable, options)
+  ];
+
+  return [
+    process.env[envName] ? { path: process.env[envName] } : null,
+    ...bundledCandidates,
+    { path: executable },
+    { path: binaryName },
+    { path: `/opt/homebrew/bin/${binaryName}` },
+    { path: `/usr/local/bin/${binaryName}` },
+    process.platform === "win32" && binaryName === "tesseract"
+      ? { path: "C:\\Program Files\\Tesseract-OCR\\tesseract.exe" }
+      : null
+  ].filter(Boolean);
+}
+
+function getBundledBinaryCandidate(toolRoot, executable, options) {
+  const candidate = { path: join(toolRoot, "bin", executable) };
+  if (options.usesTessdata) {
+    candidate.env = { TESSDATA_PREFIX: join(toolRoot, "tessdata") };
+  }
+  return candidate;
+}
+
+async function execFirstAvailable(candidates, args, options) {
+  let lastMissingError = null;
+  for (const candidate of candidates) {
+    const command = typeof candidate === "string" ? candidate : candidate.path;
+    const env = typeof candidate === "string" ? null : candidate.env;
+    try {
+      return await execFileAsync(command, args, env ? { ...options, env: { ...process.env, ...env } } : options);
+    } catch (error) {
+      if (error?.code !== "ENOENT") throw error;
+      lastMissingError = error;
+    }
+  }
+
+  const error = new Error(lastMissingError?.message || "OCR-Werkzeug nicht gefunden.");
+  error.code = "ENOENT";
+  throw error;
+}
+
+function sanitizeTempFileName(fileName) {
+  const normalized = String(fileName || "source.pdf").replace(/[/\\:]/g, "-");
+  return normalized.toLowerCase().endsWith(".pdf") ? normalized : `${normalized}.pdf`;
 }
 
 function normalizeExtractedText(text) {

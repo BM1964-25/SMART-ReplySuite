@@ -11,7 +11,7 @@
   <link rel="icon" type="image/x-icon" href="build/replysuite-icon.ico?v=replysuite-20260522">
   <link rel="apple-touch-icon" sizes="256x256" href="build/replysuite-icon-256.png?v=replysuite-20260522">
   <link rel="manifest" href="manifest.webmanifest?v=replysuite-20260522">
-  <link rel="stylesheet" href="styles.css?v=help-question-icon">
+  <link rel="stylesheet" href="styles.css?v=dictation-mic">
   <script>
     window.addEventListener("error", (event) => {
       document.documentElement.dataset.appError = event.message || "Unbekannter Skriptfehler";
@@ -378,6 +378,7 @@ Mit freundlichen Grüßen`,
       <div class="header-actions">
         <label class="help-button" for="helpToggle" aria-label="Hilfe öffnen" title="Hilfe öffnen">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21a9 9 0 1 0-9-9 9 9 0 0 0 9 9Z"></path><path d="M9.8 9.4a2.45 2.45 0 0 1 4.65 1.1c0 1.65-2.25 2.05-2.25 3.7"></path><path d="M12.2 17.2h.01"></path></svg>
+          <span>Hilfe</span>
         </label>
         <span class="header-status-pill">Browser-Speicher aktiv</span>
         <button type="button" class="primary-action header-action" data-view-target="composer">Neue Antwort</button>
@@ -419,15 +420,39 @@ Mit freundlichen Grüßen`,
               </button>
             </div>
           </div>
-          <div class="composer-guidance" aria-label="Vorgehensweise Neue Antwort">
-            <strong>Vorgehen</strong>
+          <details class="composer-guidance" aria-label="Vorgehensweise Neue Antwort" open>
+            <summary><span class="summary-open">Workflow einklappen</span><span class="summary-closed">Workflow anzeigen</span></summary>
             <ol>
-              <li><span>1</span><div><strong>Text kopieren</strong><small>E-Mail, Brief oder Schreiben aus der Quelle kopieren</small></div></li>
-              <li><span>2</span><div><strong>Einfügen</strong><small>Nachricht, Ziel und Kontext erfassen</small></div></li>
-              <li><span>3</span><div><strong>Antwortparameter wählen</strong><small>Typ, Tonalität, Fokus, Sprache und Grundstil festlegen</small></div></li>
-              <li><span>4</span><div><strong>Vorschläge erzeugen</strong><small>Analyse starten, Varianten prüfen und passende Antwort nutzen</small></div></li>
+              <li>
+                <span>01</span>
+                <div>
+                  <strong>Quelle klären</strong>
+                  <small>Eingegangene Nachricht, Betreff und Ziel erfassen, damit Kontext und gewünschte Wirkung eindeutig sind.</small>
+                </div>
+              </li>
+              <li>
+                <span>02</span>
+                <div>
+                  <strong>Kontext ergänzen</strong>
+                  <small>Eigene Notizen, Hinweise, Fristen und Grenzen hinzufügen, die nicht direkt im Ursprungstext stehen.</small>
+                </div>
+              </li>
+              <li>
+                <span>03</span>
+                <div>
+                  <strong>Varianten vergleichen</strong>
+                  <small>Antworttyp, Tonalität, Fokus und Länge wählen und die erzeugten Fassungen gegeneinander prüfen.</small>
+                </div>
+              </li>
+              <li>
+                <span>04</span>
+                <div>
+                  <strong>Antwort finalisieren</strong>
+                  <small>Passende Variante kopieren, als Vorlage sichern oder im Verlauf dokumentieren.</small>
+                </div>
+              </li>
             </ol>
-          </div>
+          </details>
           <div class="composer-parameters">
             <div class="profile-row">
               <div class="field">
@@ -493,6 +518,9 @@ Mit freundlichen Grüßen`,
               <div class="field full">
                 <label for="inboundMessage">Eingegangene Nachricht / Schreiben</label>
                 <div class="textarea-action-wrap">
+                  <button type="button" class="icon-button textarea-mic-button" id="sourceDictateBtn" aria-label="Diktat starten" aria-pressed="false" title="Diktat starten">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3Z"></path><path d="M5 11a7 7 0 0 0 14 0"></path><path d="M12 18v3"></path><path d="M9 21h6"></path></svg>
+                  </button>
                   <button type="button" class="icon-button textarea-delete-button" id="clearInboundBtn" aria-label="Eingegangene Nachricht leeren" title="Eingegangene Nachricht leeren">
                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16"></path><path d="M10 11v6"></path><path d="M14 11v6"></path><path d="M6 7l1 14h10l1-14"></path><path d="M9 7V4h6v3"></path></svg>
                   </button>
@@ -690,47 +718,76 @@ Mit freundlichen Grüßen`,
       </section>
 
       <section class="view" data-view-panel="license">
-        <section class="panel api-panel">
-          <div class="panel-heading compact"><div><h2>Lizenz & API</h2><p>Lizenz aktivieren, API-Key verwalten und Datenschutz prüfen.</p></div></div>
-          <details class="api-key-card license-card" open>
+        <section class="panel api-panel access-panel">
+          <div class="panel-heading compact access-heading"><div><h2>Zugriff, Lizenz & Datenschutz</h2><p>Login, Free Trial, Lizenz, KI-Guthaben und eigener API-Key.</p></div></div>
+          <details class="api-key-card access-card license-card" open>
             <summary class="api-key-toggle">
-              <div><h3>Lizenz verwalten</h3><p>Lizenzschlüssel und Kauf-E-Mail lokal speichern und prüfen.</p></div>
+              <div><h3>Lizenz & Nutzerzugriff</h3><p>Magic-Link Login, 3-Tage Free Trial, Jahreslizenz und Lizenzschlüssel.</p></div>
               <span class="api-key-summary"><span class="connection-badge" id="licenseBadge">Nicht aktiviert</span><span class="chevron">▾</span></span>
             </summary>
             <div class="api-key-details">
-              <div class="license-grid">
-                <div class="field api-field"><label for="licenseKey">Lizenzschlüssel</label><input id="licenseKey" type="text" autocomplete="off" placeholder="SMART-XXXX-XXXX-XXXX"></div>
-                <div class="field api-field"><label for="licenseEmail">E-Mail-Adresse</label><input id="licenseEmail" type="email" autocomplete="off" placeholder="name@unternehmen.de"></div>
+              <div class="access-steps" aria-label="Einrichtungsablauf">
+                <div class="access-step"><span>01</span><strong>E-Mail eingeben</strong><small>Login-Adresse eintragen</small></div>
+                <div class="access-step"><span>02</span><strong>Magic Link bestätigen</strong><small>Link in der E-Mail öffnen</small></div>
+                <div class="access-step"><span>03</span><strong>Free Trial oder Lizenz wählen</strong><small>5 KI-Anfragen kostenlos oder Jahreslizenz</small></div>
+                <div class="access-step"><span>04</span><strong>KI-Nutzung festlegen</strong><small>API-Key oder BuiltSmart AI Guthaben</small></div>
               </div>
-              <div class="api-action-row license-action-row">
-                <div class="api-actions license-actions"><button type="button" id="saveLicenseBtn">Lizenz speichern</button><button type="button" id="verifyLicenseBtn">Lizenz prüfen</button></div>
-                <div class="key-feedback" id="licenseFeedback">Noch keine Lizenz gespeichert.</div>
+              <div class="field api-field"><label for="licenseEmail">E-Mail für Magic Link</label><input id="licenseEmail" type="email" autocomplete="off" placeholder="name@example.com"><p class="field-help">Du erhältst eine E-Mail mit einem Magic Link. Erst danach kannst du Free Trial starten oder kaufen.</p></div>
+              <div class="access-license-actions">
+                <button type="button" id="saveLicenseBtn">Magic Link senden</button>
+                <button type="button" class="muted-action" disabled>Logout</button>
+                <button type="button" id="verifyLicenseBtn">Status aktualisieren</button>
+                <button type="button" class="success-action" disabled>3 Tage testen / 5 KI-Anfragen kostenlos</button>
+                <button type="button" class="success-action" disabled>Jahreslizenz kaufen</button>
+                <div class="key-feedback" id="licenseFeedback">Noch nicht mit BuiltSmart AI verbunden.</div>
               </div>
+              <div class="field api-field license-code-field"><label for="licenseKey">Lizenzschlüssel vorhanden? Hier aktivieren.</label><div class="license-code-row"><input id="licenseKey" type="text" autocomplete="off" placeholder="Lizenzschlüssel eingeben"><button type="button" class="license-code-button" onclick="document.querySelector('#verifyLicenseBtn')?.click()">Aktivieren</button></div><p class="field-help">Der Lizenzschlüssel aktiviert die App-Nutzung für deinen eingeloggten persönlichen Nutzerzugriff.</p></div>
+              <div class="privacy-note access-note"><strong>Getrennte Datenbereiche</strong><p>Der 3-Tage Free Trial enthält 5 kostenlose BuiltSmart AI KI-Anfragen. Nach dem Free Trial benötigst du eine aktive App-Lizenz; KI-Anfragen laufen danach entweder über deinen eigenen Anthropic API-Key oder über gekauftes BuiltSmart AI Guthaben.</p><p>Lokale App-Inhalte, Verlauf und Profile bleiben in diesem Browser. Lizenzdaten, Login-Session und KI-Guthaben werden getrennt über BuiltSmart/Supabase verwaltet. Eigene API-Keys werden nur lokal gespeichert und nicht exportiert.</p></div>
             </div>
           </details>
 
-          <details class="api-key-card" id="apiKeyCard" open>
+          <details class="api-key-card access-card" id="apiKeyCard" open>
             <summary class="api-key-toggle">
-              <div><h3>API-Key verwalten</h3><p>Anthropic Claude lokal verwalten und Verbindung testen.</p></div>
+              <div><h3>KI-Zugang einrichten</h3><p>BuiltSmart AI Guthaben nutzen oder optional eigenen API-Key lokal aktivieren.</p></div>
               <span class="api-key-summary"><span class="connection-badge" id="connectionBadge">Nicht verbunden</span><span class="chevron">▾</span></span>
             </summary>
             <div class="api-key-details">
-              <div class="field api-field">
-                <label for="apiKey">API-Schlüssel</label>
-                <div class="secret-row">
-                  <input id="apiKey" type="password" autocomplete="off" placeholder="sk-ant-...">
-                  <button type="button" class="icon-button eye-button" id="toggleKey" aria-label="API-Key anzeigen" aria-pressed="false">
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.2 12s3.6-6.5 9.8-6.5S21.8 12 21.8 12 18.2 18.5 12 18.5 2.2 12 2.2 12Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                  </button>
-                </div>
-                <p class="field-help" id="keyHint">Gib deinen Anthropic API-Key ein. Ohne Key wird keine KI-Anfrage gesendet.</p>
+              <div class="ki-options-grid">
+                <article class="ki-option built-smart-option">
+                  <span class="option-kicker">Option 1</span>
+                  <h4>BuiltSmart AI Guthaben</h4>
+                  <p>Du kaufst BuiltSmart AI Guthaben und nutzt die KI, bis das Guthaben verbraucht ist. Kein eigener Anthropic API-Key nötig.</p>
+                  <span class="connection-badge neutral-badge">Nicht geprüft</span>
+                  <div class="built-smart-actions">
+                    <button type="button" class="success-action" disabled>Guthaben kaufen</button>
+                    <button type="button" disabled>Status aktualisieren</button>
+                  </div>
+                  <div class="key-feedback">Login erforderlich, damit Guthaben deinem Nutzerzugriff zugeordnet werden kann.</div>
+                </article>
+                <article class="ki-option own-key-option">
+                  <span class="option-kicker">Option 2</span>
+                  <h4>Eigener Anthropic API-Key</h4>
+                  <p>Du nutzt deinen eigenen Anthropic API-Key. Abrechnung und Nutzung laufen dann über dein Anthropic-Konto.</p>
+                  <span class="connection-badge neutral-badge">BuiltSmart AI</span>
+                  <div class="field api-field">
+                    <label for="apiKey">Eigener Anthropic API-Key</label>
+                    <div class="secret-row">
+                      <input id="apiKey" type="password" autocomplete="off" placeholder="sk-ant-...">
+                      <button type="button" class="icon-button eye-button" id="toggleKey" aria-label="API-Key anzeigen" aria-pressed="false">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.2 12s3.6-6.5 9.8-6.5S21.8 12 21.8 12 18.2 18.5 12 18.5 2.2 12 2.2 12Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                      </button>
+                    </div>
+                    <p class="field-help" id="keyHint">Optional: eigener Anthropic API-Key für lokale KI-Nutzung. BuiltSmart AI Guthaben funktioniert ohne eigenen Key.</p>
+                  </div>
+                  <label class="check-row"><input id="rememberKey" type="checkbox"><span>API-Key lokal in diesem Browser speichern</span></label>
+                  <label class="check-row"><input type="checkbox" disabled><span>Option 2 aktivieren: eigenen API-Key für KI-Anfragen verwenden</span></label>
+                  <div class="api-action-row">
+                    <div class="api-actions"><button type="button" id="saveKeyBtn">Speichern</button><button type="button" id="connectBtn">Verbindung</button><button type="button" id="testConnectionBtn">Verbindung prüfen</button><button type="button" id="disconnectBtn">Verbindung trennen</button></div>
+                    <div class="key-feedback" id="keyFeedback">Noch kein API-Key gespeichert.</div>
+                  </div>
+                </article>
               </div>
-              <label class="check-row"><input id="rememberKey" type="checkbox"><span>API-Key lokal im Browser speichern</span></label>
-              <div class="api-action-row">
-                <div class="api-actions"><button type="button" id="saveKeyBtn">Speichern</button><button type="button" id="connectBtn">Verbindung</button><button type="button" id="testConnectionBtn">Verbindung überprüfen</button><button type="button" id="disconnectBtn">Verbindung trennen</button></div>
-                <div class="key-feedback" id="keyFeedback">Noch kein API-Key gespeichert.</div>
-              </div>
-              <div class="privacy-note"><strong>Datenschutz-Hinweis</strong><p>Inhalte werden nur für die KI-Anfrage über den lokalen Proxy an Anthropic übertragen. API-Key, Lizenz, Verlauf und Vorlagen bleiben im lokalen Browser-Speicher dieser Anwendung.</p></div>
+              <div class="privacy-note access-note"><strong>Datenschutz-Hinweis</strong><p>Standardmäßig nutzt die App BuiltSmart AI Guthaben. Wenn du einen eigenen API-Key aktivierst, werden KI-Anfragen über den lokalen Proxy an Anthropic gesendet und nicht über BuiltSmart AI Guthaben abgerechnet.</p></div>
             </div>
           </details>
         </section>
@@ -766,12 +823,162 @@ Mit freundlichen Grüßen`,
         <div>
           <p class="eyebrow">Hilfe</p>
           <h2 id="helpTitle">Anleitung für SMART ReplySuite</h2>
-          <p class="help-intro">Diese Anleitung führt dich durch Einrichtung, Antworterstellung, Vorlagen, Verlauf und Datenschutz.</p>
+          <p class="help-intro">Diese Anleitung führt Sie durch Einrichtung, Lizenz, Anthropic API-Key, Antworterstellung, Vorlagen, Verlauf und sichere Nutzung.</p>
         </div>
         <label class="modal-close" for="helpToggle" aria-label="Hilfe schließen">×</label>
       </div>
 
-      <div class="help-quickstart">
+      <div class="help-layout">
+        <nav class="help-nav" aria-label="Hilfekapitel">
+          <a href="#help-overview">Überblick</a>
+          <a href="#help-access">Einrichtung & Zugang</a>
+          <a href="#help-quickstart">Schnellstart</a>
+          <a href="#help-ui">Bedienoberfläche</a>
+          <a href="#help-functions">Wichtige Funktionen</a>
+          <a href="#help-workflow">Typischer Workflow</a>
+          <a href="#help-data">Eingaben & Daten</a>
+          <a href="#help-results">Ergebnisse verstehen</a>
+          <a href="#help-errors">Fehler & Lösungen</a>
+          <a href="#help-version">Version & Hinweise</a>
+        </nav>
+
+        <div class="help-content">
+          <section id="help-overview" class="help-chapter">
+            <h3>Überblick</h3>
+            <p>SMART ReplySuite unterstützt Sie beim Erstellen professioneller Antworten auf E-Mails, Briefe, Nachrichten und Geschäftsschreiben. Die App analysiert den Ausgangstext, berücksichtigt Ziel, Tonalität, Stilprofil, Vorlagen und interne Hinweise und erzeugt daraus strukturierte Antwortvarianten.</p>
+            <p>Die Arbeit bleibt in der aktuellen App-Ansicht erhalten. Die Hilfe öffnet als Modal und kann jederzeit geschlossen werden, ohne Eingaben, Ergebnisse oder lokale Daten zu verwerfen.</p>
+          </section>
+
+          <section id="help-access" class="help-chapter">
+            <h3>Einrichtung & Zugang</h3>
+            <div class="help-callout">
+              <strong>Lizenzschlüssel und API-Key erfüllen unterschiedliche Aufgaben:</strong>
+              <p>Der Lizenzschlüssel aktiviert die Nutzung dieser App. Er bestätigt, dass Sie berechtigt sind, die Software zu verwenden.</p>
+              <p>Der API-Key verbindet die App mit Ihrem Anthropic-Konto. Er ist erforderlich, damit KI-Funktionen ausgeführt werden können. Auch bei einer bezahlten App-Lizenz wird ein eigener API-Key benötigt, weil die Nutzung der KI-Modelle technisch und abrechnungstechnisch getrennt über Anthropic erfolgt.</p>
+            </div>
+
+            <h4>Lizenzschlüssel aktivieren</h4>
+            <ul>
+              <li>Öffnen Sie in der Sidebar den Bereich <strong>Lizenz & API</strong>.</li>
+              <li>Tragen Sie den Lizenzschlüssel und die Kauf-E-Mail-Adresse ein.</li>
+              <li>Aktivieren oder prüfen Sie die Lizenz, bevor Sie die App dauerhaft produktiv nutzen.</li>
+              <li>Der Lizenzschlüssel schaltet die Nutzung der Software frei und bestätigt Ihre Berechtigung zur App-Nutzung.</li>
+              <li>Der Lizenzschlüssel ersetzt den Anthropic API-Key nicht. Er aktiviert die App, führt aber keine KI-Anfragen aus.</li>
+            </ul>
+
+            <h4>API-Key erstellen</h4>
+            <ol>
+              <li>Öffnen Sie die Anthropic Console.</li>
+              <li>Erstellen Sie ein Konto oder melden Sie sich mit Ihrem bestehenden Anthropic-Konto an.</li>
+              <li>Öffnen Sie den Bereich <strong>API Keys</strong>.</li>
+              <li>Erstellen Sie einen neuen API-Key.</li>
+              <li>Kopieren Sie den API-Key direkt nach der Erstellung.</li>
+              <li>Fügen Sie den API-Key in SMART ReplySuite unter <strong>Lizenz & API</strong> ein.</li>
+              <li>Speichern Sie den API-Key und prüfen Sie optional die Verbindung.</li>
+            </ol>
+            <p><strong>Wichtig:</strong> Ein API-Key wird häufig nur einmal vollständig angezeigt. Speichern Sie ihn daher sicher in Ihrem Passwortmanager oder an einem anderen geschützten Ort.</p>
+
+            <h4>Warum ein API-Key erforderlich ist</h4>
+            <ul>
+              <li>SMART ReplySuite nutzt KI-Funktionen über die Anthropic API.</li>
+              <li>Der API-Key verbindet die App mit Ihrem persönlichen Anthropic-Konto.</li>
+              <li>KI-Anfragen werden dadurch Ihrem Anthropic-Konto zugeordnet.</li>
+              <li>Ohne API-Key können Analyse, Antworterstellung und andere KI-Funktionen nicht ausgeführt werden.</li>
+            </ul>
+
+            <h4>Warum auch bei bezahltem App-Abo ein API-Key nötig ist</h4>
+            <ul>
+              <li>App-Lizenz bzw. App-Abo und KI-Nutzung sind getrennt.</li>
+              <li>Die App-Lizenz bezahlt die Nutzung der Software.</li>
+              <li>Die Anthropic API-Nutzung wird separat über das Anthropic-Konto des Nutzers verarbeitet bzw. abgerechnet.</li>
+              <li>Deshalb ist auch bei bezahlter App-Lizenz ein eigener API-Key erforderlich.</li>
+            </ul>
+
+            <h4>Warum Anthropic verwendet wird</h4>
+            <ul>
+              <li>Anthropic wurde gewählt, weil Claude-Modelle stark bei strukturiertem Arbeiten, Textanalyse, Zusammenfassungen und professionellen Workflows sind.</li>
+              <li>Claude eignet sich gut für längere Dokumente, komplexe Eingaben und nachvollziehbare Ausgaben.</li>
+              <li>Anthropic legt großen Wert auf Sicherheit, Zuverlässigkeit und verantwortungsvolle KI-Nutzung.</li>
+              <li>Die API ermöglicht eine stabile Integration in professionelle Anwendungen.</li>
+              <li>Sie behalten über den eigenen API-Key Kontrolle über Nutzung und Abrechnung.</li>
+            </ul>
+          </section>
+
+          <section id="help-quickstart" class="help-chapter">
+            <h3>Schnellstart</h3>
+            <p>Beginnen Sie mit <a href="#help-access">Einrichtung & Zugang</a>, wenn Lizenz oder API-Key noch nicht eingerichtet sind.</p>
+            <ol>
+              <li>Lizenzschlüssel unter <strong>Lizenz & API</strong> aktivieren.</li>
+              <li>Anthropic API-Key eintragen, speichern und optional die Verbindung prüfen.</li>
+              <li>Unter <strong>Neue Antwort</strong> Betreff, Ausgangsnachricht, Ziel und interne Notizen erfassen.</li>
+              <li>Antworttyp, Tonalität, Fokus, Länge, Sprache und Stilprofil wählen.</li>
+              <li>Analyse starten und Antwortvarianten erzeugen.</li>
+              <li>Ergebnis prüfen, kopieren, im Verlauf speichern oder als Vorlage weiterverwenden.</li>
+            </ol>
+          </section>
+
+          <section id="help-ui" class="help-chapter">
+            <h3>Bedienoberfläche</h3>
+            <p>Die Sidebar führt zu Neue Antwort, Bibliothek, Vorlagen, Stilprofilen, Verlauf, Einstellungen, Lizenz & API sowie Hilfe. Im Header sehen Sie den Speicherstatus und den Schnellzugriff auf diese Hilfe.</p>
+            <p>Im Composer können Sie zwischen Quelle, Ergebnis und geteilter Ansicht wechseln. Quelle sammelt Eingaben und Kontext; Ergebnis zeigt Analyse, Antwortvarianten und Qualitätsbewertung.</p>
+          </section>
+
+          <section id="help-functions" class="help-chapter">
+            <h3>Wichtige Funktionen</h3>
+            <ul>
+              <li><strong>Neue Antwort:</strong> Erstellt professionelle Antworten aus Nachricht, Ziel, Kontext und Parametern.</li>
+              <li><strong>Entwurf verbessern:</strong> Optimiert vorhandene Antwortentwürfe stilistisch und inhaltlich.</li>
+              <li><strong>Dateiimport:</strong> Übernimmt Inhalte aus PDF, DOCX, TXT, MD, CSV, HTML und RTF.</li>
+              <li><strong>Diktat:</strong> Das Mikrofon im Nachrichtenfeld kann Text per Browser-Spracherkennung einfügen, sofern der Browser dies unterstützt.</li>
+              <li><strong>Vorlagen & Bibliothek:</strong> Speichert und findet wiederverwendbare Antwortbausteine.</li>
+              <li><strong>Stilprofile:</strong> Sichert Corporate Voice, Stilakzente, No-Gos und eigene Regeln.</li>
+              <li><strong>Verlauf:</strong> Speichert Antwortvorgänge lokal zum Wiederfinden und Wiederverwenden.</li>
+            </ul>
+          </section>
+
+          <section id="help-workflow" class="help-chapter">
+            <h3>Typischer Workflow</h3>
+            <ol>
+              <li><strong>Quelle klären:</strong> Eingegangene Nachricht, Betreff und Ziel erfassen.</li>
+              <li><strong>Kontext ergänzen:</strong> Eigene Notizen, Hinweise, Fristen, Grenzen und No-Gos hinzufügen.</li>
+              <li><strong>Parameter wählen:</strong> Antworttyp, Tonalität, Fokus, Länge, Sprache und Stilprofil festlegen.</li>
+              <li><strong>Varianten vergleichen:</strong> Analyse, Hauptantwort, Alternative, Kurzfassung und diplomatische Version prüfen.</li>
+              <li><strong>Antwort finalisieren:</strong> Passende Variante kopieren, speichern, als Vorlage übernehmen oder im Verlauf sichern.</li>
+            </ol>
+          </section>
+
+          <section id="help-data" class="help-chapter">
+            <h3>Eingaben & Daten</h3>
+            <p>Gute Ergebnisse entstehen durch klare Eingaben. Geben Sie das gewünschte Antwortziel, relevante Fakten, Fristen, Ansprechpartner, interne Grenzen und bevorzugte Formulierungen an. Markieren Sie vertrauliche Informationen, die nicht wörtlich übernommen werden sollen.</p>
+            <p>Vorlagen, Verlauf, Lizenzdaten, Stilprofile und Einstellungen bleiben lokal im Browser-Speicher. Inhalte werden erst bei einer KI-Anfrage über den lokalen Proxy an Anthropic übertragen.</p>
+          </section>
+
+          <section id="help-results" class="help-chapter">
+            <h3>Ergebnisse verstehen</h3>
+            <p>Die Ausgabe ist in Bereiche getrennt: Analyse, Hauptantwort, Alternative, Kurzfassung, diplomatische Version und Qualitätsbewertung. Die Qualitätsbadges zu Konflikt, Höflichkeit, Klarheit und Verbindlichkeit sind eine Orientierung, ersetzen aber keine fachliche Prüfung.</p>
+            <p>Nutzen Sie die Hauptantwort für den Standardfall, die Kurzfassung für knappe Kommunikation und die diplomatische Version für sensible oder konfliktträchtige Vorgänge.</p>
+          </section>
+
+          <section id="help-errors" class="help-chapter">
+            <h3>Fehler & Lösungen</h3>
+            <ul>
+              <li><strong>API-Key fehlt:</strong> Öffnen Sie Lizenz & API, tragen Sie den Anthropic API-Key ein und speichern Sie ihn.</li>
+              <li><strong>Lizenz nicht aktiv:</strong> Prüfen Sie Lizenzschlüssel und Kauf-E-Mail-Adresse.</li>
+              <li><strong>Keine Verbindung:</strong> Starten Sie den lokalen Server oder die macOS-App erneut und öffnen Sie die lokale App-Adresse.</li>
+              <li><strong>Antwort zu allgemein:</strong> Ergänzen Sie Ziel, eigene Notizen, Fristen, Grenzen und konkrete gewünschte Aussagen.</li>
+              <li><strong>Datei ohne Text:</strong> Gescannte PDFs benötigen OCR. Wenn kein Text erkannt wird, nutzen Sie eine OCR-Version oder kopieren Sie den Text manuell.</li>
+            </ul>
+          </section>
+
+          <section id="help-version" class="help-chapter">
+            <h3>Version & Hinweise</h3>
+            <p>SMART ReplySuite ist eine lokale browserbasierte App. Der macOS-Starter startet den lokalen Node-Server und öffnet die Browser-Oberfläche. Die Hilfe ist als Standardstruktur angelegt, damit sie in weiteren SMART-Apps konsistent wiederverwendet und app-spezifisch ergänzt werden kann.</p>
+            <p>Stand: 2026. Prüfen Sie sensible Antworten vor dem Versand fachlich, rechtlich und organisatorisch.</p>
+          </section>
+        </div>
+      </div>
+
+      <div class="help-quickstart" hidden>
         <article>
           <span>1</span>
           <div><strong>API-Key einrichten</strong><p>Unter Lizenz & API den Anthropic-Key einfügen, speichern und optional die Verbindung testen.</p></div>
@@ -790,13 +997,13 @@ Mit freundlichen Grüßen`,
         </article>
       </div>
 
-      <div class="help-section">
+      <div class="help-section" hidden>
         <h3>Neue Antwort formulieren</h3>
         <ol class="help-steps">
           <li><strong>Neue Antwort öffnen:</strong> In der Sidebar „Neue Antwort“ wählen.</li>
           <li><strong>Betreff eintragen:</strong> Der Betreff hilft der KI, Kontext und Dringlichkeit besser zu erkennen.</li>
           <li><strong>Nachricht einfügen:</strong> Den Inhalt aus Outlook, Gmail, einem Brief, PDF-Text oder anderem Schriftverkehr direkt in „Eingegangene Nachricht / Schreiben“ kopieren.</li>
-          <li><strong>Datei nutzen:</strong> PDF, DOCX, TXT, MD, CSV, HTML und RTF können in der Quelle per Drag & Drop oder Dateiauswahl übernommen werden. Gescannte PDFs ohne Text benötigen weiterhin OCR.</li>
+          <li><strong>Datei nutzen:</strong> PDF, DOCX, TXT, MD, CSV, HTML und RTF können in der Quelle per Drag & Drop oder Dateiauswahl übernommen werden. Bei gescannten PDFs versucht SMART ReplySuite eine lokale OCR-Erkennung über die mitgelieferte oder eingerichtete App-Umgebung.</li>
           <li><strong>Ziel formulieren:</strong> Kurz beschreiben, was die Antwort erreichen soll, z. B. „Termin abstimmen“, „Rückfrage stellen“ oder „Eskalation entschärfen“.</li>
           <li><strong>Eigene Notizen ergänzen:</strong> Interne Fakten, gewünschte Aussagen, Grenzen, Fristen, Ansprechpartner, No-Gos oder nächste Schritte hinterlegen. Diese Informationen stehen oft nicht im eingefügten Text, sind aber für die Antwort wichtig.</li>
           <li><strong>Zusätzliche Hinweise erfassen:</strong> Konkrete Schreib- und Antwortanweisungen ergänzen, z. B. bestimmte Formulierungen verwenden, besonders kurz antworten, auf eine Anlage verweisen oder eine Rückfrage einbauen.</li>
@@ -804,7 +1011,7 @@ Mit freundlichen Grüßen`,
         </ol>
       </div>
 
-      <div class="help-grid">
+      <div class="help-grid" hidden>
         <article>
           <h3>Arbeitsansichten</h3>
           <p>„Quelle“ zeigt Eingabe und Kontext, „Ergebnis“ zeigt Analyse und Antwortvarianten, „Geteilt“ stellt beides nebeneinander zum Prüfen und Vergleichen dar.</p>
@@ -859,7 +1066,7 @@ Mit freundlichen Grüßen`,
         </article>
       </div>
 
-      <div class="help-reference">
+      <div class="help-reference" hidden>
         <article>
           <h3>Was macht eine Vorlage?</h3>
           <ul>
@@ -923,7 +1130,7 @@ Mit freundlichen Grüßen`,
             <li><strong>Copy & Paste:</strong> Text kann direkt in „Eingegangene Nachricht / Schreiben“ eingefügt oder über „Text einfügen“ aus der Zwischenablage übernommen werden.</li>
             <li><strong>Text per Drag & Drop:</strong> Markierter Text kann auf die Ablagefläche gezogen werden und wird ebenfalls in das Nachrichtenfeld eingetragen.</li>
             <li><strong>Nachricht leeren:</strong> Das Lösch-Icon im Nachrichtenfeld entfernt nur die eingegangene Nachricht; Betreff, Ziel, Notizen und Ergebnis bleiben erhalten.</li>
-            <li><strong>PDF und DOCX:</strong> Der Text wird lokal über den App-Server extrahiert. Bei gescannten PDFs ohne Texterkennung wird kein Text gefunden.</li>
+            <li><strong>PDF und DOCX:</strong> Der Text wird lokal über den App-Server extrahiert. Bei gescannten PDFs ohne eingebetteten Text nutzt SMART ReplySuite lokale OCR, sofern die OCR-Werkzeuge mitgeliefert oder eingerichtet sind.</li>
             <li><strong>Datenschutz:</strong> Dateien werden lokal gelesen; eine KI-Übertragung erfolgt erst, wenn eine Antwort erstellt wird.</li>
             <li><strong>Beispiel laden:</strong> Füllt Quelle, Ziel und Notizen mit einem Musterfall zum schnellen Testen.</li>
           </ul>
@@ -980,7 +1187,7 @@ Mit freundlichen Grüßen`,
 
   <script src="licenseClient.js?v=sample-template-iife"></script>
   <script src="anthropicClient.js?v=sample-template-iife"></script>
-  <script src="app.js?v=sample-template-iife"></script>
+  <script src="app.js?v=dictation-mic"></script>
   <script>
     (function () {
       const collapsedKey = "smart-mailresponse-sidebar-collapsed";
